@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "outFile": "./dist/build.js",
         // при использовании webpack 2+ или rollup, добавить поддержку tree-shaking:
         "module": "es2015",
         // это соответствует поддержке браузеров у Vue
