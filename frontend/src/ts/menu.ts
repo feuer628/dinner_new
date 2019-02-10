@@ -5,6 +5,7 @@ import {MenuInfo, MenuService} from "./services/menuService";
 import SettingsService, {OrderType} from "./services/settingsService";
 import EmployeeServices, {EmployeeInfo} from "./services/employeeServices";
 import Common from "./common";
+import App from "./App";
 
 @Component({
     // language=Vue

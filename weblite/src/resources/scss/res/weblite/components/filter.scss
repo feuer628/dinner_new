@@ -1,0 +1,72 @@
+// Компонент фильтрации
+
+.filter-component {
+  position: relative;
+  width: 220px;
+
+  .filter-input {
+    @extend %input;
+    position: relative;
+    z-index: 1;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+
+  &.active .filter-input {@extend %input-focus}
+
+  .filter-dropdown {
+    position: absolute;
+    border: 1px solid $input--border-color;
+    border-radius: 0 0 $form-element--border-radius $form-element--border-radius;
+    min-width: 100%;
+    margin-top: 1px;
+    background-color: #fff;
+    box-shadow: $dropdown--box-shadow;
+    z-index: 99;
+    border-top: none;
+  }
+
+  .filter-item {
+    padding: 10px 16px;
+    cursor: pointer;
+
+    &:hover {background: $app--bg-color}
+
+    &.selected {background: $app--bg-color url('../img/icons/icon-selected.svg') no-repeat right 8px center}
+
+    &.backLink {
+      background-color: $app--bg-color;
+
+      span {
+        @extend %linkStyle;
+        padding-left: 16px;
+        background: url('../img/icons/icon-left.svg') no-repeat left center;
+        background-size: 8px;
+      }
+    }
+  }
+
+
+  // Компонент фильтрации в xButtonGroup.ts ============================================================================
+
+  .switch-select & {
+    text-align: center;
+
+    &:hover .dropdown-indicator {opacity: 1;}
+
+    .filter-input {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      height: $form-element--height;
+      line-height: normal;
+    }
+
+    &.active .dropdown-indicator {opacity: 1;}
+
+    .filter-item {
+      white-space: nowrap;
+      font-size: $font-size;
+    }
+  }
+}

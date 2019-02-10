@@ -1,0 +1,620 @@
+%input {
+  @extend %border-style;
+  padding: $input--padding;
+  outline: none;
+  line-height: 18px;
+  @extend %input-text;
+
+  &::-ms-clear {display: none}
+
+  &:focus:not([readonly]) {@extend %input-focus}
+}
+
+%input-text {
+  font-size: $input--font-size;
+  font-family: $font-family;
+  color: $text--color-1;
+}
+
+%input-focus {
+  border-color: $input-outline--color;
+  box-shadow: inset 0 0 0 1px $input-outline--color;
+}
+
+%input-disabled {
+  background-color: #f7f8fa;
+  cursor: default;
+}
+
+%input-placeholder {
+  &::-webkit-input-placeholder {color: #c7c7c7;}
+  &::-moz-placeholder {color: #c7c7c7;}
+  &:-ms-input-placeholder {color: #c7c7c7;}
+}
+
+input {
+  @extend %input;
+  height: $form-element--height;
+  vertical-align: middle;
+}
+
+%linkStyle {
+  cursor: pointer;
+  color: $text--color-1;
+  transition: $link-transition;
+  text-decoration: underline;
+
+  &:hover {
+    color: $link-color--hover;
+    text-decoration: none;
+  }
+}
+
+%icon-star-style {
+    transition: $link-transition;
+
+    &:hover {color: $input--border-color}
+
+    &.marked {color: $main-color-1}
+}
+
+%btn-primary {
+  color: $button-primary--color;
+  background-color: $button-primary--background;
+  border-color: $button-primary--background;
+}
+
+%btn-primary-hover-background {
+  background-color: darken($button-primary--hover--background, 10%);
+  border-color: darken($button-primary--hover--background, 10%);
+}
+
+%border-style {
+  border: 1px solid $input--border-color;
+  border-radius: $form-element--border-radius;
+}
+
+a {
+  @extend %linkStyle;
+  outline: none;
+
+  &.link-dotted {
+    text-decoration: none;
+    border-bottom: dotted 1px $text--color-1;
+
+    &:hover {
+      border-color: $link-color--hover;
+    }
+  }
+}
+
+.title {
+  font-size: 24px;
+  line-height: 1;
+  display: block;
+
+  .docStatus {margin-left: 15px}
+}
+
+
+
+// Для полей с встроенным заголовком ===================================================================================
+
+%withTitle {
+  $padding: 32px;
+  padding-top: $padding !important;
+  min-height: $form-field--height;
+}
+
+// Для применения отступов элементу, на который навешивается
+.withTitle-box {
+  position: relative;
+  @extend %withTitle;
+
+  &[readonly] {@extend %input-disabled}
+}
+
+// Для применения отступов к инпутам внутри элемента на который навешивается
+.withTitle-field {
+  position: relative;
+
+  input {
+    height: auto;
+    width: 100%;
+    @extend %withTitle;
+
+    &[readonly] {@extend %input-disabled}
+  }
+}
+
+
+
+// Заголовок поля ======================================================================================================
+
+%fieldTitle {
+  color: #b6bbbf;
+  font-size: 14px;
+}
+
+// Для отображения в строке
+.fieldTitle-row {
+  @extend %fieldTitle;
+  margin-bottom: 12px;
+}
+
+// Для отображения в полях
+.fieldTitle {
+  @extend %fieldTitle;
+  position: absolute;
+  top: 10px;
+  left: 16px;
+  cursor: text;
+}
+
+
+
+// aside banner ========================================================================================================
+
+.banner {
+  margin: 40px $app-sidebar--margin $app-sidebar--margin;
+  text-align: center;
+
+  div {
+    text-align: left;
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+}
+
+
+
+// Строка поиска =======================================================================================================
+
+.searchBox {
+  position: relative;
+
+  input {
+    padding-right: 48px;
+    width: 100%;
+    @extend %input-placeholder;
+  }
+
+  > div {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text--color-2;
+    line-height: 1;
+
+    &.icon-close {
+      cursor: pointer;
+      transition: $link-transition;
+
+      &:hover {color: $text--color-1}
+    }
+  }
+}
+
+
+
+// Графики =============================================================================================================
+
+.graphic-btn {
+  width: 42px;
+
+  &:hover .graphic-icon {
+
+    &:before {
+      height: 10px;
+      background-color: #5caf6e;
+    }
+
+    &:after {
+      height: 4px;
+      background-color: #cf4d4d;
+    }
+  }
+
+  .graphic-icon {
+    display: flex;
+    align-items: flex-end;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4px;
+    height: 16px;
+    background-color: #5caf6e;
+
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      width: 4px;
+      transition: all 0.4s ease 0s;
+      bottom: 0;
+    }
+
+    &:before {
+      left: -8px;
+      height: 8px;
+      background-color: #cf4d4d;
+    }
+
+    &:after {
+      left: 8px;
+      height: 12px;
+      background-color: #5caf6e;
+    }
+  }
+}
+
+// Алиас счета==========================================================================================================
+
+.icon-edit {
+  color: $light--color-1;
+  display: inline-block;
+  font-size: 12px;
+}
+
+.inplace-input {
+  width: 100%;
+  line-height: 1;
+  position: relative;
+
+  .inplace-out,
+  .icon-edit {
+    vertical-align: middle;
+    line-height: 24px;
+  }
+
+  .icon-edit {margin-left: 5px;}
+
+  input {
+    border-radius: 0;
+    padding: 0 56px 0 0;
+    width: 100%;
+    height: 24px;
+    border-width: 0 0 2px 0;
+
+    &:focus {
+      border-color: $main-color-2;
+      box-shadow: none;
+    }
+  }
+
+  .icon-checked-2,
+  .icon-close {
+    @extend .icon;
+    position: absolute;
+    background: none;
+    border: none;
+    bottom: 0;
+    color: $text--color-2;
+    outline: none;
+
+    &:before {font-size: 24px}
+  }
+
+  .icon-checked-2 {right: 32px;}
+
+  .icon-close {right: 0;}
+}
+
+
+
+// Индикатор положения выпадающего списка===============================================================================
+
+.dropdown-indicator {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background-image: url('../img/icons/icon-dropdown.svg');
+  transition: all 150ms ease;
+  opacity: 0.5;
+
+  // todo привести к единообразию названия классов открытого выпадающего списка
+  .open &,
+  .active & {transform: rotate(180deg) translateY(50%);}
+}
+
+.separate-line {
+  border-bottom: 1px solid $app-border--color;
+  margin: 24px 0;
+  opacity: 0.6;
+}
+
+// Календарь
+
+.popover-origin {z-index: 99 !important}
+
+
+// Глобальные ошибки
+
+.globalErrors {
+  position: fixed;
+  top: $header--height / 2;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: inherit;
+  z-index: 9999 !important;
+}
+
+.error-message {
+  text-align: left;
+  border: 2px solid #e7bbbb;
+  background-color: #fcdfdf;
+  position: relative;
+  padding: 12px 56px 12px 16px;
+  cursor: default;
+  color: #9d2834;
+  border-radius: $form-element--border-radius;
+
+  + .error-message {margin-top: 16px}
+
+  .icon-close {
+    position: absolute;
+    cursor: pointer;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+
+    &:before {font-size: 24px}
+  }
+
+  .icon-warning {
+    display: flex;
+    align-items: center;
+
+    &:before {
+      color: $error-color;
+      font-size: 24px;
+      margin-right: 16px;
+    }
+  }
+}
+
+.error {color: $error-color}
+
+// Платеж ==============================================================================================================
+
+.payment-sidebar-section {
+  padding: 0 $app-sidebar--margin 32px;
+  border-bottom: 1px solid $app-border--color;
+}
+
+.payment-import-file-drop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+
+  .payment-import-file-drop__content {
+    padding-left: 32px;
+    background: url('../img/icons/icon-import.svg') no-repeat left center;
+  }
+}
+
+.payment-import-file-hint {
+  color: #b6bbbf;
+  font-size: 12px;
+  margin-top: 12px;
+}
+
+// Список последних получателей ========================================================================================
+
+.recipients-block_title {
+  padding: 32px $app-sidebar--margin 24px;
+  font-weight: 500;
+
+  + .recipient-item {padding-top: 0}
+}
+
+.recipient-item {
+  padding: 8px $app-sidebar--margin;
+  transition: all 0.1s ease 0s;
+
+  &:hover {
+    cursor: pointer;
+    color: #000;
+    .recipient-account {color: $text--color-1;}
+  }
+
+  .recipient-account {
+    padding-top: 6px;
+    font-size: $input--font-size * 0.75;
+    transition: all 0.1s ease 0s;
+    color: $light--color-1;
+    line-height: 1;
+  }
+}
+
+
+
+// Уведомления =========================================================================================================
+
+.notification-page {
+
+  .spinner-throbber {
+    position: relative;
+    @extend .icon;
+    @extend .icon-spinner;
+
+    &:before,
+    &:after {position: absolute;}
+
+    &:after {
+      content: '';
+      top: -10px;
+      left: 0;
+      // 10px необходимы для перекрытия ссылки, часть которой находится за пределами родителя
+      height: calc(100% + 10px);
+      width: 100%;
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    &:before {
+      font-size: 32px;
+      height: 32px;
+      width: 32px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      color: $main-color-1;
+      z-index: 1;
+    }
+  }
+
+  .notification-header {
+    margin-bottom: 24px;
+    position: relative;
+
+    .notification-switch {
+      position: absolute;
+      left: -55px;
+    }
+
+    .notification-title {
+      font-size: 20px;
+      border-bottom: 1px dashed #b4b4b4;
+    }
+
+    a {
+      position: absolute;
+      top: -10px;
+      right: 0;
+
+      &:hover {color: $link-color--hover}
+    }
+  }
+
+  .notification-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .checkbox + .checkbox {margin-top: 16px}
+
+    .checkbox-text {margin-left: 5px}
+  }
+
+  .notification-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .error {
+      margin-bottom: 30px;
+      font-size: 24px
+    }
+  }
+
+  .no-channels-message {
+    text-align: center;
+  }
+}
+
+
+// Элемент badge для отображения количества в кружке ===================================================================
+
+.message-badge {
+  font-family: $font-family;
+  color: #fff;
+  font-size: 12px;
+  padding: 0 4px;
+  line-height: 1;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+// Элемент возврата к началу страницы ==================================================================================
+
+.scroll-up-btn {
+  width: 72px;
+  height: 72px;
+  background-color: #c9cdd0;
+  border-color: $button-primary--background;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+  bottom: 40px;
+  margin-left: 40px;
+  position: fixed;
+  cursor: pointer;
+
+  &:hover {
+    @extend %btn-primary-hover-background;
+  }
+
+  &:before {
+    font-size: 35px;
+    color: #fff;
+    display: block;
+    padding-top: 20px;
+    padding-left: 24px;
+  }
+}
+
+// Выбор электронной подписи ===========================================================================================
+
+.es-panel {
+  display: flex;
+  padding: 8px;
+  cursor: pointer;
+
+  .es-panel__info {
+    margin-left: 16px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    .es-panel__owner-name {
+      @extend .ellipsis;
+    }
+
+    .es-panel__status {
+      display: flex;
+      align-items: center;
+
+      .es-panel__status-text {
+        color: #878b97;
+        font-size: 14px;
+        margin-left: 4px;
+      }
+    }
+  }
+
+  &:hover {
+    background-color: $app--bg-color;
+  }
+}
+
+.es-icon {
+  position: relative;
+
+  .es-icon__token {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+}
+
+.es-svg {
+  display: inline-block;
+
+  svg {
+    display: block;
+  }
+}

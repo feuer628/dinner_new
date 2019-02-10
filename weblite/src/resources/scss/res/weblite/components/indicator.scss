@@ -1,0 +1,140 @@
+//======================================================================================================================
+//
+// Indicator
+//
+// «Индикатор» отображает краткие сведения о деятельности контрагента, которые представляют собой четыре разноцветных
+// кубика и статус.
+// Статус отображает текущее состояние контрагента. Внутри кубиков указаны цифры которые указывают на количество
+// фактов, найденных по данному контрагенту.
+//
+// Примеры использования: в документе Платежное поручение
+//
+//======================================================================================================================
+
+// Класс для элементов панели индикатора
+.indicator-facts {
+  display: inline-block;
+  color: #fff;
+  width: 23px;
+  height: 23px;
+  line-height: 24px;
+  font-size: 16px;
+  text-align: center;
+  border-radius: $form-element--border-radius;
+}
+
+// Цвета для фактов индикатора
+.indicator-critical-facts-color {background: #f23526;}
+
+.indicator-pay-attention-facts-color {background: #ffd100;}
+
+.indicator-activity-facts-color {background: #2ccd00;}
+
+.indicator-achievements-color {background: #008dff;}
+
+
+// Цвета для заблокированных фактов
+.indicator-critical-facts-color-disabled {background: #cdcdcd;}
+
+.indicator-pay-attention-facts-color-disabled {background: #c1c1c1;}
+
+.indicator-activity-facts-color-disabled {background: #afafaf;}
+
+.indicator-achievements-color-disabled {background: #c1c1c1;}
+
+.indicator {
+  min-height: 23px;
+
+  a {
+    font-size: 14px;
+    color: #1f83c8;
+    margin-left: 5px;
+  }
+
+  .indicator-panel {
+    font-size: 0;
+
+    .indicator-facts + .indicator-facts {margin-left: 5px}
+  }
+}
+
+// Класс для текстовых элементов панели индикатора
+.indicator-label {
+  color: #aeaeae;
+  font-size: 14px;
+}
+
+// Всплывающий тултип контрагента
+
+.indicator-tooltip {
+
+  &:hover .tooltip-text {display: block}
+
+  .tooltip-text {
+    display: none;
+    position: absolute;
+    cursor: default;
+    font-size: 13px;
+    top: 1px;
+    left: 47px;
+    padding: 20px;
+    border: 1px solid #c5c5c5;
+    border-radius: $form-element--border-radius;
+    background-color: #fff;
+    width: 355px;
+    min-height: 80px;
+    box-shadow: 0 15px 45px 0 rgba(0,0,0,0.2);
+    z-index: 10000;
+
+    >  div {
+      margin-bottom: 7px;
+
+      // цвет текста подсказок для иконок
+      span {color: #000;}
+
+      // отступ от иконок
+      .indicator-facts {margin-right: 2px;}
+    }
+
+    .company-status {
+      margin-top: 25px;
+      margin-bottom: 2px;
+      color: #000;
+      @extend .indicator-label;
+      @extend .ellipsis;
+    }
+
+    .counterparty-info {
+      font-size: 14px;
+      color: #1f83c8;
+      text-decoration: none;
+    }
+
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+    }
+
+    &:before {
+      width: 16px;
+      height: 16px;
+      border: solid #c5c5c5;
+      border-width: 0 0 1px 1px;
+      border-radius: 0 0 0 $form-element--border-radius;
+      transform: rotate(45deg);
+      left: -9px;
+      top: 28px;
+      background-color: #fff;
+    }
+
+    &:after {
+      width: 40px;
+      height: 200px;
+      left: -35px;
+      top: 0px;
+    }
+  }
+}
+
+.tooltip-visible {overflow: visible;}

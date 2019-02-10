@@ -1,0 +1,72 @@
+
+.news__error {
+  text-align: center;
+  color: $error-color;
+  margin-bottom: 30px;
+
+  > div {margin-bottom: 30px;}
+}
+
+.news__error--inSidebar {margin: 32px 0 72px;}
+
+.news__important {
+  margin-left: 8px;
+  font-size: 14px;
+  color: $important-color;
+  white-space: nowrap;
+}
+
+
+
+// Строка  новостью в operations-table =================================================================================
+
+.news-row {
+
+  .operations-table__cell:last-child {padding-right: 70px}
+
+  .icon-info-bubble {
+    display: flex;
+    justify-content: center;
+    font-size: 40px;
+  }
+
+  .icon-important {
+    font-size: 24px;
+    color: $important-color;
+  }
+}
+
+
+
+// Просмотр новости ====================================================================================================
+
+.news__date {
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: #aeaeae;
+}
+
+.news__header {
+  margin-bottom: 24px;
+  font-size: 24px;
+}
+
+
+
+// Список новостей в правой колонке ====================================================================================
+
+.newsList {
+
+  a {cursor: pointer}
+
+  .news__date {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.newsList__header {
+  margin: 0 $app-sidebar--margin 16px;
+  font-weight: 500;
+}

@@ -1,0 +1,46 @@
+// анимация раздвигающегося элемента ===================================================================================
+.extend-enter {width: 40px}
+
+.extend-enter-active {transition: width 0.3s}
+
+.extend-enter-to {width: 260px}
+
+// анимация плавно исчезающего элемента ================================================================================
+// important нужен для из-за конфликта со свойством transition в классе .link
+.fade-enter-active,
+.fade-leave-active {transition: opacity .15s cubic-bezier(1.0, 0.5, 0.8, 1.0) !important;}
+
+.fade-enter,
+.fade-leave-to {opacity: 0 !important;}
+
+// анимация появления/исчезновения элемента возврата к началу страницы =================================================
+.scroll-up-enter-active,
+.scroll-up-leave-active {
+  transition: all .33s ease;
+}
+.scroll-up-enter,
+.scroll-up-leave-to {opacity: 0;}
+
+// анимация перемещения элементов при изменении списка =================================================================
+.fade-group-item {
+  transition: all .6s;
+}
+.fade-group-enter-active {
+  transition: opacity .4s linear, transform .8s cubic-bezier(.68,-0.12,0,1.18);
+}
+
+.fade-group-enter,
+.fade-group-leave-to {
+  opacity: 0;
+}
+
+.fade-group-move {
+  transition: all .3s ease-in-out;
+}
+
+.fade-group-enter {
+  transform: translateX(-50px);
+}
+.fade-group-leave-to {
+  transform: translateX(100px);
+}

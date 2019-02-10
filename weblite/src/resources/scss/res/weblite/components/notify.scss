@@ -1,0 +1,60 @@
+// Notify ==============================================================================================================
+.overlay {
+  @extend %overlay;
+  z-index: 9998;
+  align-items: flex-start !important;
+  padding-top: 80px;
+}
+
+.notify {
+  background-color: #fcf4df;
+  border: 1px solid #d7ccb1;
+  padding: 15px 20px;
+  border-radius: $form-element--border-radius;
+
+  .notify__links {
+    margin-top: 16px;
+    transition: $link-transition;
+
+    a {
+      text-align: left;
+
+      &:hover {color: $link-color--hover}
+
+      + a {margin-left: 20px}
+    }
+
+    + .notify__message {
+      margin-top: 30px;
+      color: #b9b8b4;
+    }
+  }
+
+  .notify__message {
+    line-height: 1;
+
+    .icon-important {
+      font-size: 24px;
+      color: $important-color;
+      position: relative;
+      width: 25px;
+      display: inline-block;
+
+      &:before {
+        position: absolute;
+        top: -17px;
+      }
+    }
+  }
+
+  .icon-checked {
+    display: flex;
+    align-items: center;
+
+    &:before {
+      color: #39c876;
+      font-size: 24px;
+      margin-right: 16px;
+    }
+  }
+}

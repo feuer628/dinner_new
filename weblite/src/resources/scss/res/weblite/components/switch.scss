@@ -1,0 +1,146 @@
+// Компонент переключения
+
+$switch-width-number: 2.75;
+$switch-width: $switch-width-number * 1em;
+$switch-padding: 0.2em;
+
+$switch-speed: .15s !default;
+
+$switch-easing: ease-out !default;
+
+$switch-check-color: #ffffff !default;
+$switch-active-background-color: #39c876 !default;
+
+$switch-grey: #7a7a7a !default;
+$switch-grey-light: #b5b5b5 !default;
+
+$switch-colors: (
+        "primary": $main-color-1,
+        "warning": $invalid-color
+) !default;
+
+@mixin unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.switch {
+  @include unselectable;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+
+  & + .switch {
+    margin-left: 0.5em;
+  }
+
+  input[type=checkbox] {
+    display: none;
+
+    + .check {
+      display: flex;
+      align-items: center;
+      width: $switch-width;
+      height: #{$switch-width / 2 + $switch-padding};
+      padding: $switch-padding;
+      background: $switch-grey-light;
+      border-radius: 1em;
+      transition: background $switch-speed $switch-easing;
+
+      &:before {
+        content: "";
+        border-radius: 1em;
+        width: #{($switch-width - $switch-padding * 2) / 2};
+        height: #{($switch-width - $switch-padding * 2) / 2};
+        background: $switch-check-color;
+        box-shadow: 0 3px 1px 0 rgba(0, 0, 0, 0.05), 0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 3px 3px 0 rgba(0, 0, 0, 0.05);
+        transition: transform $switch-speed $switch-easing, width $switch-speed $switch-easing;
+        will-change: transform;
+        display: inline-block;
+      }
+
+      &.is-elastic:before {
+        width: 1.75em;
+      }
+    }
+
+    &:checked + .check {
+      background: $switch-active-background-color;
+
+      @each $name, $color in $switch-colors {
+        &.#{$name} {
+          background: $color;
+        }
+      }
+
+      &:before {
+        transform: translate3d(100%, 0, 0);
+      }
+
+      &.is-elastic:before {
+        transform: translate3d(percentage(16 / ($switch-width-number * 16)), 0, 0);
+      }
+    }
+  }
+
+  .control-label {
+    padding-left: 0.5em;
+  }
+
+  &:hover {
+
+    input[type=checkbox] + .check {
+      background: rgba($switch-grey-light, 0.9);
+    }
+
+    input[type=checkbox]:checked + .check {
+      background: rgba($switch-active-background-color, 0.9);
+
+      @each $name, $color in $switch-colors {
+        &.#{$name} {
+          background: rgba($color, 0.9);
+        }
+      }
+    }
+  }
+
+  &:focus {
+    outline: none;
+
+    input[type=checkbox] + .check {
+      box-shadow: 0 0 0.5em rgba($switch-grey, 0.6);
+    }
+
+    input[type=checkbox]:checked + .check {
+      box-shadow: 0 0 0.5em rgba($switch-active-background-color, 0.8);
+
+      @each $name, $color in $switch-colors {
+        &.#{$name} {
+          box-shadow: 0 0 0.5em rgba($color, 0.8);
+        }
+      }
+    }
+  }
+
+  &.small {
+    border-radius: 2px;
+    font-size: 0.75rem;
+  }
+
+  &.medium {
+    font-size: 1.25rem;
+  }
+
+  &.large {
+    font-size: 1.5rem;
+  }
+
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    color: $switch-grey;
+  }
+}

@@ -2,7 +2,7 @@
         "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
         "http://java.sun.com/dtd/web-app_2_3.dtd" >
 <web-app>
-    <display-name>RestWithJersey2</display-name>
+    <display-name>api</display-name>
 
     <servlet>
         <servlet-name>Rest With Jersey2</servlet-name>

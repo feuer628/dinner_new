@@ -1,0 +1,98 @@
+// Реквизиты счета
+
+// Модальное окно
+
+.account-dialog__content {
+  display: flex;
+
+  .account-dialog__account-info {
+    flex: auto;
+
+    .account-info__title {
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+
+    .account-info__label {
+      color: #c0c6d1;
+      margin: 12px 0 4px;
+    }
+  }
+
+  .qrcode-block {
+    width: 258px;
+    flex: none;
+    margin-left: 24px;
+    text-align: center;
+    color: #c0c6d1;
+
+    .qrcode {
+      padding: 20px;
+      margin-bottom: 24px;
+      border: 2px dashed $main-color-1;
+
+      img {
+        max-width: 100%;
+        max-height: 100%;
+      }
+    }
+  }
+}
+
+.account-dialog__footer {
+  display: flex;
+  justify-content: space-between;
+
+  > div {
+    display: flex;
+    flex: auto;
+    margin-right: 40px;
+  }
+
+  .btn + .btn {margin-left: 16px}
+}
+
+
+// Плашка счета
+
+.account-item {
+  padding: 24px $app-sidebar--margin;
+  border-top: 1px solid $app-border--color;
+  transition: all 0.1s ease 0s;
+  cursor: default;
+
+  &:last-child {border-bottom: 1px solid $app-border--color}
+
+  &:hover:not(.selected) {
+    cursor: pointer;
+    background-color: rgba($main-color-1,.3);
+  }
+
+  &.selected {
+    box-shadow: inset 0 0 0 2px $main-color-1;
+    background-color: #fff;
+
+    .integer-amount {font-weight: 500}
+  }
+
+  .account-header {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+  }
+
+  .account-amount {
+    display: inline-block;
+    font-size: 0;
+
+    .integer-amount {font-size: $font-size * 2}
+
+    .fractional-amount {
+      font-size: $font-size * 1.5;
+      color: $text--color-2;
+    }
+  }
+
+  .account-links {margin-top: 16px;}
+}

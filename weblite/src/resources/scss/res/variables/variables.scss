@@ -1,0 +1,63 @@
+//
+// Подключение переменных.
+
+// Colors
+$main-color-1: #ffd66e; // кастомизируется в CMS
+$main-color-2: #1f83c8; // кастомизируется в CMS
+
+$text--color-1: #555; // кастомизируется в CMS
+$text--color-2: #c5c5c5; // кастомизируется в CMS
+$app-border--color: #e9ebee;
+$app--bg-color: #f7f8fa;
+// todo сформулировать название, сейчас используется для разного вида элементов
+$light--color-1: #c9cdd0;
+
+$button--text--color: #555;  // кастомизируется в CMS
+$button--background: #fff; // кастомизируется в CMS
+$button--hover--background: #c9cdd0; // кастомизируется в CMS
+
+$button-primary--color: #555; // кастомизируется в CMS
+$button-primary--background: #ffd66e; // кастомизируется в CMS
+$button-primary--hover--background: #ffd66e; // кастомизируется в CMS
+
+$invalid-color: #fb764b;
+$important-color: #f15642;
+$error-color: #e04f5f;
+
+$header--height: 72px;
+$font-size: 16px;
+$font-family: Roboto, serif;
+
+$app--margin: 32px;
+$app-sidebar--margin: 32px;
+
+$link-color--hover: #000;
+$link-transition: color 0.1s ease 0s;
+
+
+
+// Элементы формы ======================================================================================================
+
+$form-element--height: 40px;
+$form-element--border-radius: 4px;
+
+$form-field--height: 62px;
+
+
+// Поля ввода ==========================================================================================================
+
+$input--padding:       10px 16px;
+$input--font-size:     $font-size;
+$input--hover--border: 1px solid lighten($main-color-2, 30%);
+$input--border-color: $light--color-1;
+$input-disabled--background-color: #efefef;
+$input-disabled--border-color:     $input--border-color;
+$input-disabled--color:            #333333;
+$input-outline--color: #ffd66e; // кастомизируется в CMS
+
+// Выпадающие списки ===================================================================================================
+
+$dropdown--box-shadow:  0 3px 6px 0 rgba(0,0,0,.15);
+
+// Цвет фона страницы
+$body--background-color: #f1f3f6;

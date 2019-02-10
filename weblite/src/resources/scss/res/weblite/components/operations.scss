@@ -1,0 +1,247 @@
+// Operations table ====================================================================================================
+
+$cell-height: 80px;
+
+.operations-table {
+  display: table;
+  border-collapse: collapse;
+  color: #b6bbbf;
+  margin: 0 (-$app--margin);
+
+  &__row {
+    cursor: pointer;
+    display: table-row;
+    transition: $link-transition;
+
+    &:hover,
+    &.pinned {
+      color: $text--color-1;
+      background-color: $app--bg-color;
+
+      .operation-actions {display: flex}
+
+      .operation-status {display: none}
+    }
+  }
+
+  &__cell {
+    display: table-cell;
+    padding: 0 12px;
+    vertical-align: middle;
+    height: $cell-height;
+    position: relative;
+    @extend .ellipsis;
+
+    &:empty {padding: 0}
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: $cell-height - 1px; // IE fix
+      width: 100%;
+      border-bottom: 1px solid #f1f3f6;
+    }
+
+    &:first-child {
+      padding-left: $app--margin;
+
+      &:after {
+        width: calc(100% - #{$app--margin});
+        right: 0;
+        left: auto;
+      }
+    }
+
+    &:last-child {
+      padding-right: $app--margin;
+      min-width: 230px;
+      text-align: right;
+
+      .operations-table__counterparty & {min-width: 0;}
+
+      &:after {width: calc(100% - #{$app--margin})}
+    }
+
+    .fractional-amount {font-size: 12px}
+
+    .integer-amount {font-weight: 500}
+
+    // Панель быстрых действий
+    .operation-actions {
+      display: none;
+      justify-content: flex-end;
+      font-size: 0;
+
+      > a + a {margin-left: 8px}
+
+      .icon {
+        color: #b8bec1;
+
+        &:not(.action-input__button):before {font-size: 40px}
+
+        &:hover {color: $main-color-2}
+      }
+    }
+  }
+
+  .icon-star {
+      color: $app-border--color;
+      font-size: 24px;
+      @extend %icon-star-style;
+  }
+
+  .operation-title {
+    color: $text--color-1;
+    line-height: 1.5;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  &.operations-table__counterparty {
+
+    .operations-table__cell:last-child {
+      min-width: 0;
+      text-align: left;
+
+      > div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        div:first-child {flex: auto}
+      }
+    }
+
+    .operation-title {
+      min-width: 100%;
+      width: 100px;
+    }
+
+    .operation-status {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 350px;
+    }
+
+    .operation-actions,
+    .operation-status {margin-left: 24px}
+  }
+
+  &.tax-calendar {
+    color: $text--color-1;
+
+    .operations-table__cell {
+      padding-top: 15px;
+      padding-bottom: 15px;
+      vertical-align: top;
+
+      &:last-child {vertical-align: middle}
+
+      &:after {bottom: 0;}
+
+      .operation-title {line-height: normal;}
+
+      .operation-description {white-space: normal;}
+
+      .operation-description,
+      .operation-docLink {
+        margin-top: 8px;
+
+        &,
+        a {color: #b6bbbf;}
+      }
+
+      .operation-docLink {
+
+        a {
+          text-decoration: underline;
+          margin-right: 5px;
+
+          &:hover {color: $text--color-1;}
+        }
+
+        & + .operation-docLink {margin-top: 0}
+
+        &.rejected {
+          &,
+          a {color: #ef3124;}
+        }
+      }
+
+      .operation-docLink.rejected,
+      .operation-description {font-weight: bold}
+    }
+  }
+}
+
+.operations-table__empty {
+  background: url('../img/icons/icon-empty-list.svg') top center no-repeat;
+  padding-top: 155px;
+  margin-top: 150px;
+  text-align: center;
+  color: #aeaeae;
+}
+
+.operations-empty-list__message {
+    line-height: $cell-height;
+    border: solid #f1f3f6;
+    border-width: 1px 0;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.monthDelimiter {
+  position: relative;
+  cursor: default;
+
+  &:hover {
+    background: none;
+    color: inherit;
+  }
+
+  .operations-table__cell {
+    height: $form-element--height;
+    overflow: visible;
+
+    &:after {
+      width: 100%;
+      top: $form-element--height - 1;
+    }
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: -1px;
+      width: 100%;
+      border-bottom: 1px solid #f1f3f6;
+    }
+  }
+
+  .summary {
+    position: relative;
+
+    > div {
+      position: absolute;
+      display: flex;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &__item {
+      display: flex;
+      margin-left: 16px;
+    }
+  }
+}
+
+.credit,
+.debit {color: #c5c5c5}
+
+.income {color: #5caf6e}
+
+.rejected_expense {color: #d15353}
+
+.expense {color: #555;}

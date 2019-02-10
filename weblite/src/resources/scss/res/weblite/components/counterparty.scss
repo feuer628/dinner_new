@@ -1,0 +1,228 @@
+// Диалог выбора счета получаетля
+.selectCounterparty {
+
+  .modal-body {
+    padding-bottom: 0 !important;
+    overflow-y: visible !important;
+  }
+
+  .modal-footer {display: none}
+
+  .accountItems {
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 162px;
+    justify-content: space-between;
+    overflow-y: auto;
+  }
+
+  .accountItem {
+    @extend %input;
+    width: calc(50% - 5px);
+    padding: 16px;
+    max-height: 75px;
+
+    &:nth-child(n+3) {margin-top: 10px;}
+
+    .fieldTitle {
+      @extend .ellipsis;
+      margin-top: 5px;
+      position: static;
+      max-width: 100%;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    &:hover {
+      @extend %input-focus;
+      cursor: pointer;
+    }
+  }
+}
+
+
+
+// Страница контрагенты ================================================================================================
+
+.counterparty {
+
+  .counterparty__panel {
+    display: flex;
+    margin-bottom: 50px;
+
+    > div {flex: auto}
+
+    .btn-back {margin: 0 70px 0 20px;}
+  }
+
+  .counterparty__name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    .icon-star {
+      @extend %icon-star-style;
+      color: $app-border--color;
+      font-size: 24px;
+      margin-right: 5px;
+    }
+
+    > div {
+      display: flex;
+      align-items: center;
+      flex: auto;
+
+      &.btn-group {flex: none}
+    }
+
+    .inplace-input {
+
+      &,
+      input {
+        font-size: 25px;
+      }
+
+      input {height: 32px}
+
+      .inplace-out {line-height: 32px}
+
+      .icon-edit {font-size: 16px;}
+    }
+  }
+
+  .counterparty__info {
+    padding-left: 30px;
+
+    > div + div {margin-top: 20px;}
+  }
+}
+
+// Плашка информации по счету/реквизитам
+.info-block__wrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  + .page-header {margin-top: 48px}
+
+  &.counterparty__client > * {min-height: 310px;}
+
+  &.contacts__client > * {min-height: 210px;}
+
+  > * {
+    padding: 35px 35px 30px;
+    width: calc(50% - 10px);
+    max-width: calc(50% - 10px);
+    border: solid 1px #eff1f3;
+    border-radius: $form-element--border-radius;
+    position: relative;
+
+    * {
+      flex: none;
+      white-space: normal;
+    }
+
+    &:nth-child(n+3) {margin-top: 20px}
+
+    &:hover {
+      background-color: #f7f8fa;
+      border-color: #f7f8fa;
+
+      > .btn {
+        @extend %btn-primary;
+
+        &:hover {
+          @extend %btn-primary-hover-background;
+        }
+      }
+
+      .info-block__menu-button {display: flex}
+    }
+
+    > .btn {margin-top: 45px}
+  }
+
+  .info-block__menu-button {
+    position: absolute;
+    top: 20px;
+    right: 15px;
+    display: none;
+    padding: 10px;
+
+    &:hover {cursor: pointer}
+
+    .info-block-menu-button__circle {
+      width: 5px;
+      height: 5px;
+      background: $light--color-1;
+      border-radius: 50%;
+
+      + .info-block-menu-button__circle {margin-left: 5px}
+    }
+
+    .info-block__menu {
+      position: absolute;
+      top: 9px;
+      right: 10px;
+      background-color: #fff;
+      @extend %border-style;
+
+      > div {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 10px;
+
+        + div {border-top: 1px solid $input--border-color;}
+
+        &:hover {
+          cursor: pointer;
+          background-color: lighten($button--hover--background, 10%);
+        }
+      }
+    }
+  }
+
+  .info-block__label {margin: 10px 0 4px;}
+
+  .info-block__hint {font-size: 14px}
+
+  .info-block__label,
+  .info-block__hint {color: #b1b8c6;}
+
+  .info-block__mail {color: $main-color-2;}
+}
+
+// Блок добавление счета/реквизитов
+.counterparty__add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+
+  > .plus {
+    margin-bottom: 15px;
+
+    &:before {
+      @extend .icon-add_2;
+      color: #ffffff;
+      font-size: 25px;
+      background-color: #ebeff6;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    .plus:before {
+      background-color: $main-color-1;
+    }
+  }
+}

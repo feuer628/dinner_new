@@ -1,0 +1,29 @@
+// Компонент разворачивающейся панели
+
+.accordion-component {
+  margin-top: 26px;
+
+  & + & {margin-top: 20px}
+
+  &__header {
+    cursor: pointer;
+    color: $main-color-2;
+    position: relative;
+
+    .dropdown-indicator {
+      background: none;
+      font-size: 24px;
+      margin-left: 8px;
+      right: auto;
+
+      @extend .icon;
+      @extend .icon-dropdown;
+    }
+  }
+
+  &__content {
+    min-width: 100%;
+    margin-top: 1px;
+    background-color: #fff;
+  }
+}

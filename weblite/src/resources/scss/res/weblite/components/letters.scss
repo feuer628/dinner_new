@@ -1,0 +1,157 @@
+// Letters table =======================================================================================================
+
+.letters-table {
+  display: table;
+  border-collapse: collapse;
+  width: 100%;
+
+  &__row {
+    display: table-row;
+    cursor: pointer;
+    border-bottom: 1px solid $app-border--color;
+    transition: $link-transition;
+
+    &.important-message {font-weight: bold}
+
+    &:hover {color: $link-color--hover}
+  }
+
+  &__cell {
+    display: table-cell;
+    padding: 0 8px;
+    vertical-align: middle;
+    height: 48px;
+    @extend .ellipsis;
+
+    &:empty {padding: 0}
+
+    &.recipient-cell {
+      min-width: 200px;
+      width: 200px;
+      max-width: 200px;
+    }
+  }
+
+  .icon {
+    color: $app-border--color;
+    font-size: 24px;
+
+    &.icon-star {
+      @extend %icon-star-style;
+    }
+
+    &.icon-important {color: $important-color}
+  }
+
+  .checkbox span:before {margin: 0}
+}
+
+
+
+// Письмо ==============================================================================================================
+
+.important-message {
+  position: relative;
+  @extend .icon-important;
+
+  &:before {
+    @extend .icon;
+    position: absolute;
+    left: -24px;
+    font-size: 24px;
+    color: red;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.letter-label {
+  color: $text--color-2;
+  margin-bottom: 8px;
+}
+
+.letter-body {
+  border: solid $light--color-1;
+  border-width: 1px 0;
+  padding: 16px;
+  margin-top: 24px;
+  word-wrap: break-word;
+  white-space: pre-wrap !important;
+}
+
+.letter-textarea textarea {height: 256px}
+
+// Вложения
+
+.attachments {
+  margin: 0 $app-sidebar--margin 0;
+  min-height: 100px;
+
+  .attachments-file-drop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 80px;
+
+    .attachments-file-drop__content {
+      padding-left: 46px;
+      background: url('../img/icons/attachments/icon-attachment.svg') no-repeat left center;
+    }
+  }
+
+  .attachments__title {
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+
+  .attachments-hint {
+    font-size: 12px;
+    color: #b6bbbf;
+    text-align: left;
+    margin: 12px 0 32px;
+  }
+
+  .attach {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+
+    + .attach {margin-top: 16px}
+
+    > div {
+      display: inline-flex;
+      position: relative;
+      padding-left: 40px;
+
+      &:before {
+        content: '';
+        position: absolute;
+        width: 32px;
+        height: 32px;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      &.icon-file:before {background: url('../img/icons/attachments/icon-file.svg') no-repeat center}
+      &.icon-pdf:before {background: url('../img/icons/attachments/icon-pdf.svg') no-repeat center}
+    }
+
+    .icon-close {
+      font-size: 20px;
+      opacity: 0.5;
+      margin-left: 5px;
+
+      &:hover {
+        opacity: 1;
+        cursor: pointer;
+      }
+    }
+
+    .attach__name {
+      max-width: 182px;
+      @extend .ellipsis;
+    }
+  }
+}

@@ -1,27 +1,34 @@
 {
     "compilerOptions": {
-        "outFile": "./dist/build.js",
-        // при использовании webpack 2+ или rollup, добавить поддержку tree-shaking:
-        "module": "es2015",
-        // это соответствует поддержке браузеров у Vue
-        "target": "es2015",
-        // это обеспечивает более строгий вывод для свойств данных в `this`
+        "outFile": "C:/tools/tomcat/webapps/ROOT/lib/frontend.js",
+        "module": "amd",
+        "target": "ES2015",
         "strict": true,
         "moduleResolution": "node",
 
-        "noImplicitAny": true,
-        "sourceMap": true,
         "alwaysStrict": true,
-        "declaration": true,
-        "experimentalDecorators": true,
         "forceConsistentCasingInFileNames": true,
         "importHelpers": true,
+        "baseUrl": "./src/ts",
+        "rootDir": "./src/ts",
+        "declaration": true,
+        "noImplicitAny": true,
         "noImplicitReturns": true,
-        "noImplicitThis": true,
-        "outDir": "dist/esnext",
-        "strictNullChecks": true
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "preserveConstEnums": true,
+//        "noResolve": true,
+        // для этапа разработки
+        "removeComments": false,
+        "sourceMap": true,
+        "inlineSources": true
+//        "allowJs": true
     },
-    "include": [
-        "src/**/*"
+    "include" : [
+        "./src/ts/lib/require.",
+        "./src/ts",
+        "./src/ts/components",
+        "./src/ts/services",
+        "./src/ts/style"
     ]
 }

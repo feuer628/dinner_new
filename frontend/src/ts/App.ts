@@ -1,7 +1,5 @@
 import Vue from "vue";
 import axios from 'axios'
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 import MessageDialog from './components/dialogs/messageDialog';
 import Component from "vue-class-component";
 import Common from "./common";
@@ -78,7 +76,7 @@ export default class App extends Vue {
     messageDialog: MessageDialog = Common.getMessageDialog();
 
     getAllPosts() {
-        axios.get("http://localhost/reverser/xmlbasedreverser")
+        axios.get("http://localhost/api/reverser/jsonbasedreverser")
             .then(response => {
                 console.log(response);
             })
