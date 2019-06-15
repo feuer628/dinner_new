@@ -12,6 +12,8 @@
         <module>api</module>
         <module>frontend</module>
         <module>weblite</module>
+        <module>tomcat</module>
+        <module>base</module>
     </modules>
 
 

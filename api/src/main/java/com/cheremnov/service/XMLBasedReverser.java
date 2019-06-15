@@ -1,4 +1,4 @@
-package main.java.com.cheremnov.service;
+package com.cheremnov.service;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

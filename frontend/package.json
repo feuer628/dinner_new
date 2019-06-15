@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "./node_modules/.bin/tsc -w --project ./tsconfig.json",
     "buildwebpack": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-    "build": "./node_modules/.bin/tsc --project ./tsconfig.json"
+    "build": "./node_modules/.bin/tsc --project ./tsconfig.json",
+    "release": "./node_modules/.bin/tsc --project ./tsconfig_release.json"
   },
   "dependencies": {
     "bootstrap-vue": "^2.0.0-rc.11",

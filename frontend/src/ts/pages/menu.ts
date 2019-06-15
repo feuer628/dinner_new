@@ -1,11 +1,10 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
 
-import {MenuInfo, MenuService} from "./services/menuService";
-import SettingsService, {OrderType} from "./services/settingsService";
-import EmployeeServices, {EmployeeInfo} from "./services/employeeServices";
-import Common from "./common";
-import App from "./App";
+import {MenuInfo, MenuService} from "../service/menuService";
+import SettingsService, {OrderType} from "../service/settingsService";
+import EmployeeServices, {EmployeeInfo} from "../service/employeeServices";
+import Common from "../utils/common";
 
 @Component({
     // language=Vue

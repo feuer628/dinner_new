@@ -1,12 +1,14 @@
 {
     "compilerOptions": {
-        "outFile": "C:/tools/tomcat7/webapps/ROOT/lib/frontend.js",
+        "outFile": "./target/result/lib/frontend.js",
         "module": "amd",
         "target": "ES2015",
         "strict": true,
         "moduleResolution": "node",
 
-
+        "alwaysStrict": true,
+        "forceConsistentCasingInFileNames": true,
+        "importHelpers": true,
         "baseUrl": "./src/ts",
         "rootDir": "./src/ts",
         "declaration": true,
@@ -15,17 +17,16 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "preserveConstEnums": true,
-//        "noResolve": true,
-        // для этапа разработки
-        "removeComments": false,
-        "sourceMap": true,
-        "inlineSources": true
-//        "allowJs": true
+
+        "removeComments": true,
+        "sourceMap": false,
+        "inlineSources": false
     },
     "include" : [
         "./src/ts/lib/require.",
         "./src/ts",
         "./src/ts/components",
-        "./src/ts/service"
+        "./src/ts/services",
+        "./src/ts/style"
     ]
 }

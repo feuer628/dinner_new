@@ -1,8 +1,8 @@
 import Vue from "vue";
 import axios from 'axios'
-import MessageDialog from './components/dialogs/messageDialog';
+import MessageDialog from '../components/dialogs/messageDialog';
 import Component from "vue-class-component";
-import Common from "./common";
+import Common from "../utils/common";
 
 @Component({
     // language=Vue
@@ -26,6 +26,9 @@ import Common from "./common";
                     <b-nav-item to="users">Пользователи</b-nav-item>
                     <b-nav-item to="newUsers">Новые пользователи</b-nav-item>
                     <b-nav-item to="sysProps">Системные свойства</b-nav-item>
+                    <b-nav-item to="registration">Регистрация</b-nav-item>
+                    <!--TODO вынести как отдельную страницу после которой будет открываться текущая-->
+                    <b-nav-item to="authorization">Авторизация</b-nav-item>
                 </b-navbar-nav>
 
                 <!-- Right aligned nav items -->
@@ -76,13 +79,15 @@ export default class App extends Vue {
     messageDialog: MessageDialog = Common.getMessageDialog();
 
     getAllPosts() {
+        console.log("asdad");
         axios.get("http://localhost/api/reverser/jsonbasedreverser")
             .then(response => {
                 console.log(response);
             })
-            .catch(error => {
+            .catch(async error => {
                 console.log('-----error-------');
                 console.log(error);
+                await this.messageDialog.showError("Внутренняя ошибка сервера.");
             })
     }
 }

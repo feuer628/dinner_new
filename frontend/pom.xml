@@ -10,6 +10,95 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>frontend</artifactId>
+    <packaging>pom</packaging>
+
+    <properties>
+
+        <result.dir>${project.build.directory}/result</result.dir>
+
+    </properties>
+
+    <build>
+        <sourceDirectory>${project.basedir}/src</sourceDirectory>
+        <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${result.dir}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/src</directory>
+                                    <includes>
+                                        <include>**/*.css</include>
+
+                                        <include>**/index.html</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Компилируем ts в один js-файл -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>frontend-resources</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>npm</executable>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>release</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>frontend-libs</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>gulp</executable>
+                            <arguments>
+                                <argument>release</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>frontend-js</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>gulp</executable>
+                            <arguments>
+                                <argument>uglify-index</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+    </build>
 
 
 </project>
