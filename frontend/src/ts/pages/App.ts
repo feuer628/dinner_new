@@ -73,18 +73,18 @@ import Common from "../utils/common";
     </div>`
 })
 
-export default class App extends Vue {
+export class App extends Vue {
     endpoint: string = 'https://jsonplaceholder.typicode.com/posts/';
-    posts = [];
+    posts: any[] = [];
     messageDialog: MessageDialog = Common.getMessageDialog();
 
     getAllPosts() {
         console.log("asdad");
         axios.get("http://localhost/api/reverser/jsonbasedreverser")
-            .then(response => {
+            .then((response: any) => {
                 console.log(response);
             })
-            .catch(async error => {
+            .catch(async (error: any) => {
                 console.log('-----error-------');
                 console.log(error);
                 await this.messageDialog.showError("Внутренняя ошибка сервера.");

@@ -1,0 +1,16 @@
+.w25 {
+    width: 25px;
+}
+.w80 {
+    width: 80px;
+}
+.w200 {
+    width: 200px;
+}
+.alert {
+    position: relative;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0;// переопределяем маргин
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}

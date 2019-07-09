@@ -1,31 +1,22 @@
 {
-    "compilerOptions": {
-        "outFile": "C:/tools/tomcat7/webapps/ROOT/lib/frontend.js",
-        "module": "amd",
-        "target": "ES2015",
-        "strict": true,
-        "moduleResolution": "node",
-
-
-        "baseUrl": "./src/ts",
-        "rootDir": "./src/ts",
-        "declaration": true,
-        "noImplicitAny": true,
-        "noImplicitReturns": true,
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "preserveConstEnums": true,
-//        "noResolve": true,
-        // для этапа разработки
-        "removeComments": false,
-        "sourceMap": true,
-        "inlineSources": true
-//        "allowJs": true
-    },
-    "include" : [
-        "./src/ts/lib/require.",
-        "./src/ts",
-        "./src/ts/components",
-        "./src/ts/service"
-    ]
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "lib": ["es6", "dom"],
+    "rootDir": "src",
+    "module": "commonjs",
+    "target": "es5",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true
+  },
+  "include": [
+    "./src"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
