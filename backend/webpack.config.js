@@ -1,11 +1,13 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
     entry: {
-        app: './src/app.ts'
+        app: path.resolve(__dirname, "src", "app.ts")
     },
     output: {
+        path: path.resolve(__dirname, "..", "build"),
         filename: 'app.js'
     },
     target: 'node',
@@ -25,6 +27,7 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: [ '.tsx', '.ts', '.js' ]
+        extensions: [ '.tsx', '.ts', '.js' ],
+        plugins: [new TsconfigPathsPlugin({ configFile: "./backend/tsconfig.json" })]
     }
 };

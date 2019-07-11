@@ -1,15 +1,16 @@
-require('dotenv').config();
-
 import express from 'express';
 import bodyParser from 'body-parser';
 import sassMiddleware from 'node-sass-middleware';
 import {init} from "./db";
 import {role} from "./routes/role";
 import {action} from "./routes/action";
+import dotenv from 'dotenv';
 
 export const LOG = require('simple-node-logger').createSimpleLogger('project.log');
 
 (async () => {
+
+    dotenv.config();
     const httpPort = process.env.HTTP_PORT;
 
     const app = express();
@@ -31,7 +32,7 @@ export const LOG = require('simple-node-logger').createSimpleLogger('project.log
         })
     );
 
-    app.use("/public", express.static(__dirname + '/public_html'));
+    app.use("/public", express.static(__dirname + '/public'));
     app.get('/', function(req, res) {
         res.sendFile(__dirname + "/public/index.html");
     });

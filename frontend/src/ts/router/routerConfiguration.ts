@@ -6,6 +6,7 @@ import {RouteConfig} from "vue-router";
 import menu from '../pages/menu';
 import registration from '../pages/registration';
 import authorization from '../pages/authorization';
+import {Roles} from '../pages/roles';
 // import {CounterpartiesPage} from "../pages/counterparties/counterpartiesPage";
 // import {CounterpartyView} from "../pages/counterparties/counterpartyView";
 // import {EventsPage} from "../pages/events/eventsPage";
@@ -78,6 +79,11 @@ export class RouterConfiguration {
                 path: "/authorization",
                 name: "authorization",
                 component: authorization
+            },
+            {
+                path: "/roles",
+                name: "roles",
+                component: Roles
             },
             // {
             //     path: "/counterparties",

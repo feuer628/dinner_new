@@ -18,6 +18,8 @@ import Common from "../utils/common";
             <b-collapse is-nav id="nav_collapse">
 
                 <b-navbar-nav>
+                    <b-nav-item to="roles">Роли</b-nav-item>
+                    
                     <b-nav-item to="organizations">Организации</b-nav-item>
                     <b-nav-item to="orderGroup">Группы заказов</b-nav-item>
                     <b-nav-item to="report">Отчет</b-nav-item>

@@ -1,18 +1,21 @@
+const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
+const publicPath = path.resolve(__dirname, "..", "build", "public");
 module.exports = {
     entry: {
-        app: "./src/ts/application.ts"
+        app: path.resolve(__dirname, "src", "ts", "application.ts")
     },
     output: {
-        filename: 'app.js'
+        path: publicPath,
+        filename: "app.js"
     },
     module: {
         rules: [
             {
                 test: /\.ts$/,
-                use: 'ts-loader',
-                exclude: /node_modules|dist/
+                use: 'ts-loader'
             },
             {
                 test: /\.s?css$/,
@@ -28,11 +31,12 @@ module.exports = {
         extensions: [ '.tsx', '.ts', '.js' ],
         alias: {
             'vue$': 'vue/dist/vue.esm.js'
-        }
+        },
+        plugins: [new TsconfigPathsPlugin({ configFile: "./frontend/tsconfig.json" })]
     },
     plugins: [
         new CopyPlugin([
-            { from: 'src/index.html', to: 'index.html' }
+            { from: path.resolve(__dirname, "src", "index.html"), to: path.resolve(publicPath, "index.html") }
         ])
     ]
 };
