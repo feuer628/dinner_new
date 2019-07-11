@@ -23,12 +23,16 @@ export default class MessageDialog {
         return MessageDialog.resolve(bvEvt.isOK === "ok");
     }
 
+    async showInternalError(): Promise<void> {
+        await this.showDialog("Ошибка", true, "Внутренняя ошибка сервера");
+    }
+
     /**
      * Отображает диалог с ошибкой
      * @param text текст ошибки или ошибка
      */
     async showError(text: string | Error): Promise<void> {
-        this.showDialog("Ошибка", true, text as string);
+        await this.showDialog("Ошибка", true, text as string);
     }
 
     /**
