@@ -2,12 +2,13 @@ const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
+const buildPath = path.resolve(__dirname, "..", "build");
 module.exports = {
     entry: {
         app: path.resolve(__dirname, "src", "app.ts")
     },
     output: {
-        path: path.resolve(__dirname, "..", "build"),
+        path: buildPath,
         filename: 'app.js'
     },
     target: 'node',
@@ -29,5 +30,11 @@ module.exports = {
     resolve: {
         extensions: [ '.tsx', '.ts', '.js' ],
         plugins: [new TsconfigPathsPlugin({ configFile: "./backend/tsconfig.json" })]
-    }
+    },
+    plugins: [
+        // TODO Перенести копирование .env файла в prod-конфиг, т.к. нужно только для сборки production
+        // new CopyPlugin([
+        //     { from: path.resolve(__dirname, "..", ".env"), to: path.resolve(buildPath) }
+        // ])
+]
 };

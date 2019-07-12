@@ -5,15 +5,16 @@
   "author": "Cheremnov",
   "private": true,
   "scripts": {
-    "prod": "npm-run-all front_prod back_prod",
-    "front_dev": "npm-run-all --parallel front:**",
-    "front_prod": "webpack --config frontend/webpack.prod.js",
-    "front:watch": "webpack -w --config frontend/webpack.dev.js",
+    "dev"         : "npm run back_prod && npm-run-all --parallel front:watch back_dev",
+    "front_dev"   : "npm-run-all --parallel front:**",
+    "front:watch" : "webpack -w --config frontend/webpack.dev.js",
     "front:server": "webpack-dev-server --config frontend/webpack.dev.js",
-    "back_dev": "npm-run-all --parallel back:**",
-    "back_prod": "webpack --config backend/webpack.config.js --mode=production",
-    "back:watch": "webpack -w --config backend/webpack.config.js --mode=development",
-    "back:server": "cd backend/ && nodemon ../build/app.js"
+    "back_dev"    : "npm-run-all --parallel back:**",
+    "back:watch"  : "webpack -w --config backend/webpack.config.js --mode=development",
+    "back:server" : "nodemon ./build/app.js localhost 80",
+    "prod"        : "npm-run-all front_prod back_prod",
+    "front_prod"  : "webpack --config frontend/webpack.prod.js",
+    "back_prod"   : "webpack --config backend/webpack.config.js --mode=production"
   },
   "dependencies": {
     "axios": "latest",

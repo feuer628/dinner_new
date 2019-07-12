@@ -57,7 +57,7 @@ import Common from "../utils/common";
         <main>
             <div class="content" style="">
                 <b-alert dismissible > sadfafsdf </b-alert>
-                <router-view></router-view>
+                <router-view class="m10"></router-view>
             </div>
             <!-- Диалоговое окно -->
             <b-modal :cancel-title="messageDialog.cancelTitle" 

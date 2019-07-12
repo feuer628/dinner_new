@@ -31,8 +31,8 @@ export class Roles extends Vue {
      * хук. загрузка необходимой информации
      */
     private async mounted(): Promise<void> {
-        // this.roles = await this.getRoles();
-        // this.actions = await this.getActions();
+        this.roles = await this.getRoles();
+        this.actions = await this.getActions();
     }
 
     private async getRoles(): Promise<Role[]> {
@@ -45,9 +45,9 @@ export class Roles extends Vue {
         return [];
     }
 
-    private async getActions(): Promise<Role[]> {
+    private async getActions(): Promise<Action[]> {
         try {
-            const response = await axios.get<Role[]>("/actions");
+            const response = await axios.get<Action[]>("/actions");
             return response.data;
         } catch (e) {
             await this.messageDialog.showInternalError();
