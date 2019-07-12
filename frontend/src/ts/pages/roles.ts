@@ -10,28 +10,34 @@ import Common from "../utils/common";
 `
 <div>
     <h3>Роли и действия</h3>
-    <h4>Роли (нажать, чтобы открыть список действий) <b-button pill variant="outline-success" size="sm"><font-awesome-icon icon="plus"></font-awesome-icon></b-button></h4>
+    <h4>
+        Роли (нажать, чтобы открыть список действий) 
+        <b-button v-b-modal.add-role-modal pill variant="outline-success" size="sm"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
+    </h4>
     <b-list-group>
         <b-list-group-item v-for="role in roles" v-b-toggle="'rolecollapse-'+role.id">
-            <b-button variant="outline-danger" size="sm"><font-awesome-icon icon="trash"></font-awesome-icon></b-button>
+            <b-button variant="outline-danger" size="sm" @click.stop="dropRole(role)"><font-awesome-icon icon="trash"></font-awesome-icon></b-button>
             {{role.name}} <font-awesome-icon icon="angle-down"></font-awesome-icon>
             <b-collapse :id="'rolecollapse-'+role.id" class="mt-2">
                 <b-list-group>
-                    <b-list-group-item v-for="action in actions">
-                        <b-form-checkbox :value="action.id">{{action.desc}}</b-form-checkbox>
+                    <b-list-group-item v-for="action in actions" @click.stop>
+                        <b-form-checkbox v-model="role.actions[action.id]" :value="action.desc" @change="roleActionAssoc(role.id, action.id, !!role.actions[action.id])">{{action.desc}}</b-form-checkbox>
                     </b-list-group-item>
                 </b-list-group>
             </b-collapse>
         </b-list-group-item>
     </b-list-group>
+    <b-modal ref="addRoleModal" id="add-role-modal" class="w-300" centered title="Добавление новой роли">
+        <b-form-input v-model="newRoleName" placeholder="Введите имя новой роли"></b-form-input>
+        <div slot="modal-footer" class="alignR">
+            <b-button variant="outline-secondary" size="sm" @click="hideModal('addRoleModal')">Отмена</b-button>
+            <b-button variant="success" size="sm" @click="addNewRole('addRoleModal')">Добавить</b-button>
+        </div>
+    </b-modal>
     <h4>Действия</h4>
     <b-list-group>
         <b-list-group-item v-for="action in actions">
-            <b-button variant="outline-danger" size="sm"><font-awesome-icon icon="trash"></font-awesome-icon></b-button>
             {{action.desc}}
-        </b-list-group-item>
-        <b-list-group-item>
-            <b-button pill variant="outline-success" size="sm">Добавить действие</b-button>
         </b-list-group-item>
     </b-list-group>
 </div>
@@ -43,43 +49,93 @@ export class Roles extends Vue {
 
     private roles: Role[] = [];
 
-    private actions: Action[] = [];
+    private newRoleName: string = "";
+
+    private actions: DbAction[] = [];
 
     /**
      * хук. загрузка необходимой информации
      */
     private async mounted(): Promise<void> {
-        this.roles = await this.getRoles();
-        this.actions = await this.getActions();
+        this.roles = await this.loadRoles();
+        this.actions = await this.loadItems<DbAction>("actions");
     }
 
-    private async getRoles(): Promise<Role[]> {
+    private hideModal(name: string): void {
+        (<any> this.$refs[name]).hide();
+    }
+
+    private async addNewRole(name: string): Promise<void> {
         try {
-            const response = await axios.get<Role[]>("/roles");
+            if (this.newRoleName) {
+                await axios.post("/roles", {name: this.newRoleName});
+                (<any> this.$refs[name]).hide();
+                this.roles = await this.loadItems<Role>("roles");
+            } else {
+                await this.messageDialog.showWarning("Не задано имя новой роли");
+            }
+        } catch (e) {
+            await this.messageDialog.showInternalError();
+        }
+    }
+
+    private async roleActionAssoc(roleId: number, actionId: number, newAssoc: boolean) {
+        try {
+            await axios.patch(`/roles/${roleId}/assoc/${actionId}`);
+            this.roles = await this.loadRoles();
+        } catch (e) {
+            await this.messageDialog.showInternalError();
+        }
+    }
+
+    private async dropRole(role: Role): Promise<void> {
+        try {
+            if (await this.$bvModal.msgBoxConfirm(`Вы уверены что хотите удалить роль '${role.name}'`)) {
+                await axios.delete("/roles/" + role.id);
+                this.roles = await this.loadItems<Role>("roles");
+            }
+        } catch (e) {
+            await this.messageDialog.showInternalError();
+        }
+    }
+
+    private async loadRoles(): Promise<Role[]> {
+        const roles = await this.loadItems<DbRole>("roles");
+        return roles.map(role => {
+            const actions: {[id: number]: string} = {};
+            for (const act of role.actions) {
+                actions[act.id] = act.desc;
+            }
+            return {id: role.id, name: role.name, actions}
+        });
+    }
+
+    private async loadItems<T>(refName: string): Promise<T[]> {
+        try {
+            const response = await axios.get<T[]>(`/${refName}`);
             return response.data;
         } catch (e) {
             await this.messageDialog.showInternalError();
         }
         return [];
     }
+}
 
-    private async getActions(): Promise<Action[]> {
-        try {
-            const response = await axios.get<Action[]>("/actions");
-            return response.data;
-        } catch (e) {
-            await this.messageDialog.showInternalError();
-        }
-        return [];
-    }
+type DbRole = {
+    id?: number;
+    name: string;
+    actions: DbAction[];
+}
+
+type DbAction = {
+    id: number;
+    desc: string;
 }
 
 type Role = {
     id?: number;
     name: string;
+    actions: Actions;
 }
 
-type Action = {
-    id?: number;
-    desc: string;
-}
+type Actions = {[id: number]: string};

@@ -60,12 +60,12 @@ export default class MessageDialog {
     }
 
     private async showDialog(title: string, okOnly: boolean, message: string,
-                             okTitle: string = "Ок", canselTitle: string = "Отмена"): Promise<boolean> {
+                             okTitle: string = "Ок", cancelTitle: string = "Отмена"): Promise<boolean> {
         this.isShowDialog = true;
         this.title = title;
         this.okOnly = okOnly;
         this.message = message;
-        this.cancelTitle = canselTitle;
+        this.cancelTitle = cancelTitle;
         this.okTitle = okTitle;
         return new Promise<boolean>((resolve, reject) => {
             MessageDialog.resolve = resolve;

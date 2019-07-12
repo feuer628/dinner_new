@@ -1,24 +1,21 @@
 CREATE TABLE "roles" (
-	"id" serial NOT NULL,
-	"name" VARCHAR(300) NOT NULL,
-	CONSTRAINT "roles_pk" PRIMARY KEY ("id")
+	"id" SERIAL NOT NULL PRIMARY KEY,
+	"name" VARCHAR(300) NOT NULL
 ) WITH (
     OIDS=FALSE
 );
 
 CREATE TABLE "actions" (
-    "id" serial NOT NULL,
-    "desc" VARCHAR(500) NOT NULL,
-    CONSTRAINT "actions_pk" PRIMARY KEY ("id")
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "desc" VARCHAR(500) NOT NULL
 ) WITH (
     OIDS=FALSE
 );
 
 CREATE TABLE "role_actions" (
-    "id" serial NOT NULL,
-    "role_id" serial NOT NULL,
-    "action_id" serial NOT NULL ,
-    CONSTRAINT "role_actions_pk" PRIMARY KEY ("id")
+    "id" SERIAL NOT NULL PRIMARY KEY,
+    "role_id" SERIAL NOT NULL,
+    "action_id" SERIAL NOT NULL
 ) WITH (
     OIDS=FALSE
 );
@@ -195,12 +192,16 @@ ALTER TABLE "balance_history" ADD CONSTRAINT "balance_history_fk1" FOREIGN KEY (
  Проливка начальных данных!
  */
 
-INSERT INTO "public"."roles" ("id", "name") VALUES (1, 'администратор');
-INSERT INTO "public"."roles" ("id", "name") VALUES (2, 'оператор');
-INSERT INTO "public"."roles" ("id", "name") VALUES (3, 'пользователь');
-INSERT INTO "public"."roles" ("id", "name") VALUES (4, 'поставщик');
+INSERT INTO "public"."roles" ("name") VALUES ('администратор');
+INSERT INTO "public"."roles" ("name") VALUES ('оператор');
+INSERT INTO "public"."roles" ("name") VALUES ('пользователь');
+INSERT INTO "public"."roles" ("name") VALUES ('поставщик');
 
 INSERT INTO "public"."actions" ("id", "desc") VALUES (1, 'Возможность администрирования системы');
 INSERT INTO "public"."actions" ("id", "desc") VALUES (2, 'Возможность добавлять обед за другого сотрудника');
 INSERT INTO "public"."actions" ("id", "desc") VALUES (3, 'Возможность подтверждения регистрации сотрудника');
 INSERT INTO "public"."actions" ("id", "desc") VALUES (4, 'Возможность заказывать обед');
+
+INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 1);
+INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 2);
+INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 4);
