@@ -1,3 +1,6 @@
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+
 CREATE TABLE "roles" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
 	"name" VARCHAR(300) NOT NULL
@@ -20,8 +23,52 @@ CREATE TABLE "role_actions" (
     OIDS=FALSE
 );
 
+ALTER TABLE "role_actions" ADD CONSTRAINT "role_actions_fk0" FOREIGN KEY ("role_id") REFERENCES "roles"("id");
+ALTER TABLE "role_actions" ADD CONSTRAINT "role_actions_fk1" FOREIGN KEY ("action_id") REFERENCES "actions"("id");
+
+CREATE TABLE "system_properties" (
+	"name" VARCHAR(100) NOT NULL PRIMARY KEY,
+	"value" VARCHAR(1024)
+) WITH (
+    OIDS=FALSE
+);
+
+CREATE TABLE "org_groups" (
+	"id" SERIAL NOT NULL PRIMARY KEY,
+	"limit_type" INTEGER NOT NULL,
+	"name" VARCHAR(300) NOT NULL,
+	"description" VARCHAR(255),
+	"provider_id" INTEGER
+) WITH (
+    OIDS=FALSE
+);
+
+CREATE TABLE "organizations" (
+	"id" SERIAL NOT NULL PRIMARY KEY,
+	"name" VARCHAR(300) NOT NULL,
+	"to_name" VARCHAR(300),
+	"group_id" integer NOT NULL
+) WITH (
+    OIDS=FALSE
+);
+
+ALTER TABLE "organizations" ADD CONSTRAINT "organizations_fk0" FOREIGN KEY ("group_id") REFERENCES "org_groups"("id");
 
 
+
+INSERT INTO "public"."roles" ("name") VALUES ('администратор');
+INSERT INTO "public"."roles" ("name") VALUES ('оператор');
+INSERT INTO "public"."roles" ("name") VALUES ('пользователь');
+INSERT INTO "public"."roles" ("name") VALUES ('поставщик');
+
+INSERT INTO "public"."actions" ("id", "desc") VALUES (1, 'Возможность администрирования системы');
+INSERT INTO "public"."actions" ("id", "desc") VALUES (2, 'Возможность добавлять обед за другого сотрудника');
+INSERT INTO "public"."actions" ("id", "desc") VALUES (3, 'Возможность подтверждения регистрации сотрудника');
+INSERT INTO "public"."actions" ("id", "desc") VALUES (4, 'Возможность заказывать обед');
+
+INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 1);
+INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 2);
+INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 4);
 /*
 CREATE TABLE "menu" (
 	"id" serial,
@@ -37,20 +84,6 @@ CREATE TABLE "menu" (
   OIDS=FALSE
 );
 
-
-
-CREATE TABLE "organizations" (
-	"id" serial,
-	"name" VARCHAR(300) NOT NULL,
-	"to_name" VARCHAR(300),
-	"group_id" integer NOT NULL,
-	CONSTRAINT "organizations_pk" PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
-
-
 CREATE TABLE "orders" (
 	"id" serial,
 	"user_id" integer NOT NULL,
@@ -62,8 +95,6 @@ CREATE TABLE "orders" (
 ) WITH (
   OIDS=FALSE
 );
-
-
 
 CREATE TABLE "users" (
 	"id" serial NOT NULL,
@@ -89,19 +120,6 @@ CREATE TABLE "users" (
   OIDS=FALSE
 );
 
-
-
-CREATE TABLE "org_groups" (
-	"id" serial NOT NULL,
-	"limit_type" integer NOT NULL,
-	"name" VARCHAR(300) NOT NULL,
-	"oper_id" integer,
-	"description" VARCHAR(255),
-	CONSTRAINT "org_groups_pk" PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
 CREATE TABLE "providers" (
 	"id" serial NOT NULL,
 	"name" VARCHAR(300) NOT NULL,
@@ -111,8 +129,6 @@ CREATE TABLE "providers" (
 ) WITH (
   OIDS=FALSE
 );
-
-
 
 CREATE TABLE "order_items" (
 	"id" serial NOT NULL,
@@ -128,8 +144,6 @@ CREATE TABLE "order_items" (
   OIDS=FALSE
 );
 
-
-
 CREATE TABLE "provider_reviews" (
 	"id" serial NOT NULL,
 	"provider_id" integer NOT NULL,
@@ -140,8 +154,6 @@ CREATE TABLE "provider_reviews" (
 ) WITH (
   OIDS=FALSE
 );
-
-
 
 CREATE TABLE "balance_history" (
 	"id" serial NOT NULL,
@@ -154,36 +166,13 @@ CREATE TABLE "balance_history" (
   OIDS=FALSE
 );
 
-
-
-CREATE TABLE "system_properties" (
-	"name" VARCHAR(100) NOT NULL,
-	"value" VARCHAR(1024),
-	CONSTRAINT "system_properties_pk" PRIMARY KEY ("name")
-) WITH (
-  OIDS=FALSE
-);
-
-
-
 ALTER TABLE "menu" ADD CONSTRAINT "menu_fk0" FOREIGN KEY ("provider_id") REFERENCES "providers"("id");
-
-ALTER TABLE "organizations" ADD CONSTRAINT "organizations_fk0" FOREIGN KEY ("group_id") REFERENCES "org_groups"("id");
-
 ALTER TABLE "orders" ADD CONSTRAINT "orders_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
-
 ALTER TABLE "users" ADD CONSTRAINT "users_fk0" FOREIGN KEY ("org_id") REFERENCES "organizations"("id");
 ALTER TABLE "users" ADD CONSTRAINT "users_fk1" FOREIGN KEY ("role_id") REFERENCES "roles"("id");
-
-ALTER TABLE "org_groups" ADD CONSTRAINT "org_groups_fk0" FOREIGN KEY ("oper_id") REFERENCES "users"("id");
-
-
-
 ALTER TABLE "order_items" ADD CONSTRAINT "order_items_fk0" FOREIGN KEY ("order_id") REFERENCES "orders"("id");
-
 ALTER TABLE "provider_reviews" ADD CONSTRAINT "provider_reviews_fk0" FOREIGN KEY ("provider_id") REFERENCES "providers"("id");
 ALTER TABLE "provider_reviews" ADD CONSTRAINT "provider_reviews_fk1" FOREIGN KEY ("user_id") REFERENCES "users"("id");
-
 ALTER TABLE "balance_history" ADD CONSTRAINT "balance_history_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
 ALTER TABLE "balance_history" ADD CONSTRAINT "balance_history_fk1" FOREIGN KEY ("order_id") REFERENCES "orders"("id");
 */
@@ -191,17 +180,3 @@ ALTER TABLE "balance_history" ADD CONSTRAINT "balance_history_fk1" FOREIGN KEY (
 /*
  Проливка начальных данных!
  */
-
-INSERT INTO "public"."roles" ("name") VALUES ('администратор');
-INSERT INTO "public"."roles" ("name") VALUES ('оператор');
-INSERT INTO "public"."roles" ("name") VALUES ('пользователь');
-INSERT INTO "public"."roles" ("name") VALUES ('поставщик');
-
-INSERT INTO "public"."actions" ("id", "desc") VALUES (1, 'Возможность администрирования системы');
-INSERT INTO "public"."actions" ("id", "desc") VALUES (2, 'Возможность добавлять обед за другого сотрудника');
-INSERT INTO "public"."actions" ("id", "desc") VALUES (3, 'Возможность подтверждения регистрации сотрудника');
-INSERT INTO "public"."actions" ("id", "desc") VALUES (4, 'Возможность заказывать обед');
-
-INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 1);
-INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 2);
-INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 4);

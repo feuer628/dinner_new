@@ -17,7 +17,6 @@ role.post('/', async (req, res, next) => {
 role.patch('/:id/assoc/:actionId', async (req, res, next) => {
     try {
         const roleActions = await RoleAction.scope(req.query['scope']).findAll({where: {role_id: req.params['id'], action_id: req.params['actionId']}});
-        console.log(roleActions);
         if (roleActions.length) {
             roleActions.every(async roleAction => {
                 await roleAction.destroy();
