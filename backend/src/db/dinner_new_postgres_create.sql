@@ -47,7 +47,7 @@ CREATE TABLE "organizations" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
 	"name" VARCHAR(300) NOT NULL,
 	"to_name" VARCHAR(300),
-	"group_id" integer NOT NULL
+	"group_id" INTEGER NULL
 ) WITH (
     OIDS=FALSE
 );
@@ -69,6 +69,16 @@ INSERT INTO "public"."actions" ("id", "desc") VALUES (4, 'Возможность
 INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 1);
 INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 2);
 INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 4);
+
+INSERT INTO org_groups (limit_type, name, description) VALUES (200, 'Первая группа', 'Описание первой группы');
+INSERT INTO org_groups (limit_type, name) VALUES (200, 'СС');
+INSERT INTO org_groups (limit_type, name, description) VALUES (200, 'Адобе', 'Фтошоп');
+
+INSERT INTO organizations (name, to_name, group_id) VALUES ('ФТОР', 'Судейкису С.', 1);
+INSERT INTO organizations (name, to_name) VALUES ('ХРОМ', 'Муд А.');
+INSERT INTO organizations (name, to_name, group_id) VALUES ('СЕЛЕН', 'Гуд М.', 2);
+INSERT INTO organizations (name, to_name) VALUES ('БРОМ', 'Дуд Д.');
+
 /*
 CREATE TABLE "menu" (
 	"id" serial,

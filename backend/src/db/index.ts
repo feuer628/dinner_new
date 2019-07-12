@@ -3,6 +3,8 @@ import {LOG} from "../app";
 import {Role} from "./models/Role";
 import {RoleAction} from "./models/RoleAction";
 import {Action} from "./models/Action";
+import {Organization} from "./models/Organization";
+import {OrgGroup} from "./models/OrgGroup";
 
 export function init() {
     LOG.info("Инициализация моделей. Начало.");
@@ -14,7 +16,7 @@ export function init() {
         dialect: 'postgres',
         storage: ':memory:'
     });
-    sequelize.addModels([Role, Action, RoleAction]);
+    sequelize.addModels([Role, Action, RoleAction, Organization, OrgGroup]);
     LOG.info("Инициализация моделей. Конец.")
 }
 

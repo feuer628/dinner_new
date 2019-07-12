@@ -5,6 +5,8 @@ import {init} from "./db";
 import {role} from "./routes/role";
 import {action} from "./routes/action";
 import dotenv from 'dotenv';
+import {organization} from "./routes/organization";
+import {org_group} from "./routes/org_group";
 
 export const LOG = require('simple-node-logger').createSimpleLogger('project.log');
 
@@ -25,6 +27,8 @@ export const LOG = require('simple-node-logger').createSimpleLogger('project.log
     app.use(bodyParser.json({ limit: '10mb' }));
     app.use("/roles", role);
     app.use("/actions", action);
+    app.use("/organizations", organization);
+    app.use("/org_groups", org_group);
     app.use(sassMiddleware({
             src: __dirname,
             dest: __dirname,
