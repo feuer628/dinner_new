@@ -10,12 +10,30 @@ import Common from "../utils/common";
 `
 <div>
     <h3>Роли и действия</h3>
-    <p>Тут список ролей</p>
-    <div v-for="role in roles">{{role.name}}</div>
-    <b-button pill variant="outline-success" size="sm">Добавить роль</b-button>
-    <p>Тут список действий</p>
-    <div v-for="action in actions">{{action.desc}}</div>
-    <b-button pill variant="outline-success" size="sm">Добавить действие</b-button>
+    <h4>Роли (нажать, чтобы открыть список действий) <b-button pill variant="outline-success" size="sm"><font-awesome-icon icon="plus"></font-awesome-icon></b-button></h4>
+    <b-list-group>
+        <b-list-group-item v-for="role in roles" v-b-toggle="'rolecollapse-'+role.id">
+            <b-button variant="outline-danger" size="sm"><font-awesome-icon icon="trash"></font-awesome-icon></b-button>
+            {{role.name}} <font-awesome-icon icon="angle-down"></font-awesome-icon>
+            <b-collapse :id="'rolecollapse-'+role.id" class="mt-2">
+                <b-list-group>
+                    <b-list-group-item v-for="action in actions">
+                        <b-form-checkbox :value="action.id">{{action.desc}}</b-form-checkbox>
+                    </b-list-group-item>
+                </b-list-group>
+            </b-collapse>
+        </b-list-group-item>
+    </b-list-group>
+    <h4>Действия</h4>
+    <b-list-group>
+        <b-list-group-item v-for="action in actions">
+            <b-button variant="outline-danger" size="sm"><font-awesome-icon icon="trash"></font-awesome-icon></b-button>
+            {{action.desc}}
+        </b-list-group-item>
+        <b-list-group-item>
+            <b-button pill variant="outline-success" size="sm">Добавить действие</b-button>
+        </b-list-group-item>
+    </b-list-group>
 </div>
 `
 })

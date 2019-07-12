@@ -5,18 +5,21 @@
   "author": "Cheremnov",
   "private": true,
   "scripts": {
-    "dev"         : "npm run back_prod && npm-run-all --parallel front:watch back_dev",
-    "front_dev"   : "npm-run-all --parallel front:**",
-    "front:watch" : "webpack -w --config frontend/webpack.dev.js",
+    "dev": "npm run back_prod && npm-run-all --parallel front:watch back_dev",
+    "front_dev": "npm-run-all --parallel front:**",
+    "front:watch": "webpack -w --config frontend/webpack.dev.js",
     "front:server": "webpack-dev-server --config frontend/webpack.dev.js",
-    "back_dev"    : "npm-run-all --parallel back:**",
-    "back:watch"  : "webpack -w --config backend/webpack.config.js --mode=development",
-    "back:server" : "nodemon ./build/app.js localhost 80",
-    "prod"        : "npm-run-all front_prod back_prod",
-    "front_prod"  : "webpack --config frontend/webpack.prod.js",
-    "back_prod"   : "webpack --config backend/webpack.config.js --mode=production"
+    "back_dev": "npm-run-all --parallel back:**",
+    "back:watch": "webpack -w --config backend/webpack.config.js --mode=development",
+    "back:server": "nodemon ./build/app.js localhost 80",
+    "prod": "npm-run-all front_prod back_prod",
+    "front_prod": "webpack --config frontend/webpack.prod.js",
+    "back_prod": "webpack --config backend/webpack.config.js --mode=production"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.19",
+    "@fortawesome/free-solid-svg-icons": "^5.9.0",
+    "@fortawesome/vue-fontawesome": "^0.1.6",
     "axios": "latest",
     "body-parser": "1.19.0",
     "bootstrap-vue": "^2.0.0-rc.25",
@@ -35,9 +38,9 @@
     "simple-node-logger": "^18.12.22",
     "typescript": "^3.5.3",
     "vue": "^2.6.10",
-    "vue-router": "^3.0.7",
     "vue-class-component": "^7.1.0",
-    "vue-meta": "^2.0.4"
+    "vue-meta": "^2.0.4",
+    "vue-router": "^3.0.7"
   },
   "devDependencies": {
     "@types/body-parser": "^1.17.0",

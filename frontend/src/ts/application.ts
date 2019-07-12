@@ -1,6 +1,9 @@
-import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import "../../../node_modules/bootstrap-vue/dist/bootstrap-vue.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-vue/dist/bootstrap-vue.min.css";
 import "../scss/custom.scss";
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -37,13 +40,14 @@ settingsService.loadSettings();
 // загружаем информацию о пользователе
 employeeService.loadEmployeeInfo();
 
-
 /**
  * Точка входа в приложение
  */
 (async () => {
 
     const router = RouterConfiguration.getRouter();
+    library.add(fas);
+    Vue.component('font-awesome-icon', FontAwesomeIcon);
     Vue.config.productionTip = false;
     Vue.use(BootstrapVue);
     new Vue({
