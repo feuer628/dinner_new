@@ -23,12 +23,20 @@ CREATE TABLE "role_actions" (
     OIDS=FALSE
 );
 
-ALTER TABLE "role_actions" ADD CONSTRAINT "role_actions_fk0" FOREIGN KEY ("role_id") REFERENCES "roles"("id");
-ALTER TABLE "role_actions" ADD CONSTRAINT "role_actions_fk1" FOREIGN KEY ("action_id") REFERENCES "actions"("id");
-
 CREATE TABLE "system_properties" (
 	"name" VARCHAR(100) NOT NULL PRIMARY KEY,
-	"value" VARCHAR(1024)
+	"value" VARCHAR(1024) NULL
+) WITH (
+    OIDS=FALSE
+);
+
+CREATE TABLE "providers" (
+	"id" SERIAL NOT NULL PRIMARY KEY,
+	"name" VARCHAR(300) NOT NULL,
+	"emails" VARCHAR(255) NOT NULL,
+	"description" VARCHAR(1024) NULL,
+	"url" VARCHAR(255) NULL,
+	"logo" VARCHAR(255) NULL
 ) WITH (
     OIDS=FALSE
 );
@@ -38,10 +46,11 @@ CREATE TABLE "org_groups" (
 	"limit_type" INTEGER NOT NULL,
 	"name" VARCHAR(300) NOT NULL,
 	"description" VARCHAR(255),
-	"provider_id" INTEGER
+	"provider_id" INTEGER NULL
 ) WITH (
     OIDS=FALSE
 );
+
 
 CREATE TABLE "organizations" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
@@ -52,8 +61,47 @@ CREATE TABLE "organizations" (
     OIDS=FALSE
 );
 
-ALTER TABLE "organizations" ADD CONSTRAINT "organizations_fk0" FOREIGN KEY ("group_id") REFERENCES "org_groups"("id");
+CREATE TABLE "provider_reviews" (
+	"id" SERIAL NOT NULL PRIMARY KEY,
+	"provider_id" INTEGER NOT NULL,
+	"user_id" INTEGER NOT NULL,
+	"review" VARCHAR(255) NOT NULL,
+	"rating" INTEGER NOT NULL
+) WITH (
+    OIDS=FALSE
+);
 
+CREATE TABLE "users" (
+	"id" SERIAL NOT NULL PRIMARY KEY,
+	"login" VARCHAR(100) NOT NULL UNIQUE,
+	"password" VARCHAR(255) NOT NULL,
+	"balance" FLOAT NOT NULL,
+	"description" VARCHAR(255) NOT NULL,
+	"birthday" DATE NOT NULL,
+	"phone" VARCHAR(10) NOT NULL,
+	"org_id" INTEGER NOT NULL,
+	"role_id" INTEGER NOT NULL,
+	"status" SMALLINT DEFAULT 0,
+	"key" VARCHAR(255),
+	"ip" VARCHAR(255),
+	"komp_key" VARCHAR(255),
+	"ip_phone" VARCHAR(255),
+	"from_text" VARCHAR(255),
+	"telegram_id" INTEGER,
+	"created_at" TIMESTAMP,
+	"updated_at" TIMESTAMP
+) WITH (
+    OIDS=FALSE
+);
+
+ALTER TABLE "role_actions" ADD CONSTRAINT "role_actions_fk0" FOREIGN KEY ("role_id") REFERENCES "roles"("id");
+ALTER TABLE "role_actions" ADD CONSTRAINT "role_actions_fk1" FOREIGN KEY ("action_id") REFERENCES "actions"("id");
+ALTER TABLE "org_groups" ADD CONSTRAINT "org_groups_fk0" FOREIGN KEY ("provider_id") REFERENCES "providers"("id");
+ALTER TABLE "organizations" ADD CONSTRAINT "organizations_fk0" FOREIGN KEY ("group_id") REFERENCES "org_groups"("id");
+ALTER TABLE "provider_reviews" ADD CONSTRAINT "provider_reviews_fk0" FOREIGN KEY ("provider_id") REFERENCES "providers"("id");
+ALTER TABLE "provider_reviews" ADD CONSTRAINT "provider_reviews_fk1" FOREIGN KEY ("user_id") REFERENCES "users"("id");
+ALTER TABLE "users" ADD CONSTRAINT "users_fk0" FOREIGN KEY ("org_id") REFERENCES "organizations"("id");
+ALTER TABLE "users" ADD CONSTRAINT "users_fk1" FOREIGN KEY ("role_id") REFERENCES "roles"("id");
 
 
 INSERT INTO "public"."roles" ("name") VALUES ('администратор');
@@ -106,40 +154,6 @@ CREATE TABLE "orders" (
   OIDS=FALSE
 );
 
-CREATE TABLE "users" (
-	"id" serial NOT NULL,
-	"login" VARCHAR(100) NOT NULL UNIQUE,
-	"password" VARCHAR(255) NOT NULL,
-	"balance" FLOAT NOT NULL,
-	"description" VARCHAR(255) NOT NULL,
-	"birthday" DATE NOT NULL,
-	"phone" VARCHAR(10) NOT NULL,
-	"org_id" integer NOT NULL,
-	"role_id" integer NOT NULL,
-	"status" integer NOT NULL,
-	"key" VARCHAR(255),
-	"ip" VARCHAR(255),
-	"komp_key" VARCHAR(255),
-	"ip_phone" VARCHAR(255),
-	"from_text" VARCHAR(255),
-	"telegram_id" integer,
-	"created_at" TIMESTAMP,
-	"updated_at" TIMESTAMP,
-	CONSTRAINT "users_pk" PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
-CREATE TABLE "providers" (
-	"id" serial NOT NULL,
-	"name" VARCHAR(300) NOT NULL,
-	"emails" VARCHAR(255) NOT NULL,
-	"description" VARCHAR(1024),
-	CONSTRAINT "providers_pk" PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
 CREATE TABLE "order_items" (
 	"id" serial NOT NULL,
 	"order_id" integer NOT NULL,
@@ -150,17 +164,6 @@ CREATE TABLE "order_items" (
 	"rating" integer,
 	"review" VARCHAR(500),
 	CONSTRAINT "order_items_pk" PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
-CREATE TABLE "provider_reviews" (
-	"id" serial NOT NULL,
-	"provider_id" integer NOT NULL,
-	"user_id" integer NOT NULL,
-	"review" VARCHAR(255) NOT NULL,
-	"rating" integer NOT NULL,
-	CONSTRAINT "provider_reviews_pk" PRIMARY KEY ("id")
 ) WITH (
   OIDS=FALSE
 );
@@ -178,15 +181,7 @@ CREATE TABLE "balance_history" (
 
 ALTER TABLE "menu" ADD CONSTRAINT "menu_fk0" FOREIGN KEY ("provider_id") REFERENCES "providers"("id");
 ALTER TABLE "orders" ADD CONSTRAINT "orders_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
-ALTER TABLE "users" ADD CONSTRAINT "users_fk0" FOREIGN KEY ("org_id") REFERENCES "organizations"("id");
-ALTER TABLE "users" ADD CONSTRAINT "users_fk1" FOREIGN KEY ("role_id") REFERENCES "roles"("id");
 ALTER TABLE "order_items" ADD CONSTRAINT "order_items_fk0" FOREIGN KEY ("order_id") REFERENCES "orders"("id");
-ALTER TABLE "provider_reviews" ADD CONSTRAINT "provider_reviews_fk0" FOREIGN KEY ("provider_id") REFERENCES "providers"("id");
-ALTER TABLE "provider_reviews" ADD CONSTRAINT "provider_reviews_fk1" FOREIGN KEY ("user_id") REFERENCES "users"("id");
 ALTER TABLE "balance_history" ADD CONSTRAINT "balance_history_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
 ALTER TABLE "balance_history" ADD CONSTRAINT "balance_history_fk1" FOREIGN KEY ("order_id") REFERENCES "orders"("id");
 */
-
-/*
- Проливка начальных данных!
- */
