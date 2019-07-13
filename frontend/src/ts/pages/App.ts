@@ -1,5 +1,4 @@
 import Vue from "vue";
-import axios from 'axios'
 import MessageDialog from '../components/dialogs/messageDialog';
 import Component from "vue-class-component";
 import Common from "../utils/common";
@@ -80,14 +79,13 @@ export class App extends Vue {
 
     getAllPosts() {
         console.log("asdad");
-        axios.get("http://localhost/api/reverser/jsonbasedreverser")
-            .then((response: any) => {
-                console.log(response);
-            })
-            .catch(async (error: any) => {
-                console.log('-----error-------');
-                console.log(error);
-                await this.messageDialog.showError("Внутренняя ошибка сервера.");
-            })
+        try {
+            const response = this.$http.get("/api/reverser/jsonbasedreverser");
+            console.log(response);
+        } catch (error) {
+            console.log('-----error-------');
+            console.log(error);
+            this.messageDialog.showError("Внутренняя ошибка сервера.");
+        }
     }
 }

@@ -20,7 +20,6 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
     "@fortawesome/free-solid-svg-icons": "^5.9.0",
     "@fortawesome/vue-fontawesome": "^0.1.6",
-    "axios": "latest",
     "body-parser": "1.19.0",
     "bootstrap-vue": "^2.0.0-rc.25",
     "cors": "^2.8.5",
@@ -40,6 +39,7 @@
     "vue": "^2.6.10",
     "vue-class-component": "^7.1.0",
     "vue-meta": "^2.0.4",
+    "vue-resource": "1.5.1",
     "vue-router": "^3.0.7"
   },
   "devDependencies": {

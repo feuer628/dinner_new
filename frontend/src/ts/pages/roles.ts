@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Component from "vue-class-component";
-import axios from "axios";
 import MessageDialog from '../components/dialogs/messageDialog';
 import Common from "../utils/common";
 
@@ -10,6 +9,7 @@ import Common from "../utils/common";
 `
 <div>
     <h3>Роли и действия</h3>
+    <hr/>
     <h4>
         Роли (нажать, чтобы открыть список действий) 
         <b-button v-b-modal.add-role-modal pill variant="outline-success" size="sm"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
@@ -68,7 +68,7 @@ export class Roles extends Vue {
     private async addNewRole(name: string): Promise<void> {
         try {
             if (this.newRoleName) {
-                await axios.post("/roles", {name: this.newRoleName});
+                await this.$http.post("/roles", {name: this.newRoleName});
                 (<any> this.$refs[name]).hide();
                 this.roles = await this.loadItems<Role>("roles");
             } else {
@@ -81,7 +81,7 @@ export class Roles extends Vue {
 
     private async roleActionAssoc(roleId: number, actionId: number, newAssoc: boolean) {
         try {
-            await axios.patch(`/roles/${roleId}/assoc/${actionId}`);
+            await this.$http.patch(`/roles/${roleId}/assoc/${actionId}`);
             this.roles = await this.loadRoles();
         } catch (e) {
             await this.messageDialog.showInternalError();
@@ -91,7 +91,7 @@ export class Roles extends Vue {
     private async dropRole(role: Role): Promise<void> {
         try {
             if (await this.$bvModal.msgBoxConfirm(`Вы уверены что хотите удалить роль '${role.name}'`)) {
-                await axios.delete("/roles/" + role.id);
+                await this.$http.delete("/roles/" + role.id);
                 this.roles = await this.loadItems<Role>("roles");
             }
         } catch (e) {
@@ -112,8 +112,8 @@ export class Roles extends Vue {
 
     private async loadItems<T>(refName: string): Promise<T[]> {
         try {
-            const response = await axios.get<T[]>(`/${refName}`);
-            return response.data;
+            const response = await this.$http.get(`/${refName}`);
+            return <T[]>response.data;
         } catch (e) {
             await this.messageDialog.showInternalError();
         }

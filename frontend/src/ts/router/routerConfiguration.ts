@@ -7,6 +7,7 @@ import menu from '../pages/menu';
 import registration from '../pages/registration';
 import authorization from '../pages/authorization';
 import {Roles} from '../pages/roles';
+import {Organizations} from "../pages/organizations";
 // import {CounterpartiesPage} from "../pages/counterparties/counterpartiesPage";
 // import {CounterpartyView} from "../pages/counterparties/counterpartyView";
 // import {EventsPage} from "../pages/events/eventsPage";
@@ -84,6 +85,11 @@ export class RouterConfiguration {
                 path: "/roles",
                 name: "roles",
                 component: Roles
+            },
+            {
+                path: "/organizations",
+                name: "orgs",
+                component: Organizations
             },
             // {
             //     path: "/counterparties",
