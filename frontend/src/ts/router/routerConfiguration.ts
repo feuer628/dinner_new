@@ -1,37 +1,9 @@
-// import {Container} from "platform/ioc";
-import Vue from "vue";
-import VueRouter from "vue-router";
-import {RouteConfig} from "vue-router";
-// import RouteConfig = VueRouter.RouteConfig;
+import VueRouter, {RouteConfig} from "vue-router";
 import menu from '../pages/menu';
 import registration from '../pages/registration';
 import authorization from '../pages/authorization';
 import {Roles} from '../pages/roles';
 import {Organizations} from "../pages/organizations";
-// import {CounterpartiesPage} from "../pages/counterparties/counterpartiesPage";
-// import {CounterpartyView} from "../pages/counterparties/counterpartyView";
-// import {EventsPage} from "../pages/events/eventsPage";
-// import {LetterEditPage} from "../pages/letters/letterEditPage";
-// import {LettersList} from "../pages/letters/lettersList";
-// import {LettersPage} from "../pages/letters/lettersPage";
-// import {LetterViewPage} from "../pages/letters/letterViewPage";
-// import {NewsPage} from "../pages/news/newsPage";
-// import {NewsView} from "../pages/news/newsView";
-// import {OperationViewPage} from "../pages/operations/operationViewPage";
-// import {PaymentEditPage} from "../pages/payments/paymentEditPage";
-// import {PaymentViewPage} from "../pages/payments/paymentViewPage";
-// import {InterfaceSettingsPage} from "../pages/settings/interfaceSettingsPage";
-// import {NotificationsSettingsPage} from "../pages/settings/notificationsSettingsPage";
-// import {SettingsPage} from "../pages/settings/settingsPage";
-// import {TaxSettingsPage} from "../pages/settings/taxSettingsPage";
-// import {StatementPage} from "../pages/statement/statementPage";
-// import {TasksPage} from "../pages/taxes/tasksPage";
-// import {TaxCalendarPage} from "../pages/taxes/taxCalendarPage";
-// import {LogoutService} from "../service/logoutService";
-
-// import PermissionsService from "../service/permissionsService";
-
-Vue.use(VueRouter);
 
 /**
  * Класс отвечающий за создание роутингов и инициализацию роутера
@@ -57,72 +29,6 @@ export class RouterConfiguration {
     }
 
     private static createRoutes(): RouteConfig[] {
-        const routes: RouteConfig[] = [
-            {
-                path: "/logout",
-                // beforeEnter: async () => await Container.get(LogoutService).logout()
-            },
-            // {
-            //     path: "*",
-            //     redirect: "/events"
-            // },
-            {
-                path: "/menu",
-                name: "menu",
-                component: menu
-            },
-            {
-                path: "/registration",
-                name: "registration",
-                component: registration
-            },
-            {
-                path: "/authorization",
-                name: "authorization",
-                component: authorization
-            },
-            {
-                path: "/roles",
-                name: "roles",
-                component: Roles
-            },
-            {
-                path: "/organizations",
-                name: "orgs",
-                component: Organizations
-            },
-            // {
-            //     path: "/counterparties",
-            //     name: "counterparties",
-            //     component: CounterpartiesPage
-            // },
-            // {
-            //     path: "/counterparties/:id/:tab",
-            //     name: "counterpartyView",
-            //     component: CounterpartyView
-            // },
-            // {
-            //     path: "/statement",
-            //     component: StatementPage
-            // },
-            // {
-            //     path: "/operation/:accountId/:operationUid",
-            //     name: "operationView",
-            //     component: OperationViewPage
-            // },
-            // {
-            //     path: "/news/:newsId",
-            //     component: NewsPage,
-            //     children: [{
-            //         path: "",
-            //         name: "news",
-            //         component: NewsView,
-            //         props: route => ({newsId: route.params.newsId}),
-            //     }]
-            // },
-        ];
-
-
         // const permissionsService = PermissionsService;
         // const settingsChildren: RouteConfig[] = [];
         // if (permissionsService.isTaxCalendarAvailable()) {
@@ -225,6 +131,69 @@ export class RouterConfiguration {
         //         },
         //     ]);
         // }
-        return routes;
+        return [
+            {
+                path: "/logout",
+                // beforeEnter: async () => await Container.get(LogoutService).logout()
+            },
+            // {
+            //     path: "*",
+            //     redirect: "/events"
+            // },
+            {
+                path: "/menu",
+                name: "menu",
+                component: menu
+            },
+            {
+                path: "/registration",
+                name: "registration",
+                component: registration
+            },
+            {
+                path: "/authorization",
+                name: "authorization",
+                component: authorization
+            },
+            {
+                path: "/roles",
+                name: "roles",
+                component: Roles
+            },
+            {
+                path: "/organizations",
+                name: "orgs",
+                component: Organizations
+            },
+            // {
+            //     path: "/counterparties",
+            //     name: "counterparties",
+            //     component: CounterpartiesPage
+            // },
+            // {
+            //     path: "/counterparties/:id/:tab",
+            //     name: "counterpartyView",
+            //     component: CounterpartyView
+            // },
+            // {
+            //     path: "/statement",
+            //     component: StatementPage
+            // },
+            // {
+            //     path: "/operation/:accountId/:operationUid",
+            //     name: "operationView",
+            //     component: OperationViewPage
+            // },
+            // {
+            //     path: "/news/:newsId",
+            //     component: NewsPage,
+            //     children: [{
+            //         path: "",
+            //         name: "news",
+            //         component: NewsView,
+            //         props: route => ({newsId: route.params.newsId}),
+            //     }]
+            // },
+        ];
     }
 }

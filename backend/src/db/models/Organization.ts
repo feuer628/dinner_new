@@ -13,7 +13,7 @@ export class Organization extends Model<Organization> {
     public name: string;
 
     @Column
-    public to_name: string;
+    public to_name: string |null;
 
     @ForeignKey(() => OrgGroup)
     @Column

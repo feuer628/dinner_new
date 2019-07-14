@@ -13,6 +13,9 @@ export class OrgGroup extends Model<OrgGroup> {
     limit_type: number;
 
     @Column
+    limit: number;
+
+    @Column
     name: string;
 
     @Column

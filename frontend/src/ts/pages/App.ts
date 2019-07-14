@@ -78,7 +78,6 @@ export class App extends Vue {
     messageDialog: MessageDialog = Common.getMessageDialog();
 
     getAllPosts() {
-        console.log("asdad");
         try {
             const response = this.$http.get("/api/reverser/jsonbasedreverser");
             console.log(response);

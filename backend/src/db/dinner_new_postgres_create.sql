@@ -43,7 +43,8 @@ CREATE TABLE "providers" (
 
 CREATE TABLE "org_groups" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
-	"limit_type" INTEGER NOT NULL,
+	"limit_type" SMALLINT NOT NULL,
+	"limit" INTEGER,
 	"name" VARCHAR(300) NOT NULL,
 	"description" VARCHAR(255),
 	"provider_id" INTEGER NULL
@@ -118,9 +119,9 @@ INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 1);
 INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 2);
 INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 4);
 
-INSERT INTO org_groups (limit_type, name, description) VALUES (200, 'Первая группа', 'Описание первой группы');
-INSERT INTO org_groups (limit_type, name) VALUES (200, 'СС');
-INSERT INTO org_groups (limit_type, name, description) VALUES (200, 'Адобе', 'Фтошоп');
+INSERT INTO org_groups (limit_type, name, description) VALUES (0, 'Первая группа', 'Описание первой группы');
+INSERT INTO org_groups (limit_type, "limit", name) VALUES (1, 200, 'СС');
+INSERT INTO org_groups (limit_type, "limit", name, description) VALUES (2, 250, 'Адобе', 'Фтошоп');
 
 INSERT INTO organizations (name, to_name, group_id) VALUES ('ФТОР', 'Судейкису С.', 1);
 INSERT INTO organizations (name, to_name) VALUES ('ХРОМ', 'Муд А.');
