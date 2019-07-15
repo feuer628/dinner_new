@@ -52,7 +52,6 @@ CREATE TABLE "org_groups" (
     OIDS=FALSE
 );
 
-
 CREATE TABLE "organizations" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
 	"name" VARCHAR(300) NOT NULL,
@@ -95,6 +94,53 @@ CREATE TABLE "users" (
     OIDS=FALSE
 );
 
+CREATE TABLE "menu_items" (
+	"id" SERIAL NOT NULL PRIMARY KEY,
+	"provider_id" INTEGER NOT NULL,
+	"menu_date" DATE NOT NULL,
+	"type" VARCHAR(255) NOT NULL,
+	"name" VARCHAR(255) NOT NULL,
+	"weight" INTEGER,
+	"price" FLOAT(10),
+	"description" VARCHAR(1024)
+) WITH (
+  OIDS=FALSE
+);
+
+CREATE TABLE "orders" (
+	"id" SERIAL NOT NULL PRIMARY KEY,
+	"user_id" INTEGER NOT NULL,
+	"status" INTEGER NOT NULL DEFAULT '1',
+	"order_date" DATE NOT NULL,
+	"created_at" TIMESTAMP NOT NULL,
+	"updated_at" TIMESTAMP NOT NULL
+) WITH (
+  OIDS=FALSE
+);
+
+CREATE TABLE "order_items" (
+	"id" SERIAL NOT NULL PRIMARY KEY,
+	"order_id" INTEGER NOT NULL,
+	"name" VARCHAR(255) NOT NULL,
+	"comment" VARCHAR(255),
+	"count" INTEGER NOT NULL,
+	"price" FLOAT(10) NOT NULL,
+	"rating" integer,
+	"review" VARCHAR(500)
+) WITH (
+  OIDS=FALSE
+);
+
+CREATE TABLE "balance_history" (
+	"id" SERIAL NOT NULL PRIMARY KEY,
+	"user_id" INTEGER NOT NULL,
+	"amount" FLOAT(10) NOT NULL,
+	"created_at" TIMESTAMP NOT NULL,
+	"order_id" INTEGER
+) WITH (
+  OIDS=FALSE
+);
+
 ALTER TABLE "role_actions" ADD CONSTRAINT "role_actions_fk0" FOREIGN KEY ("role_id") REFERENCES "roles"("id");
 ALTER TABLE "role_actions" ADD CONSTRAINT "role_actions_fk1" FOREIGN KEY ("action_id") REFERENCES "actions"("id");
 ALTER TABLE "org_groups" ADD CONSTRAINT "org_groups_fk0" FOREIGN KEY ("provider_id") REFERENCES "providers"("id");
@@ -103,7 +149,11 @@ ALTER TABLE "provider_reviews" ADD CONSTRAINT "provider_reviews_fk0" FOREIGN KEY
 ALTER TABLE "provider_reviews" ADD CONSTRAINT "provider_reviews_fk1" FOREIGN KEY ("user_id") REFERENCES "users"("id");
 ALTER TABLE "users" ADD CONSTRAINT "users_fk0" FOREIGN KEY ("org_id") REFERENCES "organizations"("id");
 ALTER TABLE "users" ADD CONSTRAINT "users_fk1" FOREIGN KEY ("role_id") REFERENCES "roles"("id");
-
+ALTER TABLE "menu_items" ADD CONSTRAINT "menu_items_fk0" FOREIGN KEY ("provider_id") REFERENCES "providers"("id");
+ALTER TABLE "orders" ADD CONSTRAINT "orders_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
+ALTER TABLE "order_items" ADD CONSTRAINT "order_items_fk0" FOREIGN KEY ("order_id") REFERENCES "orders"("id");
+ALTER TABLE "balance_history" ADD CONSTRAINT "balance_history_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
+ALTER TABLE "balance_history" ADD CONSTRAINT "balance_history_fk1" FOREIGN KEY ("order_id") REFERENCES "orders"("id");
 
 INSERT INTO "public"."roles" ("name") VALUES ('администратор');
 INSERT INTO "public"."roles" ("name") VALUES ('оператор');
@@ -127,62 +177,3 @@ INSERT INTO organizations (name, to_name, group_id) VALUES ('ФТОР', 'Суд�
 INSERT INTO organizations (name, to_name) VALUES ('ХРОМ', 'Муд А.');
 INSERT INTO organizations (name, to_name, group_id) VALUES ('СЕЛЕН', 'Гуд М.', 2);
 INSERT INTO organizations (name, to_name) VALUES ('БРОМ', 'Дуд Д.');
-
-/*
-CREATE TABLE "menu" (
-	"id" serial,
-	"provider_id" integer NOT NULL,
-	"menu_date" DATE NOT NULL,
-	"type" VARCHAR(255) NOT NULL,
-	"name" VARCHAR(255) NOT NULL,
-	"weight" integer,
-	"price" FLOAT(10) NOT NULL,
-	"description" VARCHAR(1024),
-	CONSTRAINT "menu_pk" PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
-CREATE TABLE "orders" (
-	"id" serial,
-	"user_id" integer NOT NULL,
-	"status" integer NOT NULL DEFAULT '1',
-	"order_date" DATE NOT NULL,
-	"created_at" TIMESTAMP NOT NULL,
-	"updated_at" TIMESTAMP NOT NULL,
-	CONSTRAINT "orders_pk" PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
-CREATE TABLE "order_items" (
-	"id" serial NOT NULL,
-	"order_id" integer NOT NULL,
-	"name" VARCHAR(255) NOT NULL,
-	"comment" VARCHAR(255),
-	"count" integer NOT NULL,
-	"price" FLOAT NOT NULL,
-	"rating" integer,
-	"review" VARCHAR(500),
-	CONSTRAINT "order_items_pk" PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
-CREATE TABLE "balance_history" (
-	"id" serial NOT NULL,
-	"user_id" integer NOT NULL,
-	"amount" FLOAT NOT NULL,
-	"created_at" TIMESTAMP NOT NULL,
-	"order_id" integer,
-	CONSTRAINT "balance_history_pk" PRIMARY KEY ("id")
-) WITH (
-  OIDS=FALSE
-);
-
-ALTER TABLE "menu" ADD CONSTRAINT "menu_fk0" FOREIGN KEY ("provider_id") REFERENCES "providers"("id");
-ALTER TABLE "orders" ADD CONSTRAINT "orders_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
-ALTER TABLE "order_items" ADD CONSTRAINT "order_items_fk0" FOREIGN KEY ("order_id") REFERENCES "orders"("id");
-ALTER TABLE "balance_history" ADD CONSTRAINT "balance_history_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
-ALTER TABLE "balance_history" ADD CONSTRAINT "balance_history_fk1" FOREIGN KEY ("order_id") REFERENCES "orders"("id");
-*/
