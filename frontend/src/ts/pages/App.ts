@@ -26,7 +26,8 @@ import Common from "../utils/common";
                     
                     <b-nav-item-dropdown text="Администрирование">
                         <b-dropdown-item href="#/roles">Роли</b-dropdown-item>
-                        <b-dropdown-item href="#/organizations">Организации</b-dropdown-item>
+                        <b-dropdown-item href="#/org_groups">Группы организаций</b-dropdown-item>
+                        <b-dropdown-item href="#/organizations">Список организаций</b-dropdown-item>
                         <b-dropdown-item href="#/users">Пользователи</b-dropdown-item>
                         <b-dropdown-item href="#/newUsers">Новые пользователи</b-dropdown-item>
                         <b-dropdown-item href="#/sysProps">Системные свойства</b-dropdown-item>

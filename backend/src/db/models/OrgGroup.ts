@@ -13,7 +13,13 @@ export class OrgGroup extends Model<OrgGroup> {
     limit_type: number;
 
     @Column
+    compensation_flag: boolean;
+
+    @Column
     limit: number;
+
+    @Column
+    hard_limit: number;
 
     @Column
     name: string;

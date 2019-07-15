@@ -4,6 +4,7 @@ import registration from '../pages/registration';
 import authorization from '../pages/authorization';
 import {Roles} from '../pages/roles';
 import {Organizations} from "../pages/organizations";
+import {OrgGroups} from "../pages/org_groups";
 
 /**
  * Класс отвечающий за создание роутингов и инициализацию роутера
@@ -159,6 +160,11 @@ export class RouterConfiguration {
                 path: "/roles",
                 name: "roles",
                 component: Roles
+            },
+            {
+                path: "/org_groups",
+                name: "org_groups",
+                component: OrgGroups
             },
             {
                 path: "/organizations",

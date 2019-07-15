@@ -43,8 +43,10 @@ CREATE TABLE "providers" (
 
 CREATE TABLE "org_groups" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
-	"limit_type" SMALLINT NOT NULL,
-	"limit" INTEGER,
+    "limit_type" SMALLINT NOT NULL,
+	"compensation_flag" BOOLEAN DEFAULT FALSE,
+	"limit" INTEGER DEFAULT 0,
+	"hard_limit" INTEGER DEFAULT 0,
 	"name" VARCHAR(300) NOT NULL,
 	"description" VARCHAR(255),
 	"provider_id" INTEGER NULL
@@ -170,10 +172,17 @@ INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 2);
 INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 4);
 
 INSERT INTO org_groups (limit_type, name, description) VALUES (0, 'Первая группа', 'Описание первой группы');
-INSERT INTO org_groups (limit_type, "limit", name) VALUES (1, 200, 'СС');
-INSERT INTO org_groups (limit_type, "limit", name, description) VALUES (2, 250, 'Адобе', 'Фтошоп');
+INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name) VALUES (1, true, 200, 1000, 'СС');
+INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name) VALUES (1, false, 0, 0, 'Финализированная группос');
+INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name, description) VALUES (1, true, 220, 0, 'ЖЖшечка', 'Акробат');
+INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name, description) VALUES (1, true, 1000, 0, 'Адобе', 'Фтошоп');
 
 INSERT INTO organizations (name, to_name, group_id) VALUES ('ФТОР', 'Судейкису С.', 1);
 INSERT INTO organizations (name, to_name) VALUES ('ХРОМ', 'Муд А.');
 INSERT INTO organizations (name, to_name, group_id) VALUES ('СЕЛЕН', 'Гуд М.', 2);
 INSERT INTO organizations (name, to_name) VALUES ('БРОМ', 'Дуд Д.');
+INSERT INTO organizations (name, to_name) VALUES ('МЕЛЬБДОНИЙ', 'Врачу');
+INSERT INTO organizations (name, to_name) VALUES ('НАТРИЙ', 'Натрию');
+INSERT INTO organizations (name, to_name) VALUES ('КАЛИЙ', 'Калию Юлию');
+INSERT INTO organizations (name, to_name) VALUES ('БЕРИЛИЙ', 'Берию');
+INSERT INTO organizations (name, to_name) VALUES ('Молибден', 'Молбдену');
