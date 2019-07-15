@@ -56,3 +56,12 @@ organization.put('/:id', async (req, res, next) => {
         next(e);
     }
 });
+
+organization.delete('/:id', async (req, res, next) => {
+    try {
+        await Organization.destroy({where: {id: req.params['id']}});
+        res.sendStatus(200);
+    } catch (e) {
+        next(e);
+    }
+});

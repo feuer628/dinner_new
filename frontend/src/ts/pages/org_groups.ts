@@ -141,13 +141,12 @@ export class OrgGroups extends Vue {
 
     private async deleteGroup(group: OrgGroup): Promise<void> {
         try {
-            if (await this.$bvModal.msgBoxConfirm(`Вы уверены что хотите удалить группу '${group.name}'`)) {
+            if (await this.$bvModal.msgBoxConfirm(`Вы уверены что хотите удалить группу '${group.name}'?`)) {
                 await this.$http.delete(`/org_groups/${group.id}`);
                 await this.refreshData();
             }
         } catch (e) {
             await this.messageDialog.showInternalError();
         }
-
     }
 }
