@@ -7,6 +7,7 @@ import {action} from "./routes/action";
 import dotenv from 'dotenv';
 import {organization} from "./routes/organization";
 import {org_group} from "./routes/org_group";
+import {provider} from "./routes/provider";
 
 export const LOG = require('simple-node-logger').createSimpleLogger('project.log');
 
@@ -29,6 +30,7 @@ export const LOG = require('simple-node-logger').createSimpleLogger('project.log
     app.use("/actions", action);
     app.use("/organizations", organization);
     app.use("/org_groups", org_group);
+    app.use("/providers", provider);
 
     app.use(sassMiddleware({
             src: __dirname,

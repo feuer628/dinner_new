@@ -1,3 +1,22 @@
+export type DbRole = {
+    id?: number;
+    name: string;
+    actions: DbAction[];
+}
+
+export type DbAction = {
+    id: number;
+    desc: string;
+}
+
+export type Role = {
+    id?: number;
+    name: string;
+    actions: Actions;
+}
+
+export type Actions = {[id: number]: string};
+
 export type Organization = {
     id?: number;
     name: string;
@@ -14,5 +33,24 @@ export type OrgGroup = {
     limit: number;
     hard_limit: number;
     description: string | null;
+    provider_id: number | null;
     orgs: Organization[];
 };
+
+export type Provider = {
+    id?: number;
+    name: string;
+    emails: string;
+    description: string;
+    url: string;
+    logo: string;
+    reviews?: ProviderReview[];
+}
+
+export type ProviderReview = {
+    id?: number;
+    review: string;
+    rating: number;
+    provider_id: number;
+    user_id: number;
+}

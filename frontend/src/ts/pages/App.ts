@@ -12,42 +12,35 @@ import Common from "../utils/common";
 
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
-            <b-navbar-brand href="/">BIFIT_dinner</b-navbar-brand>
+            <b-navbar-brand to="menu">BIFIT_dinner</b-navbar-brand>
 
             <b-collapse is-nav id="nav_collapse">
 
                 <b-navbar-nav>
-                    <b-nav-item to="menu">Меню</b-nav-item>
+                    <b-nav-item to="menu"><font-awesome-icon icon="th-list"></font-awesome-icon> Меню</b-nav-item>
                     
                     <b-nav-item-dropdown text="Обеды">
                         <b-nav-item to="orderGroup">Группы заказов</b-nav-item>
                         <b-nav-item to="report">Отчет</b-nav-item>
                     </b-nav-item-dropdown>
-                    
-                    <b-nav-item-dropdown text="Администрирование">
-                        <b-dropdown-item href="#/roles">Роли</b-dropdown-item>
-                        <b-dropdown-item href="#/org_groups">Группы организаций</b-dropdown-item>
-                        <b-dropdown-item href="#/organizations">Список организаций</b-dropdown-item>
-                        <b-dropdown-item href="#/users">Пользователи</b-dropdown-item>
-                        <b-dropdown-item href="#/newUsers">Новые пользователи</b-dropdown-item>
-                        <b-dropdown-item href="#/sysProps">Системные свойства</b-dropdown-item>
-                    </b-nav-item-dropdown>
 
-                    <b-nav-item to="registration">Регистрация</b-nav-item>
-                    <!-- TODO вынести как отдельную страницу после которой будет открываться текущая -->
-                    <b-nav-item to="authorization">Авторизация</b-nav-item>
+                    <b-nav-item-dropdown text="Администрирование">
+                        <b-dropdown-item to="roles">Роли</b-dropdown-item>
+                        <b-dropdown-item to="org_groups">Группы организаций</b-dropdown-item>
+                        <b-dropdown-item to="organizations">Список организаций</b-dropdown-item>
+                        <b-dropdown-item to="providers">Поставщики</b-dropdown-item>
+                        <b-dropdown-item to="users">Пользователи</b-dropdown-item>
+                        <b-dropdown-item to="newUsers">Новые пользователи</b-dropdown-item>
+                        <b-dropdown-item to="system_properties">Системные свойства</b-dropdown-item>
+                    </b-nav-item-dropdown>
                 </b-navbar-nav>
 
-                <!-- Right aligned nav items -->
                 <b-navbar-nav class="ml-auto">
-                    <b-nav-item-dropdown right>
-                        <!-- Using button-content slot -->
-                        <template slot="button-content">
-                            <em>Пользователь</em>
-                        </template>
-                        <b-dropdown-item href="settings">Настройки</b-dropdown-item>
-                        <b-dropdown-item href="#">Выход</b-dropdown-item>
-                    </b-nav-item-dropdown>
+                    <b-nav-item to="registration"><font-awesome-icon icon="user-plus"></font-awesome-icon> Регистрация</b-nav-item>
+                    <!-- TODO вынести как отдельную страницу после которой будет открываться текущая -->
+                    <b-nav-item to="authorization"><font-awesome-icon icon="sign-in-alt"></font-awesome-icon> Вход</b-nav-item>
+                    <b-nav-item to="settings"><font-awesome-icon icon="user-cog"></font-awesome-icon> Настройки</b-nav-item>
+                    <b-nav-item to="logout"><font-awesome-icon icon="sign-out-alt"></font-awesome-icon> Выход</b-nav-item>
                 </b-navbar-nav>
 
 

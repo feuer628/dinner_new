@@ -171,11 +171,17 @@ INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 1);
 INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 2);
 INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 4);
 
+INSERT INTO providers (name, emails, url) VALUES ('Вкусная почта', 'asdasdw@mail.ru', 'http://obedi.ru');
+INSERT INTO providers (name, emails, url) VALUES ('Просто еда', 'eda@mail.ru', 'http://obedi22.ru');
+INSERT INTO providers (name, emails, url) VALUES ('Еда для гопников', 'zhrachka@mail.ru', 'http://obedi354.ru');
+INSERT INTO providers (name, emails, description, url) VALUES ('Инкогнито', 'pohlebka@mail.ru', '', 'http://obed6574i.ru');
+INSERT INTO providers (name, emails, description, url) VALUES ('Супы домашние', 'soup@mail.ru', '', 'http://ob7452edi.ru');
+
 INSERT INTO org_groups (limit_type, name, description) VALUES (0, 'Первая группа', 'Описание первой группы');
 INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name) VALUES (1, true, 200, 1000, 'СС');
-INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name) VALUES (1, false, 0, 0, 'Финализированная группос');
+INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name, provider_id) VALUES (1, false, 0, 0, 'Финализированная группос', 2);
 INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name, description) VALUES (1, true, 220, 0, 'ЖЖшечка', 'Акробат');
-INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name, description) VALUES (1, true, 1000, 0, 'Адобе', 'Фтошоп');
+INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name, description, provider_id) VALUES (1, true, 1000, 0, 'Адобе', 'Фтошоп', 1);
 
 INSERT INTO organizations (name, to_name, group_id) VALUES ('ФТОР', 'Судейкису С.', 1);
 INSERT INTO organizations (name, to_name) VALUES ('ХРОМ', 'Муд А.');
@@ -186,12 +192,6 @@ INSERT INTO organizations (name, to_name) VALUES ('НАТРИЙ', 'Натрию'
 INSERT INTO organizations (name, to_name) VALUES ('КАЛИЙ', 'Калию Юлию');
 INSERT INTO organizations (name, to_name) VALUES ('БЕРИЛИЙ', 'Берию');
 INSERT INTO organizations (name, to_name) VALUES ('Молибден', 'Молбдену');
-
-INSERT INTO providers (name, emails, url) VALUES ('Вкусная почта', 'asdasdw@mail.ru', 'http://obedi.ru');
-INSERT INTO providers (name, emails, url) VALUES ('Просто еда', 'eda@mail.ru', 'http://obedi22.ru');
-INSERT INTO providers (name, emails, url) VALUES ('Еда для гопников', 'zhrachka@mail.ru', 'http://obedi354.ru');
-INSERT INTO providers (name, emails, description, url) VALUES ('Инкогнито', 'pohlebka@mail.ru', '', 'http://obed6574i.ru');
-INSERT INTO providers (name, emails, description, url) VALUES ('Супы домашние', 'soup@mail.ru', '', 'http://ob7452edi.ru');
 
 -- INSERT INTO provider_reviews (provider_id, user_id, review, rating) VALUES (1, 1, 'Замечательный поставщик, никогда не пересаливает!', 5);
 

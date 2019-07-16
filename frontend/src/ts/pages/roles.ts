@@ -2,6 +2,7 @@ import Vue from "vue";
 import Component from "vue-class-component";
 import MessageDialog from '../components/dialogs/messageDialog';
 import Common from "../utils/common";
+import {DbAction, DbRole, Role} from "../models/models";
 
 @Component({
     // language=Vue
@@ -120,22 +121,3 @@ export class Roles extends Vue {
         return [];
     }
 }
-
-type DbRole = {
-    id?: number;
-    name: string;
-    actions: DbAction[];
-}
-
-type DbAction = {
-    id: number;
-    desc: string;
-}
-
-type Role = {
-    id?: number;
-    name: string;
-    actions: Actions;
-}
-
-type Actions = {[id: number]: string};

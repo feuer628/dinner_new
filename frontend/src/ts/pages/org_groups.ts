@@ -3,7 +3,7 @@ import Component from "vue-class-component";
 import MessageDialog from '../components/dialogs/messageDialog';
 import Common from "../utils/common";
 import {LimitType} from "../models/limitType";
-import {Organization, OrgGroup} from "../models/models";
+import {Organization, OrgGroup, Provider} from "../models/models";
 
 @Component({
     // language=Vue
@@ -15,6 +15,9 @@ import {Organization, OrgGroup} from "../models/models";
     <b-card-group columns>
         <b-card v-for="orgGroup in orgGroups" :key="orgGroup.id" :title="orgGroup.name" :sub-title="orgGroup.description">
             <b-card-text>
+                <div v-if="!!orgGroup.provider_id">Поставщик: <b-badge pill variant="primary">{{getProviderName(orgGroup.provider_id)}}</b-badge></div>
+                <div v-else><b>Поставщик обедов не задан</b></div>
+                <hr/>
                 <div><b>{{getLimitTypeDesc(orgGroup.limit_type)}}</b></div>
                 <template v-if="orgGroup.compensation_flag">
                     <div>Обеды компенсируются работодателем</div>
@@ -42,16 +45,21 @@ import {Organization, OrgGroup} from "../models/models";
                 Лимит:
                 <b-form-input v-model="currentGroup.limit" placeholder="Лимит" type="number"></b-form-input>
                 Ограничение суммы обеда:
-                <b-form-input v-model="currentGroup.hard_limit" placeholder="Ограничение суммы обеда" type="number"></b-form-input>
+                <b-form-input v-model="currentGroup.hard_limit" placeholder="Ограничение суммы обеда" type="number" class="mb10"></b-form-input>
             </template>
         </template>
+        <b-form-select v-model="currentGroup.provider_id" :options="providers" value-field="id" text-field="name" class="mb10">
+            <template slot="first">
+                <option :value="null" disabled>Выберите поставщика</option>
+            </template>
+        </b-form-select>
         <div>Организации:</div>
         <template v-for="org in orgs">
             <b-form-checkbox v-if="org.group_id === null || org.group_id === currentGroup.id" v-model="currentGroup.orgs" :key="org.id" :value="org" inline>{{org.name}}</b-form-checkbox>
         </template>
         <div slot="modal-footer" class="alignR">
             <b-button variant="outline-secondary" size="sm" @click="hideModal">Отмена</b-button>
-            <b-button variant="success" size="sm" @click="editGroup">{{!!currentGroup.id ? 'Изменить' : 'Добавить'}}</b-button>
+            <b-button :variant="!!currentGroup.id ? 'primary' : 'success'" size="sm" @click="editGroup">{{!!currentGroup.id ? 'Изменить' : 'Добавить'}}</b-button>
         </div>
     </b-modal>
 </div>
@@ -67,6 +75,8 @@ export class OrgGroups extends Vue {
 
     private orgs: Organization[] = [];
 
+    private providers: Provider[] = [];
+
     private async mounted(): Promise<void> {
         await this.refreshData();
     }
@@ -74,6 +84,7 @@ export class OrgGroups extends Vue {
     private async refreshData(): Promise<void> {
         this.orgGroups = await this.loadItems<OrgGroup>("org_groups/full");
         this.orgs = await this.loadItems<Organization>("organizations");
+        this.providers = await this.loadItems<Provider>("providers");
     }
 
     private initCurrentGroup(): OrgGroup {
@@ -81,11 +92,17 @@ export class OrgGroups extends Vue {
             name: "",
             limit_type: 0,
             compensation_flag: false,
+            provider_id: null,
             limit: 0,
             hard_limit: 0,
             description: "",
             orgs: []
         };
+    }
+
+    private getProviderName(provider_id: number) {
+        const provider = this.providers.find(p => p.id === provider_id);
+        return provider && provider.name || "<ИМЯ НЕ НАЙДЕНО>";
     }
 
     private limitTypes() {
@@ -107,6 +124,7 @@ export class OrgGroups extends Vue {
                 limit: group.limit,
                 hard_limit: group.hard_limit,
                 description: group.description,
+                provider_id: group.provider_id,
                 orgs: group.orgs
             }
         } else {
