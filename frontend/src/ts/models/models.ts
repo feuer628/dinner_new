@@ -1,3 +1,5 @@
+import {Column, ForeignKey} from "sequelize-typescript";
+
 export type DbRole = {
     id?: number;
     name: string;
@@ -53,4 +55,15 @@ export type ProviderReview = {
     rating: number;
     provider_id: number;
     user_id: number;
+}
+
+export type MenuItem = {
+    id: number;
+    provider_id: number;
+    menu_date: string;
+    type: string;
+    name: string;
+    weight: number;
+    price: number;
+    description: string;
 }

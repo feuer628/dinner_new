@@ -1,9 +1,11 @@
+import {MenuItem} from "../models/models";
+
 export class MenuService {
 
-    public static getMenu(): MenuInfo[] {
+    public static getMenu(): MenuItem[] {
 
         return [
-            {
+/*            {
                 date: "2018-11-29",
                 totalPrice: 0,
                 ordered: false,
@@ -98,14 +100,14 @@ export class MenuService {
                         count: 0
                     }
                 ]
-            }
+            }*/
         ]
     }
 
-    public static getWeeklyOrder(): MenuInfo[] {
+    public static getWeeklyOrder(): MenuItem[] {
         return [
-            {
-                date: "2018-12-29",
+/*            {
+                date: new Date(),
                 totalPrice: 1166.5,
                 ordered: true,
                 items: [
@@ -143,20 +145,11 @@ export class MenuService {
                         comment: "comment2"
                     }
                 ]
-            }
+            }*/
         ]
     }
 
-    public static sendOrder(menu: MenuInfo) {
+    public static sendOrder(menu: MenuItem) {
         console.log(menu);
     }
-}
-
-export interface MenuInfo {
-    notOrderedEmployees?: any;
-    employeeInfo?: any;
-    date: any;
-    totalPrice: number;
-    items: any;
-    ordered: boolean;
 }

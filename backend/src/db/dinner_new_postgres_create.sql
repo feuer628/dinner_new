@@ -201,3 +201,14 @@ INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, descr
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'макароны с томатами пилати', 120, 30, 'описание гарнира: ну такое');
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'стручковая фасоль с медом и морковью', 150, 40, 'описание гарнира: ну такое');
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'гречка', 200, 38, 'описание гарнира: ну такое');
+
+INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id, created_at, updated_at)
+    VALUES ('silakov', '123456', 100, '', MAKE_DATE(1980, 06, 12), '9108786556', 1, 1, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789', CURRENT_DATE, CURRENT_DATE);
+INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id, created_at, updated_at)
+VALUES ('ivanov', '123456', 0, '', MAKE_DATE(1998, 04, 29), '9105144545', 2, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789', CURRENT_DATE, CURRENT_DATE);
+INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id, created_at, updated_at)
+VALUES ('petrov', '123456', 200, '', MAKE_DATE(1997, 02, 20), '9085623223', 3, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789', CURRENT_DATE, CURRENT_DATE);
+INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id, created_at, updated_at)
+VALUES ('sidorov', '123456', 500, '', MAKE_DATE(1996, 09, 29), '9105654854', 2, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789', CURRENT_DATE, CURRENT_DATE);
+INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id, created_at, updated_at)
+VALUES ('egoshin', '123456', -80, '', MAKE_DATE(1995, 12, 29), '9875642312', 3, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789', CURRENT_DATE, CURRENT_DATE);

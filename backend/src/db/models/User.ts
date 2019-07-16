@@ -32,6 +32,9 @@ export class User extends Model<User> {
     @Column
     org_id: string;
 
+    @BelongsTo(() => Organization)
+    organization: Organization;
+
     @ForeignKey(() => Role)
     @Column
     role_id: string;
