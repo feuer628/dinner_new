@@ -7,13 +7,13 @@ export class Organization extends Model<Organization> {
     @PrimaryKey
     @AutoIncrement
     @Column
-    public id: number;
+    id: number;
 
     @Column
-    public name: string;
+    name: string;
 
     @Column
-    public to_name: string |null;
+    to_name: string |null;
 
     @ForeignKey(() => OrgGroup)
     @Column

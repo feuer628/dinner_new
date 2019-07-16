@@ -1,5 +1,6 @@
-import {AutoIncrement, Column, ForeignKey, HasMany, Model, PrimaryKey, Table} from "sequelize-typescript";
+import {AutoIncrement, BelongsTo, Column, ForeignKey, HasMany, Model, PrimaryKey, Table} from "sequelize-typescript";
 import {Organization} from "./Organization";
+import {Provider} from "./Provider";
 
 @Table({modelName: "org_groups"})
 export class OrgGroup extends Model<OrgGroup> {
@@ -27,9 +28,12 @@ export class OrgGroup extends Model<OrgGroup> {
     @Column
     description: string;
 
-    // TODO ForeignKey!
+    @ForeignKey(() => Provider)
     @Column
     provider_id: string;
+
+    @BelongsTo(() => Provider)
+    provider: Provider;
 
     @HasMany(() => Organization)
     orgs: Organization[];

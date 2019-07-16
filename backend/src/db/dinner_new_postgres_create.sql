@@ -86,7 +86,7 @@ CREATE TABLE "users" (
 	"status" SMALLINT DEFAULT 0,
 	"key" VARCHAR(255),
 	"ip" VARCHAR(255),
-	"komp_key" VARCHAR(255),
+	"comp_key" VARCHAR(255),
 	"ip_phone" VARCHAR(255),
 	"from_text" VARCHAR(255),
 	"telegram_id" INTEGER,
@@ -186,3 +186,18 @@ INSERT INTO organizations (name, to_name) VALUES ('НАТРИЙ', 'Натрию'
 INSERT INTO organizations (name, to_name) VALUES ('КАЛИЙ', 'Калию Юлию');
 INSERT INTO organizations (name, to_name) VALUES ('БЕРИЛИЙ', 'Берию');
 INSERT INTO organizations (name, to_name) VALUES ('Молибден', 'Молбдену');
+
+INSERT INTO providers (name, emails, url) VALUES ('Вкусная почта', 'asdasdw@mail.ru', 'http://obedi.ru');
+INSERT INTO providers (name, emails, url) VALUES ('Просто еда', 'eda@mail.ru', 'http://obedi22.ru');
+INSERT INTO providers (name, emails, url) VALUES ('Еда для гопников', 'zhrachka@mail.ru', 'http://obedi354.ru');
+INSERT INTO providers (name, emails, description, url) VALUES ('Инкогнито', 'pohlebka@mail.ru', '', 'http://obed6574i.ru');
+INSERT INTO providers (name, emails, description, url) VALUES ('Супы домашние', 'soup@mail.ru', '', 'http://ob7452edi.ru');
+
+-- INSERT INTO provider_reviews (provider_id, user_id, review, rating) VALUES (1, 1, 'Замечательный поставщик, никогда не пересаливает!', 5);
+
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'рис', 300, 45, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'картофельное пюре', 150, 24, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'чечевица с овощами', 180, 40, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'макароны с томатами пилати', 120, 30, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'стручковая фасоль с медом и морковью', 150, 40, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'гречка', 200, 38, 'описание гарнира: ну такое');

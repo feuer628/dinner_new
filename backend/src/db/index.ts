@@ -5,6 +5,14 @@ import {RoleAction} from "./models/RoleAction";
 import {Action} from "./models/Action";
 import {Organization} from "./models/Organization";
 import {OrgGroup} from "./models/OrgGroup";
+import {Provider} from "./models/Provider";
+import {ProviderReview} from "./models/ProviderReview";
+import {SystemProperty} from "./models/SystemProperty";
+import {User} from "./models/User";
+import {MenuItem} from "./models/MenuItem";
+import {OrderItem} from "./models/OrderItem";
+import {Order} from "./models/Order";
+import {BalanceHistory} from "./models/BalanceHistory";
 
 export function init() {
     LOG.info("Инициализация моделей. Начало.");
@@ -18,7 +26,10 @@ export function init() {
         storage: ':memory:'
     });
     LOG.info("Инициализация моделей");
-    sequelize.addModels([Role, Action, RoleAction, Organization, OrgGroup]);
+    sequelize.addModels([
+        Role, Action, RoleAction, Organization, OrgGroup, Provider, ProviderReview,
+        SystemProperty, User, MenuItem, Order, OrderItem, BalanceHistory
+    ]);
     LOG.info("Инициализация моделей. Конец.")
 }
 

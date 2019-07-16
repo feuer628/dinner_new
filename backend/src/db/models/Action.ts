@@ -8,10 +8,10 @@ export class Action extends Model<Action> {
     @PrimaryKey
     @AutoIncrement
     @Column
-    public id: number;
+    id: number;
 
     @Column
-    public desc: string;
+    desc: string;
 
     @BelongsToMany(() => Role, () => RoleAction)
     roles: Role[];
