@@ -77,9 +77,9 @@ CREATE TABLE "users" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
 	"login" VARCHAR(100) NOT NULL UNIQUE,
 	"password" VARCHAR(255) NOT NULL,
-	"balance" FLOAT NOT NULL,
-	"description" VARCHAR(255) NOT NULL,
-	"birthday" DATE NOT NULL,
+	"balance" FLOAT DEFAULT 0,
+	"description" VARCHAR(255),
+	"birthday" DATE,
 	"phone" VARCHAR(10) NOT NULL,
 	"org_id" INTEGER NOT NULL,
 	"role_id" INTEGER NOT NULL,
@@ -90,8 +90,8 @@ CREATE TABLE "users" (
 	"ip_phone" VARCHAR(255),
 	"from_text" VARCHAR(255),
 	"telegram_id" INTEGER,
-	"created_at" TIMESTAMP,
-	"updated_at" TIMESTAMP
+	"created_at" TIMESTAMP DEFAULT CURRENT_DATE,
+	"updated_at" TIMESTAMP DEFAULT CURRENT_DATE
 ) WITH (
     OIDS=FALSE
 );
@@ -114,8 +114,8 @@ CREATE TABLE "orders" (
 	"user_id" INTEGER NOT NULL,
 	"status" INTEGER NOT NULL DEFAULT '1',
 	"order_date" DATE NOT NULL,
-	"created_at" TIMESTAMP NOT NULL,
-	"updated_at" TIMESTAMP NOT NULL
+	"created_at" TIMESTAMP DEFAULT CURRENT_DATE,
+	"updated_at" TIMESTAMP DEFAULT CURRENT_DATE
 ) WITH (
   OIDS=FALSE
 );
@@ -202,13 +202,13 @@ INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, descr
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'стручковая фасоль с медом и морковью', 150, 40, 'описание гарнира: ну такое');
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'гречка', 200, 38, 'описание гарнира: ну такое');
 
-INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id, created_at, updated_at)
-    VALUES ('silakov', '123456', 100, '', MAKE_DATE(1980, 06, 12), '9108786556', 1, 1, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789', CURRENT_DATE, CURRENT_DATE);
-INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id, created_at, updated_at)
-VALUES ('ivanov', '123456', 0, '', MAKE_DATE(1998, 04, 29), '9105144545', 2, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789', CURRENT_DATE, CURRENT_DATE);
-INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id, created_at, updated_at)
-VALUES ('petrov', '123456', 200, '', MAKE_DATE(1997, 02, 20), '9085623223', 3, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789', CURRENT_DATE, CURRENT_DATE);
-INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id, created_at, updated_at)
-VALUES ('sidorov', '123456', 500, '', MAKE_DATE(1996, 09, 29), '9105654854', 2, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789', CURRENT_DATE, CURRENT_DATE);
-INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id, created_at, updated_at)
-VALUES ('egoshin', '123456', -80, '', MAKE_DATE(1995, 12, 29), '9875642312', 3, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789', CURRENT_DATE, CURRENT_DATE);
+INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
+    VALUES ('silakov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 100, '', MAKE_DATE(1980, 06, 12), '9108786556', 1, 1, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
+INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
+VALUES ('ivanov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 0, '', MAKE_DATE(1998, 04, 29), '9105144545', 2, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
+INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
+VALUES ('petrov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 200, '', MAKE_DATE(1997, 02, 20), '9085623223', 3, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
+INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
+VALUES ('sidorov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 500, '', MAKE_DATE(1996, 09, 29), '9105654854', 2, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
+INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
+VALUES ('egoshin', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', -80, '', MAKE_DATE(1995, 12, 29), '9875642312', 3, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');

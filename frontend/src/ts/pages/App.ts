@@ -36,9 +36,8 @@ import Common from "../utils/common";
                 </b-navbar-nav>
 
                 <b-navbar-nav class="ml-auto">
-                    <b-nav-item to="registration"><font-awesome-icon icon="user-plus"></font-awesome-icon> Регистрация</b-nav-item>
-                    <!-- TODO вынести как отдельную страницу после которой будет открываться текущая -->
-                    <b-nav-item to="authorization"><font-awesome-icon icon="sign-in-alt"></font-awesome-icon> Вход</b-nav-item>
+                    <b-nav-item to="sign_up"><font-awesome-icon icon="user-plus"></font-awesome-icon> Регистрация</b-nav-item>
+                    <b-nav-item to="sign_in"><font-awesome-icon icon="sign-in-alt"></font-awesome-icon> Вход</b-nav-item>
                     <b-nav-item to="settings"><font-awesome-icon icon="user-cog"></font-awesome-icon> Настройки</b-nav-item>
                     <b-nav-item to="logout"><font-awesome-icon icon="sign-out-alt"></font-awesome-icon> Выход</b-nav-item>
                 </b-navbar-nav>
@@ -67,18 +66,6 @@ import Common from "../utils/common";
 })
 
 export class App extends Vue {
-    endpoint: string = 'https://jsonplaceholder.typicode.com/posts/';
-    posts: any[] = [];
-    messageDialog: MessageDialog = Common.getMessageDialog();
 
-    getAllPosts() {
-        try {
-            const response = this.$http.get("/api/reverser/jsonbasedreverser");
-            console.log(response);
-        } catch (error) {
-            console.log('-----error-------');
-            console.log(error);
-            this.messageDialog.showError("Внутренняя ошибка сервера.");
-        }
-    }
+    messageDialog: MessageDialog = Common.getMessageDialog();
 }

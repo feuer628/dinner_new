@@ -39,8 +39,12 @@ export default class MessageDialog {
      * Отображает диалог с предупреждением
      * @param text текст предупреждения
      */
-    async showWarning(text: string | Error): Promise<any> {
-        this.showDialog("Предупреждение", true, text as string);
+    async showWarning(text: string | Error): Promise<boolean> {
+        return this.showDialog("Предупреждение", true, text as string);
+    }
+
+    async showInfo(text: string): Promise<boolean> {
+        return this.showDialog("Информация", true, text as string);
     }
 
     /**

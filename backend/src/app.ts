@@ -10,6 +10,9 @@ import {org_group} from "./routes/org_group";
 import {provider} from "./routes/provider";
 import {menu_item} from "./routes/menu_item";
 import {user} from "./routes/user";
+import {verifyToken} from "./routes/middlewares";
+import {registration} from "./routes/registration";
+import {sign_in} from "./routes/sign_in";
 
 export const LOG = require('simple-node-logger').createSimpleLogger('project.log');
 
@@ -28,13 +31,15 @@ export const LOG = require('simple-node-logger').createSimpleLogger('project.log
     app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
     // parse application/json
     app.use(bodyParser.json({ limit: '10mb' }));
-    app.use("/roles", role);
-    app.use("/actions", action);
+    app.use("/roles", verifyToken, role);
+    app.use("/actions", verifyToken, action);
     app.use("/organizations", organization);
-    app.use("/org_groups", org_group);
-    app.use("/providers", provider);
-    app.use("/menu_items", menu_item);
-    app.use("/users", user);
+    app.use("/org_groups", verifyToken, org_group);
+    app.use("/providers", verifyToken, provider);
+    app.use("/menu_items", verifyToken, menu_item);
+    app.use("/users", verifyToken, user);
+    app.use("/sign_up", registration);
+    app.use("/sign_in", sign_in);
 
     app.use(sassMiddleware({
             src: __dirname,

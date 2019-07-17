@@ -13,6 +13,8 @@ import BootstrapVue from "bootstrap-vue";
 import settingsService from './service/settingsService';
 import employeeService from './service/employeeServices';
 import {RouterConfiguration} from "./router/routerConfiguration";
+import {install} from "vue-cookies";
+import Common from "./utils/common";
 
 // загружаем настройки заказов
 settingsService.loadSettings();
@@ -31,6 +33,18 @@ employeeService.loadEmployeeInfo();
     Vue.use(BootstrapVue);
     Vue.use(VueResource);
     Vue.use(VueRouter);
+    install(Vue);
+
+    // Кладем токен аутентификации в заголовок запросов
+    (<any> Vue).http.interceptors.push((request: any, next: any) => {
+        request.headers.set('x-access-token', Vue.cookies.get("token"));
+        next((response: any) => {
+            if(response.status == 401 || response.status === 403) {
+                Common.messageDialog.showWarning("Вы не авторизованы!");
+                router.push("/sign_in");
+            }
+        });
+    });
 
     const router = RouterConfiguration.getRouter();
     new Vue({

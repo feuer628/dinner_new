@@ -1,4 +1,4 @@
-import {Column, ForeignKey} from "sequelize-typescript";
+import {BelongsTo, Column, ForeignKey} from "sequelize-typescript";
 
 export type DbRole = {
     id?: number;
@@ -66,4 +66,25 @@ export type MenuItem = {
     weight: number;
     price: number;
     description: string;
+}
+
+export type User = {
+    id?: number;
+    login: string;
+    password: string;
+    balance?: number;
+    description?: string;
+    birthday?: string;
+    phone: string;
+    org_id: string;
+    role_id?: string;
+    status?: number;
+    key?: string;
+    ip?: string;
+    comp_key?: string;
+    ip_phone?: string;
+    from_text?: string;
+    telegram_id?: number;
+    created_at?: string;
+    updated_at?: string;
 }

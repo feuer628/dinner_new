@@ -1,11 +1,12 @@
 import VueRouter, {RouteConfig} from "vue-router";
 import menu from '../pages/menu';
-import registration from '../pages/registration';
-import authorization from '../pages/authorization';
 import {Roles} from '../pages/roles';
 import {Organizations} from "../pages/organizations";
 import {OrgGroups} from "../pages/org_groups";
 import {Providers} from "../pages/providers";
+import {SignIn} from "../pages/sign_in";
+import {SignUp} from "../pages/sign_up";
+import {LogoutService} from "../service/logoutService";
 
 /**
  * Класс отвечающий за создание роутингов и инициализацию роутера
@@ -33,8 +34,12 @@ export class RouterConfiguration {
     private static createRoutes(): RouteConfig[] {
         return [
             {
+                path: "/",
+                redirect: "/menu"
+            },
+            {
                 path: "/logout",
-                // beforeEnter: async () => await Container.get(LogoutService).logout()
+                beforeEnter: LogoutService.logOutHook
             },
             // {
             //     path: "*",
@@ -46,14 +51,14 @@ export class RouterConfiguration {
                 component: menu
             },
             {
-                path: "/registration",
-                name: "registration",
-                component: registration
+                path: "/sign_up",
+                name: "sign_up",
+                component: SignUp
             },
             {
-                path: "/authorization",
-                name: "authorization",
-                component: authorization
+                path: "/sign_in",
+                name: "sign_in",
+                component: SignIn
             },
             {
                 path: "/roles",
