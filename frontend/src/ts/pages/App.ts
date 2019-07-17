@@ -17,14 +17,14 @@ import Common from "../utils/common";
             <b-collapse is-nav id="nav_collapse">
 
                 <b-navbar-nav>
-                    <b-nav-item to="menu"><font-awesome-icon icon="th-list"></font-awesome-icon> Меню</b-nav-item>
+                    <b-nav-item v-show="authenticated" to="menu"><font-awesome-icon icon="th-list"></font-awesome-icon> Меню</b-nav-item>
                     
-                    <b-nav-item-dropdown text="Обеды">
+                    <b-nav-item-dropdown v-show="authenticated" text="Обеды">
                         <b-nav-item to="orderGroup">Группы заказов</b-nav-item>
                         <b-nav-item to="report">Отчет</b-nav-item>
                     </b-nav-item-dropdown>
 
-                    <b-nav-item-dropdown text="Администрирование">
+                    <b-nav-item-dropdown v-show="authenticated" text="Администрирование">
                         <b-dropdown-item to="roles">Роли</b-dropdown-item>
                         <b-dropdown-item to="org_groups">Группы организаций</b-dropdown-item>
                         <b-dropdown-item to="organizations">Список организаций</b-dropdown-item>
@@ -36,10 +36,10 @@ import Common from "../utils/common";
                 </b-navbar-nav>
 
                 <b-navbar-nav class="ml-auto">
-                    <b-nav-item to="sign_up"><font-awesome-icon icon="user-plus"></font-awesome-icon> Регистрация</b-nav-item>
-                    <b-nav-item to="sign_in"><font-awesome-icon icon="sign-in-alt"></font-awesome-icon> Вход</b-nav-item>
-                    <b-nav-item to="settings"><font-awesome-icon icon="user-cog"></font-awesome-icon> Настройки</b-nav-item>
-                    <b-nav-item to="logout"><font-awesome-icon icon="sign-out-alt"></font-awesome-icon> Выход</b-nav-item>
+                    <b-nav-item v-show="!authenticated" to="sign_up"><font-awesome-icon icon="user-plus"></font-awesome-icon> Регистрация</b-nav-item>
+                    <b-nav-item v-show="!authenticated" to="sign_in"><font-awesome-icon icon="sign-in-alt"></font-awesome-icon> Вход</b-nav-item>
+                    <b-nav-item v-show="authenticated" to="settings"><font-awesome-icon icon="user-cog"></font-awesome-icon> Настройки</b-nav-item>
+                    <b-nav-item v-show="authenticated" to="logout"><font-awesome-icon icon="sign-out-alt"></font-awesome-icon> Выход</b-nav-item>
                 </b-navbar-nav>
 
 
@@ -57,8 +57,7 @@ import Common from "../utils/common";
                      :ok-only="messageDialog.okOnly" 
                      :title="messageDialog.title" 
                      v-model="messageDialog.isShowDialog"
-                     @hide="messageDialog.hide"
-            >
+                     @hide="messageDialog.hide">
                 {{messageDialog.message}}
             </b-modal>
         </main>
@@ -68,4 +67,14 @@ import Common from "../utils/common";
 export class App extends Vue {
 
     messageDialog: MessageDialog = Common.getMessageDialog();
+
+    private get authenticated() {
+        return this.$store.state.auth;
+    }
+
+    private async created(): Promise<void> {
+        await this.$http.get("/users/me");
+        this.$store.state.auth = true;
+    }
+
 }

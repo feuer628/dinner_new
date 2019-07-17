@@ -6,7 +6,7 @@ import {OrgGroups} from "../pages/org_groups";
 import {Providers} from "../pages/providers";
 import {SignIn} from "../pages/sign_in";
 import {SignUp} from "../pages/sign_up";
-import {LogoutService} from "../service/logoutService";
+import {Logout} from "../pages/logout";
 
 /**
  * Класс отвечающий за создание роутингов и инициализацию роутера
@@ -39,7 +39,7 @@ export class RouterConfiguration {
             },
             {
                 path: "/logout",
-                beforeEnter: LogoutService.logOutHook
+                component: Logout
             },
             // {
             //     path: "*",

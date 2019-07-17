@@ -28,7 +28,7 @@ export class SignIn extends Vue {
     private credentials: Credentials = {login: "", password: ""};
 
     private async created(): Promise<void> {
-        if (this.$cookies.get("auth")) {
+        if (this.$store.state.auth) {
             this.$router.push("/");
         }
     }
@@ -36,7 +36,7 @@ export class SignIn extends Vue {
     private async login(): Promise<void> {
         try {
             const response = await this.$http.post("/sign_in", this.credentials);
-            this.$cookies.set("auth", true, <any>{expires: "1d"});
+            this.$store.state.auth = true;
             this.$cookies.set("token", response.data.token, <any>{expires: "1d"});
             this.$forceUpdate();
             this.$router.push("/");

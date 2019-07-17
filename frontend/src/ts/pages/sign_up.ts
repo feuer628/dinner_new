@@ -39,7 +39,7 @@ export class SignUp extends Vue {
     private organizations: Organization[] = [];
 
     private async created(): Promise<void> {
-        if (this.$cookies.get("auth")) {
+        if (this.$store.state.auth) {
             this.$router.push("/");
         }
     }
@@ -62,7 +62,7 @@ export class SignUp extends Vue {
         const data = <AuthData> result.data;
         if (data.auth) {
             await Common.messageDialog.showInfo("Регистрация прошла успешно!");
-            this.$cookies.set("auth", true, <any> {expires: "1d"});
+            this.$store.state.auth = true;
             this.$cookies.set("token", data.token, <any> {expires: "1d"});
             this.$router.push("/");
         } else {

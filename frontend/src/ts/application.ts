@@ -15,6 +15,7 @@ import employeeService from './service/employeeServices';
 import {RouterConfiguration} from "./router/routerConfiguration";
 import {install} from "vue-cookies";
 import Common from "./utils/common";
+import {store} from "./store";
 
 // загружаем настройки заказов
 settingsService.loadSettings();
@@ -49,6 +50,7 @@ employeeService.loadEmployeeInfo();
     const router = RouterConfiguration.getRouter();
     new Vue({
         el: '#app',
+        store,
         render: h => h(App),
         router
     });
