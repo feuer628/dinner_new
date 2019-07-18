@@ -33,6 +33,10 @@ import Common from "../utils/common";
                         <b-dropdown-item to="newUsers">Новые пользователи</b-dropdown-item>
                         <b-dropdown-item to="system_properties">Системные свойства</b-dropdown-item>
                     </b-nav-item-dropdown>
+
+                    <b-nav-item v-show="authenticated" to="menu_reviews"><font-awesome-icon icon="meh-rolling-eyes"></font-awesome-icon> Отзывы о блюдах</b-nav-item>
+                    <b-nav-item v-show="authenticated" to="provider_reviews"><font-awesome-icon icon="star-half-alt"></font-awesome-icon> Отзывы о поставщике</b-nav-item>
+                    
                 </b-navbar-nav>
 
                 <b-navbar-nav class="ml-auto">

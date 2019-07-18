@@ -7,6 +7,7 @@ import {Providers} from "../pages/providers";
 import {SignIn} from "../pages/sign_in";
 import {SignUp} from "../pages/sign_up";
 import {Logout} from "../pages/logout";
+import {Settings} from "../pages/settings";
 
 /**
  * Класс отвечающий за создание роутингов и инициализацию роутера
@@ -37,10 +38,6 @@ export class RouterConfiguration {
                 path: "/",
                 redirect: "/menu"
             },
-            {
-                path: "/logout",
-                component: Logout
-            },
             // {
             //     path: "*",
             //     redirect: "/events"
@@ -59,6 +56,14 @@ export class RouterConfiguration {
                 path: "/sign_in",
                 name: "sign_in",
                 component: SignIn
+            },
+            {
+                path: "/logout",
+                component: Logout
+            },
+            {
+                path: "/settings",
+                component: Settings
             },
             {
                 path: "/roles",

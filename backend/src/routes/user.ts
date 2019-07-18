@@ -46,6 +46,15 @@ user.get('/me', async (req, res, next) => {
     }
 });
 
+user.put('/me', async (req, res, next) => {
+    try {
+        await User.update<User>(req.body, {where: {id: (<any> req).userId}});
+        res.sendStatus(200);
+    } catch (e) {
+        next(e);
+    }
+});
+
 user.get('', async (req, res, next) => {
     try {
         res.json(await User.scope(req.query['scope']).findAll({order: ['id']}));

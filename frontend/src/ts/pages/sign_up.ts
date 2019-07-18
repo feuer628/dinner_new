@@ -8,7 +8,7 @@ import Common from "../utils/common";
 // language=Vue
 template: `
 <div>
-    <b-card title="Введите данные для регистрации" style="max-width: 500px; margin: 50px auto" class="mb-2">
+    <b-card title="Введите данные для регистрации" style="max-width: 500px; margin: 50px auto" class="mb-2" v-on:keyup.enter="reristerUser">
         <b-form>
             <b-form-group label="Введите логин" label-for="login">
                 <b-form-input id="login" v-model="current.login" trim></b-form-input>
