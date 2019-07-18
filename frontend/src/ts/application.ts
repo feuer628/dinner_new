@@ -16,6 +16,8 @@ import {RouterConfiguration} from "./router/routerConfiguration";
 import {install} from "vue-cookies";
 import Common from "./utils/common";
 import {store} from "./store";
+import {Days} from "./models/days";
+import moment = require("moment");
 
 // загружаем настройки заказов
 settingsService.loadSettings();
@@ -35,6 +37,15 @@ employeeService.loadEmployeeInfo();
     Vue.use(VueResource);
     Vue.use(VueRouter);
     install(Vue);
+
+    Vue.filter('formatTabDate', function (value: string) {
+        if (!value) {
+            return ''
+        }
+        const date = moment(new Date(value));
+        const dayText = Days.valueOf(date.weekday()).text;
+        return dayText + " (" + moment(date).format("DD.MM") + ")"
+    });
 
     // Кладем токен аутентификации в заголовок запросов
     (<any> Vue).http.interceptors.push((request: any, next: any) => {

@@ -12,21 +12,18 @@ const MENU_ITEMS = "menu_items";
     template: `
 <div v-if="tabs && user && user.organization.group">
     <b-tabs v-model="tabIndex" card>
-        <b-tab v-for="tab in tabs" :key="tab.name" :title="tab.name">
-            <b-table striped  hover :items="tab.items" :fields="columns" caption-top>
+        <b-tab v-for="tab in tabs" :key="tab.name" :title="tab.name | formatTabDate">
+            <b-table striped  hover :items="tab.items" :fields="tab.orderConfirmed ? basicMenuFields : fullMenuFields" caption-top>
                 <template slot="table-caption">
                     <div v-if="tab.orderConfirmed" class="mb10">
                         <h4 class="alignC">На этот день вы заказали следующее:</h4>
                         <b-list-group class="w800 mAuto">
                             <b-list-group-item v-for="ordItem in tab.current" :key="ordItem.itemId" class="flex-column align-items-start">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h5>
-                                        <b-button v-if="!ordItem.rating" size="sm" variant="outline-primary"><font-awesome-icon icon="star"></font-awesome-icon></b-button>
-                                        {{ordItem.name}}
-                                    </h5>
-                                    {{ordItem.count}} шт. по {{ordItem.price}}₽/шт
+                                    <h6>{{ordItem.name}}</h6>
+                                    <span><b>{{ordItem.count}}</b> шт. по {{ordItem.price}}₽/шт</span>
                                 </div>
-                                <small v-if="ordItem.rating">Ваш рейтинг: {{ordItem.rating}}, ваш отзыв: "{{ordItem.review}}"</small>
+                                <div v-if="ordItem.comment"><small>С комментом "{{ordItem.comment}}"</small></div>
                             </b-list-group-item>
                         </b-list-group>
                     </div>
@@ -61,7 +58,7 @@ const MENU_ITEMS = "menu_items";
 <!--                        </b-button>-->
 <!--                    </span>-->
                 </template>
-                <template v-if="!tab.orderConfirmed" slot="buttons" slot-scope="row">
+                <template slot="buttons" slot-scope="row">
                     <b-button-group>
                         <b-button size="sm" @click="add(row.item)" variant="info"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
                         <b-button disabled variant="light"><b>{{getOrderItemCount(row.item.id)}}</b></b-button>
@@ -239,11 +236,7 @@ export default class Menu extends Vue {
     /**
      * Описание колонок таблицы меню
      */
-    private columns = {
-        buttons: {
-            label: "Количество",
-            class: "w80"
-        },
+    private basicMenuFields = {
         price: {
             label: "Цена",
             class: "w80"
@@ -262,6 +255,14 @@ export default class Menu extends Vue {
             label: "Рейтинг",
             class: "w80"
         }
+    };
+
+    private fullMenuFields = {
+        buttons: {
+            label: "Количество",
+            class: "w80"
+        },
+        ...this.basicMenuFields
     };
 
     private orderFields = {
