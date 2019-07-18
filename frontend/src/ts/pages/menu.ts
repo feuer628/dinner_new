@@ -13,59 +13,62 @@ const MENU_ITEMS = "menu_items";
 <div v-if="tabs && user && user.organization.group">
     <b-tabs v-model="tabIndex" card>
         <b-tab v-for="tab in tabs" :key="tab.name" :title="tab.name | formatTabDate">
-            <b-table striped  hover :items="tab.items" :fields="tab.orderConfirmed ? basicMenuFields : fullMenuFields" caption-top>
-                <template slot="table-caption">
-                    <div v-if="tab.orderConfirmed" class="mb10">
-                        <h4 class="alignC">На этот день вы заказали следующее:</h4>
-                        <b-list-group class="w800 mAuto">
-                            <b-list-group-item v-for="ordItem in tab.current" :key="ordItem.itemId" class="flex-column align-items-start">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h6>{{ordItem.name}}</h6>
-                                    <span><b>{{ordItem.count}}</b> шт. по {{ordItem.price}}₽/шт</span>
-                                </div>
-                                <div v-if="ordItem.comment"><small>С комментом "{{ordItem.comment}}"</small></div>
-                            </b-list-group-item>
-                        </b-list-group>
-                    </div>
-                    <template v-else>
-                        <div>
-                            Выбрано блюд на {{totalPrice}}₽
-                            <span v-if="user.organization.group.limit" class="xs">(компенсируется {{user.organization.group.limit}}₽)</span>
-                            <b-badge v-if="limitExceeded" variant="warning">Превышение на {{totalPrice - user.organization.group.limit}}₽!</b-badge>
+            <div v-if="tab.orderConfirmed" class="mb10">
+                <h4 class="alignC">На этот день вы заказали следующее:</h4>
+                <b-list-group class="w800 mAuto">
+                    <b-list-group-item v-for="ordItem in tab.current" :key="ordItem.itemId" class="flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6>{{ordItem.name}}</h6>
+                            <span><b>{{ordItem.count}}</b> шт. по {{ordItem.price}}₽/шт</span>
                         </div>
-                        <b-badge v-if="hardLimitExceeded" variant="danger">
-                            Ограничение суммы заказа {{user.organization.group.hard_limit}}₽. Такой заказ невозможно утвердить.
-                        </b-badge>
-                        <div v-if="user.organization.group.limit_type === 0">
-                            Баланс {{user.balance}}₽
-                            <b-badge v-if="user.balance < totalPrice" variant="danger">
-                                Сумма заказа превышает ваш баланс. Такой заказ невозможно утвердить.
-                            </b-badge>
-                        </div>
+                        <div v-if="ordItem.comment"><small>С комментом "{{ordItem.comment}}"</small></div>
+                    </b-list-group-item>
+                </b-list-group>
+            </div>
+            <div v-else>
+                <div>
+                    Выбрано блюд на {{totalPrice}}₽
+                    <span v-if="user.organization.group.limit" class="xs">(компенсируется {{user.organization.group.limit}}₽)</span>
+                    <b-badge v-if="limitExceeded" variant="warning">Превышение на {{totalPrice - user.organization.group.limit}}₽!</b-badge>
+                </div>
+                <b-badge v-if="hardLimitExceeded" variant="danger">
+                    Ограничение суммы заказа {{user.organization.group.hard_limit}}₽. Такой заказ невозможно утвердить.
+                </b-badge>
+                <div v-if="user.organization.group.limit_type === 0">
+                    Баланс {{user.balance}}₽
+                    <b-badge v-if="user.balance < totalPrice" variant="danger">
+                        Сумма заказа превышает ваш баланс. Такой заказ невозможно утвердить.
+                    </b-badge>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <b-button v-if="!tab.orderConfirmed" :disabled="confirmButtonDisabled" @click="showOrderConfirmDialog" size="sm" variant="primary">Утвердить заказ</b-button>
+                <b-button size="sm" variant="outline-info">В Весточку</b-button>
+                <b-button size="sm" variant="outline-info">В Telegram</b-button>
+                <b-button size="sm" variant="outline-warning">Попросить сбросить заказ</b-button>
+            </div>
+            <!--                    <span>-->
+            <!--                        <b-form-checkbox v-model="menu.anotherEmployee" @input="orderForAnotherEmployee(!!menu.anotherEmployee, menu)">Заказать за другого сотрудника</b-form-checkbox>-->
+            <!--                        <b-form-select v-model="menu.employeeInfo" size="sm" class="w200" :disabled="!menu.anotherEmployee" :options="menu.notOrderedEmployees" @input="changeEmployee(menu)"></b-form-select>-->
+            <!--                        <b-button size="sm" v-if="!menu.ordered" variant="info" :disabled="menu.totalPrice === 0" -->
+            <!--                                  @click="setResultMenu(menu)" v-b-modal.confirmMenu>-->
+            <!--                            Утвердить-->
+            <!--                        </b-button>-->
+            <!--                    </span>-->
+            <b-button :aria-expanded="tab.needShowMenu ? 'true' : 'false'" aria-controls="menu_table_collapse" @click="tab.needShowMenu = !tab.needShowMenu" size="sm">
+                Свернуть / развернуть меню
+            </b-button>
+            <b-collapse id="menu_table_collapse" v-model="tab.needShowMenu">
+                <b-table striped :items="tab.items" :fields="tab.orderConfirmed ? basicMenuFields : fullMenuFields" class="mt10">
+                    <template slot="buttons" slot-scope="row">
+                        <b-button-group>
+                            <b-button size="sm" @click="add(row.item)" variant="info"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
+                            <b-button disabled variant="light"><b>{{getOrderItemCount(row.item.id)}}</b></b-button>
+                            <b-button :disabled="!getOrderItemCount(row.item.id)" size="sm" @click="dec(row.item)" variant="info"><font-awesome-icon icon="minus"></font-awesome-icon></b-button>
+                        </b-button-group>
                     </template>
-                    <div style="text-align: center;">
-                        <b-button v-if="!tab.orderConfirmed" :disabled="confirmButtonDisabled" @click="showOrderConfirmDialog" size="sm" variant="primary">Утвердить заказ</b-button>
-                        <b-button size="sm" variant="outline-info">В Весточку</b-button>
-                        <b-button size="sm" variant="outline-info">В Telegram</b-button>
-                        <b-button size="sm" variant="outline-warning">Попросить сбросить заказ</b-button>
-                    </div>
-<!--                    <span>-->
-<!--                        <b-form-checkbox v-model="menu.anotherEmployee" @input="orderForAnotherEmployee(!!menu.anotherEmployee, menu)">Заказать за другого сотрудника</b-form-checkbox>-->
-<!--                        <b-form-select v-model="menu.employeeInfo" size="sm" class="w200" :disabled="!menu.anotherEmployee" :options="menu.notOrderedEmployees" @input="changeEmployee(menu)"></b-form-select>-->
-<!--                        <b-button size="sm" v-if="!menu.ordered" variant="info" :disabled="menu.totalPrice === 0" -->
-<!--                                  @click="setResultMenu(menu)" v-b-modal.confirmMenu>-->
-<!--                            Утвердить-->
-<!--                        </b-button>-->
-<!--                    </span>-->
-                </template>
-                <template slot="buttons" slot-scope="row">
-                    <b-button-group>
-                        <b-button size="sm" @click="add(row.item)" variant="info"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
-                        <b-button disabled variant="light"><b>{{getOrderItemCount(row.item.id)}}</b></b-button>
-                        <b-button :disabled="!getOrderItemCount(row.item.id)" size="sm" @click="dec(row.item)" variant="info"><font-awesome-icon icon="minus"></font-awesome-icon></b-button>
-                    </b-button-group>
-                </template>
-            </b-table>
+                </b-table>
+            </b-collapse>
         </b-tab>
         
         <b-modal ref="orderConfirmDialog" title="Подтверждение заказа">
@@ -161,7 +164,8 @@ export default class Menu extends Vue {
                 name: menuDate,
                 items: menu.filter(m => m.menu_date === menuDate),
                 current: [],
-                orderConfirmed: false
+                orderConfirmed: false,
+                needShowMenu: false
             });
             await this.loadOrderInfo(menuDate);
         });
@@ -208,6 +212,8 @@ export default class Menu extends Vue {
                         name: orderItem.name
                     })
                 }
+            } else {
+                tab.needShowMenu = true;
             }
         }
     }
@@ -284,6 +290,7 @@ type MenuTab = {
     name: string;
     items: MenuItem[];
     orderConfirmed: boolean;
+    needShowMenu: boolean;
     current: OrderItem[];
 }
 
