@@ -13,9 +13,9 @@ order.post('/', async (req, res, next) => {
         for (const orderItem of (<any[]>req.body.items)) {
             await OrderItem.create({
                 order_id: order.id,
-                name: orderItem.item.name,
+                name: orderItem.name,
                 count: orderItem.count,
-                price: orderItem.item.price,
+                price: orderItem.price,
                 comment: orderItem.comment
             })
         }

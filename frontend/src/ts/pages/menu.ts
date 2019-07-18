@@ -63,8 +63,8 @@ const MENU_ITEMS = "menu_items";
                     <template slot="buttons" slot-scope="row">
                         <b-button-group>
                             <b-button size="sm" @click="add(row.item)" variant="info"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
-                            <b-button disabled variant="light"><b>{{getOrderItemCount(row.item.id)}}</b></b-button>
-                            <b-button :disabled="!getOrderItemCount(row.item.id)" size="sm" @click="dec(row.item)" variant="info"><font-awesome-icon icon="minus"></font-awesome-icon></b-button>
+                            <b-button disabled variant="light"><b>{{getOrderItemCount(row.item.name)}}</b></b-button>
+                            <b-button :disabled="!getOrderItemCount(row.item)" size="sm" @click="dec(row.item)" variant="info"><font-awesome-icon icon="minus"></font-awesome-icon></b-button>
                         </b-button-group>
                     </template>
                 </b-table>
@@ -82,7 +82,7 @@ const MENU_ITEMS = "menu_items";
                     <b-form-input v-model="row.item.comment" type="text" label-size="sm" placeholder="Ваш комментарий к позиции"></b-form-input>
                 </template>
                 <template slot="amount" slot-scope="row">
-                    {{row.item.count}} * {{row.item.item.price}}₽ = {{row.item.count*row.item.item.price}}₽
+                    {{row.item.count}} * {{row.item.price}}₽ = {{row.item.count*row.item.price}}₽
                 </template>
             </b-table>
             <div>Всего: {{totalPrice}}₽</div>
@@ -146,8 +146,7 @@ export default class Menu extends Vue {
     private get totalPrice() {
         let total = 0;
         this.currentOrder.forEach(item => {
-            const price = item.price ? item.price : (<any> item.item).price;
-            total += item.count * price;
+            total += item.count * item.price;
         });
         return total;
     }
@@ -200,7 +199,9 @@ export default class Menu extends Vue {
         const response = (await this.$http.get(`/orders/date/${orderDate}`)).data;
         const tab = this.tabs.find(t => {return t.name === orderDate});
         if (tab) {
+            tab.current = [];
             tab.orderConfirmed = response !== null;
+            tab.needShowMenu = response === null;
             if (response !== null) {
                 for (const orderItem of (<any[]>response.orderItems)) {
                     tab.current.push({
@@ -218,22 +219,22 @@ export default class Menu extends Vue {
         }
     }
 
-    private getOrderItemCount(id: number): number {
-        const item = this.currentOrder.find(i => i.itemId === id);
+    private getOrderItemCount(name: string): number {
+        const item = this.currentOrder.find(i => i.name === name);
         return item && item.count || 0;
     }
 
     private async add(item: MenuItem): Promise<void> {
-        const currentOrderItem = this.currentOrder.find(s => s.itemId === item.id);
+        const currentOrderItem = this.currentOrder.find(s => s.name === item.name);
         if (currentOrderItem) {
             currentOrderItem.count++;
         } else {
-            this.currentOrder.push({itemId: item.id, count: 1, comment: "", item});
+            this.currentOrder.push({name: item.name, count: 1, comment: "", price: item.price});
         }
     }
 
     private dec(item: MenuItem): void {
-        const currentOrderItem = this.currentOrder.find(s => s.itemId === item.id);
+        const currentOrderItem = this.currentOrder.find(s => s.name === item.name);
         if (currentOrderItem && currentOrderItem.count) {
             currentOrderItem.count--;
         }
@@ -296,11 +297,9 @@ type MenuTab = {
 
 type OrderItem = {
     count: number;
+    name: string;
     comment: string;
-    itemId?: number;
+    price: number;
     rating?: number;
     review?: string;
-    price?: number;
-    name?: string;
-    item?: MenuItem;
 }

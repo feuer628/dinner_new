@@ -202,17 +202,18 @@ INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, descr
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'тушеное', 'макароны с томатами пилати', 120, 30, 'описание гарнира: ну такое');
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'тушеное', 'стручковая фасоль с медом и морковью', 150, 40, 'описание гарнира: ну такое');
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'гречка', 200, 38, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'перловара', 200, 38, 'описание гарнира: ну такое');
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '1 day', 'гарниры', 'пюре', 200, 38, 'описание гарнира: ну такое');
-INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '1 day', 'гарниры', 'печень', 200, 38, 'описание такое');
-INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '1 day', 'фитнесс', 'печенька', 200, 38, 'описание: ну такое');
-INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '1 day', 'гарниры', 'фасоль', 200, 38, 'описание гарнира: ну такое');
-INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '1 day', 'гарниры', 'перловара', 200, 38, 'описание гарнира: ну такое');
-INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'комильфо', 'перловара', 200, 38, 'описание гарнира: ну такое');
-INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'комильфо', 'перловара', 200, 38, 'описание гарнира: ну такое');
-INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'комильфо', 'перловара', 200, 38, 'описание гарнира: ну такое');
-INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'гарниры', 'перловара', 200, 38, 'описание гарнира: ну такое');
-INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'фитнесс', 'перловара', 200, 38, 'описание гарнира: ну такое');
-INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'фитнесс', 'перловара', 200, 38, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '1 day', 'гарниры', 'печень', 200, 21, 'описание такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '1 day', 'фитнесс', 'печенька', 200, 90, 'описание: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '1 day', 'гарниры', 'фасоль', 200, 8, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '1 day', 'гарниры', 'перловара', 200, 67, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'комильфо', 'перловара', 200, 32, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'комильфо', 'перловара1', 200, 65, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'комильфо', 'перловара2', 200, 98, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'гарниры', 'перловара3', 200, 15, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'фитнесс', 'перловара4', 200, 238, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'фитнесс', 'перловара5', 200, 138, 'описание гарнира: ну такое');
 
 INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
     VALUES ('silakov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 100, '', MAKE_DATE(1980, 06, 12), '9108786556', 2, 1, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
