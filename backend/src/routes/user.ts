@@ -35,16 +35,12 @@ user.post('/', async (req, res, next) => {
 
 user.get('/me', async (req, res, next) => {
     try {
-        let token = <string> req.headers['x-access-token'];
-        if (!token) {
-            return res.status(401).send({ auth: false, message: 'No token provided.' });
+        const user = await User.findOne({where: {id: (<any> req).userId}, include: [{model: Role, include: [Action]}, {model: Organization, include: [OrgGroup]}]});
+        if (!user) {
+            return res.status(404).send("Пользователь не найден");
         }
-        verify(token, process.env.AUTH_SECRET, function(err: VerifyErrors, decoded: string | object) {
-            if (err) {
-                return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
-            }
-            res.status(200).send(decoded);
-        });
+        user.password = null;
+        res.status(200).send(user);
     } catch (e) {
         next(e);
     }

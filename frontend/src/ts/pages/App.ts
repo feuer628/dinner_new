@@ -73,7 +73,7 @@ export class App extends Vue {
     }
 
     private async created(): Promise<void> {
-        await this.$http.get("/users/me");
+        this.$store.state.user = (await this.$http.get("/users/me")).data;
         this.$store.state.auth = true;
     }
 

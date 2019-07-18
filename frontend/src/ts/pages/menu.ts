@@ -1,9 +1,8 @@
 import Vue from "vue"
 import Component from "vue-class-component"
-
-import EmployeeServices, {EmployeeInfo} from "../service/employeeServices";
 import {MenuItem} from "../models/models";
 import {RestService} from "../service/restService";
+import Common from "../utils/common";
 
 /** Название REST-пути работы с пунктами меню */
 const MENU_ITEMS = "menu_items";
@@ -11,18 +10,48 @@ const MENU_ITEMS = "menu_items";
 @Component({
     // language=Vue
     template: `
-<div>
-    <b-tabs card>
-        <b-tab v-for="tab in tabs" :key="tab.name" :title="tab.name" :active="activeTab">
+<div v-if="tabs && user && user.organization.group">
+    <b-tabs v-model="tabIndex" card>
+        <b-tab v-for="tab in tabs" :key="tab.name" :title="tab.name">
             <b-table striped  hover :items="tab.items" :fields="columns" caption-top>
                 <template slot="table-caption">
-                    <span>Выбрано блюд на {{totalPrice}} ₽</span>
-                    <div style="text-align: center;">
-                        <b-button size="sm" variant="outline-primary">Утвердить заказ</b-button>
+                    <div v-if="tab.orderConfirmed" class="mb10">
+                        <h4 class="alignC">На этот день вы заказали следующее:</h4>
+                        <b-list-group class="w800 mAuto">
+                            <b-list-group-item v-for="ordItem in tab.current" :key="ordItem.itemId" class="flex-column align-items-start">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5>
+                                        <b-button v-if="!ordItem.rating" size="sm" variant="outline-primary"><font-awesome-icon icon="star"></font-awesome-icon></b-button>
+                                        {{ordItem.name}}
+                                    </h5>
+                                    {{ordItem.count}} шт. по {{ordItem.price}}₽/шт
+                                </div>
+                                <small v-if="ordItem.rating">Ваш рейтинг: {{ordItem.rating}}, ваш отзыв: "{{ordItem.review}}"</small>
+                            </b-list-group-item>
+                        </b-list-group>
                     </div>
-<!--                    <span>-->
-<!--                        Ваш баланс: {{menu.employeeInfo.balance}}-->
-<!--                    </span>-->
+                    <template v-else>
+                        <div>
+                            Выбрано блюд на {{totalPrice}}₽
+                            <span v-if="user.organization.group.limit" class="xs">(компенсируется {{user.organization.group.limit}}₽)</span>
+                            <b-badge v-if="limitExceeded" variant="warning">Превышение на {{totalPrice - user.organization.group.limit}}₽!</b-badge>
+                        </div>
+                        <b-badge v-if="hardLimitExceeded" variant="danger">
+                            Ограничение суммы заказа {{user.organization.group.hard_limit}}₽. Такой заказ невозможно утвердить.
+                        </b-badge>
+                        <div v-if="user.organization.group.limit_type === 0">
+                            Баланс {{user.balance}}₽
+                            <b-badge v-if="user.balance < totalPrice" variant="danger">
+                                Сумма заказа превышает ваш баланс. Такой заказ невозможно утвердить.
+                            </b-badge>
+                        </div>
+                    </template>
+                    <div style="text-align: center;">
+                        <b-button v-if="!tab.orderConfirmed" :disabled="confirmButtonDisabled" @click="showOrderConfirmDialog" size="sm" variant="primary">Утвердить заказ</b-button>
+                        <b-button size="sm" variant="outline-info">В Весточку</b-button>
+                        <b-button size="sm" variant="outline-info">В Telegram</b-button>
+                        <b-button size="sm" variant="outline-warning">Попросить сбросить заказ</b-button>
+                    </div>
 <!--                    <span>-->
 <!--                        <b-form-checkbox v-model="menu.anotherEmployee" @input="orderForAnotherEmployee(!!menu.anotherEmployee, menu)">Заказать за другого сотрудника</b-form-checkbox>-->
 <!--                        <b-form-select v-model="menu.employeeInfo" size="sm" class="w200" :disabled="!menu.anotherEmployee" :options="menu.notOrderedEmployees" @input="changeEmployee(menu)"></b-form-select>-->
@@ -32,28 +61,37 @@ const MENU_ITEMS = "menu_items";
 <!--                        </b-button>-->
 <!--                    </span>-->
                 </template>
-                <template slot="buttons" slot-scope="row">
+                <template v-if="!tab.orderConfirmed" slot="buttons" slot-scope="row">
                     <b-button-group>
                         <b-button size="sm" @click="add(row.item)" variant="info"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
-                        <b-button disabled variant="outline-info">{{getOrderItemCount(row.item.id)}}</b-button>
+                        <b-button disabled variant="light"><b>{{getOrderItemCount(row.item.id)}}</b></b-button>
                         <b-button :disabled="!getOrderItemCount(row.item.id)" size="sm" @click="dec(row.item)" variant="info"><font-awesome-icon icon="minus"></font-awesome-icon></b-button>
                     </b-button-group>
                 </template>
             </b-table>
         </b-tab>
         
-        <!-- диалог для подтверждения заказа -->
-        <b-modal id="confirmMenu" title="Утвеждрение заказа" @ok="confirmMenu">
-            <b-table :items="resultMenu.items" :fields="resultMenu.fields" caption>
-                <template slot="table-caption">
-                    <div>
-                        <label>Общая стоимость: {{resultMenu.totalPrice}} ₽</label>
-                    </div>
-                    <div>
-                        <label>Баланс: {{getBalance(resultMenu)}} ₽</label>
-                    </div>
+        <b-modal ref="orderConfirmDialog" title="Подтверждение заказа">
+            <b-table :items="currentOrder" :fields="orderFields" stripped small>
+                <template slot="comment" slot-scope="row">
+                    <b-button size="sm" @click.stop="row.toggleDetails" variant="outline-info" :pressed.sync="row.detailsShowing">
+                        <font-awesome-icon :icon="row.detailsShowing ? 'angle-up' : 'angle-down'"></font-awesome-icon>
+                    </b-button>
+                </template>
+                <template slot="row-details" slot-scope="row">
+                    <b-form-input v-model="row.item.comment" type="text" label-size="sm" placeholder="Ваш комментарий к позиции"></b-form-input>
+                </template>
+                <template slot="amount" slot-scope="row">
+                    {{row.item.count}} * {{row.item.item.price}}₽ = {{row.item.count*row.item.item.price}}₽
                 </template>
             </b-table>
+            <div>Всего: {{totalPrice}}₽</div>
+            <div v-if="user.organization.group.limit">Компенсация: -{{user.organization.group.limit}}₽</div>
+            <div v-if="totalPay > 0"><b>К доплате: {{totalPay}}₽</b></div>
+            <div slot="modal-footer" class="alignR">
+                <b-button variant="outline-secondary" size="sm" @click="hideModal">Отмена</b-button>
+                <b-button variant="success" size="sm" @click="confirmOrder">Подтвердить заказ</b-button>
+            </div>
         </b-modal>
     </b-tabs>
 </div>
@@ -61,92 +99,120 @@ const MENU_ITEMS = "menu_items";
 })
 export default class Menu extends Vue {
 
-    private menu: MenuItem[] = [];
+    private tabs: MenuTab[] = [];
 
-    private tabs: MenuTabs[] = [];
-
-    private activeTab: string = "";
-
-    private currentOrder: OrderItem[] = [];
-
-    /** зделанные заказы за неделю */
-    private weeklyOrder: MenuItem[] = [];
-    /** отображаемое меню */
-    private showMenu: MenuItem[] = [];
-    /** Сегодняшняя дата */
-    private today = new Date();
-    /** информация о пользователе */
-    private employeeInfo: EmployeeInfo = EmployeeServices.employeeInfo;
-    /** Итоговый заказ */
-    private resultMenu: any = {};
+    private tabIndex = 0;
 
     private rest: RestService = new RestService(this);
 
-    /**
-     * хук. загрузка необходимой информации
-     */
-    private async mounted(): Promise<void> {
-        this.menu = await this.rest.loadItems<MenuItem>(MENU_ITEMS);
-        new Set(this.menu.map(m => m.menu_date)).forEach(menuDate => {
-            this.tabs.push({name: menuDate, items: this.menu.filter(m => m.menu_date === menuDate)});
-        });
-        // this.weeklyOrder = MenuService.getWeeklyOrder();
-        // this.makeShowMenu();
+    private get currentOrder() {
+        return this.tabs[this.tabIndex] && this.tabs[this.tabIndex].current || [];
+    }
+
+    private get activeTab() {
+        return this.tabs[this.tabIndex];
+    }
+
+    private get user() {
+        return this.$store.state.user;
+    }
+
+    private get limitExceeded() {
+        return this.user.organization.group.limit && this.totalPrice > this.user.organization.group.limit;
+    }
+
+    private get hardLimitExceeded() {
+        return this.user.organization.group.hard_limit && this.totalPrice > this.user.organization.group.hard_limit;
+    }
+
+    private get confirmButtonDisabled() {
+        if (this.user.organization.group.limit_type === 0) {
+            return this.user.balance < this.totalPrice;
+        } else {
+            return this.hardLimitExceeded;
+        }
+    }
+
+    private get totalPay() {
+        let total = this.totalPrice;
+        if (this.user.organization.group.limit_type === 0) {
+            return total;
+        } else {
+            total -= this.user.organization.group.limit;
+            return  total;
+        }
     }
 
     private get totalPrice() {
         let total = 0;
         this.currentOrder.forEach(item => {
-            total += item.count * item.item.price;
+            const price = item.price ? item.price : (<any> item.item).price;
+            total += item.count * price;
         });
         return total;
     }
 
-    /**
-     * Сформировать меню, которое будет отображаться
-     */
-    private makeShowMenu() {
-/*        this.showMenu = JSON.parse(JSON.stringify(this.weeklyOrder));
-
-        // склеим менюхи: для заказанных дней подставим сам заказ
-        let dates:any = [];
-        this.showMenu.forEach((item) => {
-            dates.push(item.date);
+    private async created(): Promise<void> {
+        this.$store.state.user = (await this.$http.get("/users/me")).data;
+        if (this.$store.state.user.organization.group === null) {
+            await Common.messageDialog.showWarning("Ваша оргиназация не входит ни в одну группу.");
+            return;
+        }
+        const menu = await this.rest.loadItems<MenuItem>(MENU_ITEMS);
+        new Set(menu.map(m => m.menu_date)).forEach(async (menuDate: string) => {
+            this.tabs.push({
+                name: menuDate,
+                items: menu.filter(m => m.menu_date === menuDate),
+                current: [],
+                orderConfirmed: false
+            });
+            await this.loadOrderInfo(menuDate);
         });
-        this.menu.forEach(item => {
-            if (dates.indexOf(item.date) === -1) {
-                this.showMenu.push(JSON.parse(JSON.stringify(item)))
-            }
-        });
-        // отсортируем меню для показа
-        this.showMenu.sort((a, b) => (new Date(a.date) > new Date(b.date)) ? 1 : -1);
-
-        // проставляем информацию по столбцам;
-        // по умолчанию меню расчитано на залогиневшегося пользователя
-        this.showMenu.forEach((item: any) => {
-            item.fields = JSON.parse(JSON.stringify(this.columns));
-            // if (item.ordered) {
-            //     // удалим колонку с кнопками для заказанных дней
-            //     delete item.fields.buttons;
-            // }
-            item.employeeInfo = this.employeeInfo;
-        });*/
     }
 
-    /**
-     * Получение наименования таба
-     * @param date дата для которой отображается таб
-     */
-    private getTabName(date: any) {
-        return new Date(date).toLocaleDateString();
-    };
+    private async showOrderConfirmDialog() {
+        this.activeTab.current = this.currentOrder.filter(orderItem => {
+            return orderItem.count !== 0;
+        });
+        if (!this.currentOrder.length) {
+            await this.$bvModal.msgBoxOk("Вы ничего не выбрали.");
+            return;
+        }
+        (<any>this.$refs["orderConfirmDialog"]).show();
+    }
 
-    /**
-     * Определение является ли данный таб активный(сегодняшний)
-     * @param date дата для таба
-     */
-    private isActiveTab(date: any) {
-        return new Date(date).toLocaleDateString() === this.today.toLocaleDateString();
+    private hideModal() {
+        (<any>this.$refs["orderConfirmDialog"]).hide();
+    }
+
+    private async confirmOrder() {
+        const params = {
+            order_date: this.activeTab.name,
+            items: this.currentOrder
+        };
+        await this.$http.post("/orders", params);
+        this.hideModal();
+        await this.loadOrderInfo(this.activeTab.name);
+    }
+
+    private async loadOrderInfo(orderDate: string) {
+        const response = (await this.$http.get(`/orders/date/${orderDate}`)).data;
+        const tab = this.tabs.find(t => {return t.name === orderDate});
+        if (tab) {
+            tab.orderConfirmed = response !== null;
+            if (response !== null) {
+                for (const orderItem of (<any[]>response.orderItems)) {
+                    tab.current.push({
+                        count: orderItem.count,
+                        comment: orderItem.comment,
+                        rating: orderItem.rating,
+                        review: orderItem.review,
+                        price: orderItem.price,
+                        name: orderItem.name
+                    })
+                }
+            }
+        }
     }
 
     private getOrderItemCount(id: number): number {
@@ -159,7 +225,7 @@ export default class Menu extends Vue {
         if (currentOrderItem) {
             currentOrderItem.count++;
         } else {
-            this.currentOrder.push({itemId: item.id, count: 1, item});
+            this.currentOrder.push({itemId: item.id, count: 1, comment: "", item});
         }
     }
 
@@ -168,130 +234,6 @@ export default class Menu extends Vue {
         if (currentOrderItem && currentOrderItem.count) {
             currentOrderItem.count--;
         }
-    }
-
-    /**
-     * Инициализация процесса заказа меню за другого сотрудника
-     * @param forAnother флаг заказа за другого сотрудника
-     * @param menu день меню на который делается заказ
-     */
-    private orderForAnotherEmployee(forAnother: boolean, menu: MenuItem) {
-/*        if (forAnother) {
-            if (!menu.notOrderedEmployees) {
-                // запрос делаем только в первый раз
-                menu.notOrderedEmployees = this.loadNotOrderedEmployees(menu.date);
-            }
-            const isSelectAnotherEmployee = menu.employeeInfo.id !== this.employeeInfo.id;
-            // если другой пользователь определен, а текущий уже сделал заказ -
-            // установим полное меню на этот день, если оно есть
-            if (isSelectAnotherEmployee && menu.ordered) {
-                this.setMenuItemsFromArray(this.menu, menu, false);
-            }
-        } else {
-            if (!this.setMenuItemsFromArray(this.weeklyOrder, menu, true)) {
-                this.setMenuItemsFromArray(this.menu, menu, false);
-            }
-        }*/
-    }
-
-    /**
-     * Загружает список тех кто не заказал обед на заданную дату
-     * @param date дата для загрузки
-     */
-    private loadNotOrderedEmployees(date: string) {
-        let a = EmployeeServices.getNotLoadedEmployees(date);
-        return a.map(item => {
-            return {value: item, text: item.fio};
-        });
-    }
-
-    private changeEmployee(menu: MenuItem) {
-/*        if (menu.ordered) {
-            this.setMenuItemsFromArray(this.menu, menu, false);
-        }
-        // при смене пользователя очистим заказ на текущий день
-        menu.totalPrice = 0;
-        menu.items.forEach((item: any) => {
-            item._rowVariant = "default";
-            item.count = 0;
-            item.comment = "";
-        });*/
-    }
-
-    /**
-     * Получаем элементы меню из набора по дате
-     * @param menuList набор меню
-     * @param dayMenu текущий день меню
-     * @param isOrdered флаг заказа на текущий день
-     * @return флаг того что елемент из набора был найден
-     */
-    private setMenuItemsFromArray(menuList: MenuItem[], dayMenu: MenuItem, isOrdered: boolean): boolean {
-/*        let menu = this.findMenu(menuList, dayMenu.date);
-        if (menu) {
-            dayMenu.items = menu.items;
-            dayMenu.totalPrice = menu.totalPrice;
-            dayMenu.ordered = isOrdered;
-            return true;
-        }*/
-        return false;
-    }
-
-    /**
-     * Поиск элемента меню в наборе данных по дате
-     * @param menuList набор меню
-     * @param date дата
-     * @param copy нужно ли вернуть копию меню или же сам объект, по умолчанию делает копию
-     */
-/*    private findMenu(menuList: MenuItem[], date: string, copy: boolean = true): MenuItem {
-        let menu: any = null;
-        menuList.forEach(item => {
-            if (item.date === date) {
-                menu = copy ? JSON.parse(JSON.stringify(item)) : item;
-            }
-        });
-        return menu;
-    }*/
-
-    /**
-     * Преобразование меню для показа в диалоге подтверждения
-     * @param menu меню
-     */
-    private setResultMenu(menu: MenuItem) {
-        this.resultMenu = JSON.parse(JSON.stringify(menu));
-        // отфильтруем не заказанные позиции
-        this.resultMenu.items = this.resultMenu.items.filter((item: any) => !!item.count);
-        this.resultMenu.items.forEach((item: any) => {
-            item._rowVariant = "default";
-        });
-        delete this.resultMenu.fields.weight;
-        delete this.resultMenu.fields.buttons;
-        delete this.resultMenu.fields.comment;
-    }
-
-    /**
-     * Получить исходящий остаток баланса после утверждения очередного заказа
-     */
-    private getBalance(): any {
-        if (this.resultMenu.employeeInfo) {
-            return this.resultMenu.employeeInfo.balance - this.resultMenu.totalPrice;
-        }
-    }
-
-    /**
-     * Подтверждение заказа
-     */
-    private confirmMenu() {
-/*        try {
-            // отправляем заказ, если успешно то пометим меню в текущем наборе как заказанное
-            MenuService.sendOrder(this.resultMenu);
-            let menu: MenuItem = this.findMenu(this.showMenu, this.resultMenu.date, false);
-            menu.ordered = true;
-            menu.items = this.resultMenu.items;
-            // TODO для оператора перезагрузить список тех кто не заказал
-            menu.notOrderedEmployees = this.loadNotOrderedEmployees(menu.date);
-        } catch (e) {
-
-        }*/
     }
 
     /**
@@ -308,7 +250,6 @@ export default class Menu extends Vue {
         },
         name: {
             label: "Наименование"
-
         },
         description: {
             label: "Подробно"
@@ -322,15 +263,36 @@ export default class Menu extends Vue {
             class: "w80"
         }
     };
+
+    private orderFields = {
+        comment: {
+            label: "",
+            class: "w25"
+        },
+        amount: {
+            label: "Стоимость",
+            class: "text-center"
+        },
+        "item.name": {
+            label: "Наименование"
+        },
+    }
 }
 
-type MenuTabs = {
+type MenuTab = {
     name: string;
     items: MenuItem[];
+    orderConfirmed: boolean;
+    current: OrderItem[];
 }
 
 type OrderItem = {
-    itemId: number;
     count: number;
-    item: MenuItem;
+    comment: string;
+    itemId?: number;
+    rating?: number;
+    review?: string;
+    price?: number;
+    name?: string;
+    item?: MenuItem;
 }

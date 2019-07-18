@@ -1,15 +1,9 @@
-.w25 {
-    width: 25px;
-}
-.w80 {
-    width: 80px;
-}
-.w200 {
-    width: 200px;
-}
-.w400 {
-    width: 400px;
-}
+.w25 {width: 25px;}
+.w40 {width: 40px;}
+.w80 {width: 80px;}
+.w200 {width: 200px;}
+.w400 { width: 400px;}
+.w800 { width: 800px;}
 .floatR {
     float: right;
 }
@@ -20,23 +14,19 @@
     border: 1px solid transparent;
     border-radius: 0.25rem;
 }
-.m5 { margin: 5px; }
-
 .ml5 { margin-left: 5px; }
 
-.mb10 {
-    margin-bottom: 10px;
-}
-.mt10 {
-    margin-top: 10px;
-}
-.m10 {
-    margin: 10px;
-}
-.alignR {
-    text-align: right;
-}
-.alignL {
-    text-align: left;
-}
+.mb10 {margin-bottom: 10px;}
+
+.mt10 {margin-top: 10px;}
+
+.m5 { margin: 5px; }
+.m10 {margin: 10px;}
+
+.mAuto {margin: 0 auto;}
+
+.alignR {text-align: right;}
+.alignL {text-align: left;}
+.alignC {text-align: center;}
+
 .xs { font-size: 14px;}

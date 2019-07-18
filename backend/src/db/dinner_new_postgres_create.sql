@@ -127,7 +127,7 @@ CREATE TABLE "order_items" (
 	"comment" VARCHAR(255),
 	"count" INTEGER NOT NULL,
 	"price" FLOAT(10) NOT NULL,
-	"rating" integer,
+	"rating" INTEGER,
 	"review" VARCHAR(500)
 ) WITH (
   OIDS=FALSE
@@ -152,6 +152,7 @@ ALTER TABLE "provider_reviews" ADD CONSTRAINT "provider_reviews_fk1" FOREIGN KEY
 ALTER TABLE "users" ADD CONSTRAINT "users_fk0" FOREIGN KEY ("org_id") REFERENCES "organizations"("id");
 ALTER TABLE "users" ADD CONSTRAINT "users_fk1" FOREIGN KEY ("role_id") REFERENCES "roles"("id");
 ALTER TABLE "menu_items" ADD CONSTRAINT "menu_items_fk0" FOREIGN KEY ("provider_id") REFERENCES "providers"("id");
+ALTER TABLE "orders" ADD CONSTRAINT "unique_fields" UNIQUE ("user_id", "order_date");
 ALTER TABLE "orders" ADD CONSTRAINT "orders_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
 ALTER TABLE "order_items" ADD CONSTRAINT "order_items_fk0" FOREIGN KEY ("order_id") REFERENCES "orders"("id");
 ALTER TABLE "balance_history" ADD CONSTRAINT "balance_history_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
@@ -184,7 +185,7 @@ INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name
 INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name, description, provider_id) VALUES (1, true, 1000, 0, 'Адобе', 'Фтошоп', 1);
 
 INSERT INTO organizations (name, to_name, group_id) VALUES ('ФТОР', 'Судейкису С.', 1);
-INSERT INTO organizations (name, to_name) VALUES ('ХРОМ', 'Муд А.');
+INSERT INTO organizations (name, to_name, group_id) VALUES ('ХРОМ', 'Муд А.', 2);
 INSERT INTO organizations (name, to_name, group_id) VALUES ('СЕЛЕН', 'Гуд М.', 2);
 INSERT INTO organizations (name, to_name) VALUES ('БРОМ', 'Дуд Д.');
 INSERT INTO organizations (name, to_name) VALUES ('МЕЛЬБДОНИЙ', 'Врачу');
@@ -197,13 +198,24 @@ INSERT INTO organizations (name, to_name) VALUES ('Молибден', 'Молб�
 
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'рис', 300, 45, 'описание гарнира: ну такое');
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'картофельное пюре', 150, 24, 'описание гарнира: ну такое');
-INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'чечевица с овощами', 180, 40, 'описание гарнира: ну такое');
-INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'макароны с томатами пилати', 120, 30, 'описание гарнира: ну такое');
-INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'стручковая фасоль с медом и морковью', 150, 40, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'тушеное', 'чечевица с овощами', 180, 40, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'тушеное', 'макароны с томатами пилати', 120, 30, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'тушеное', 'стручковая фасоль с медом и морковью', 150, 40, 'описание гарнира: ну такое');
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE, 'гарниры', 'гречка', 200, 38, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '1 day', 'гарниры', 'пюре', 200, 38, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '1 day', 'гарниры', 'печень', 200, 38, 'описание такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '1 day', 'фитнесс', 'печенька', 200, 38, 'описание: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '1 day', 'гарниры', 'фасоль', 200, 38, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '1 day', 'гарниры', 'перловара', 200, 38, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'комильфо', 'перловара', 200, 38, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'комильфо', 'перловара', 200, 38, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'комильфо', 'перловара', 200, 38, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'гарниры', 'перловара', 200, 38, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'фитнесс', 'перловара', 200, 38, 'описание гарнира: ну такое');
+INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'фитнесс', 'перловара', 200, 38, 'описание гарнира: ну такое');
 
 INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
-    VALUES ('silakov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 100, '', MAKE_DATE(1980, 06, 12), '9108786556', 1, 1, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
+    VALUES ('silakov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 100, '', MAKE_DATE(1980, 06, 12), '9108786556', 2, 1, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
 INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
 VALUES ('ivanov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 0, '', MAKE_DATE(1998, 04, 29), '9105144545', 2, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
 INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)

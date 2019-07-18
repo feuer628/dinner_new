@@ -13,6 +13,7 @@ import {user} from "./routes/user";
 import {verifyToken} from "./routes/middlewares";
 import {registration} from "./routes/registration";
 import {sign_in} from "./routes/sign_in";
+import {order} from "./routes/order";
 
 export const LOG = require('simple-node-logger').createSimpleLogger('project.log');
 
@@ -40,6 +41,7 @@ export const LOG = require('simple-node-logger').createSimpleLogger('project.log
     app.use("/users", verifyToken, user);
     app.use("/sign_up", registration);
     app.use("/sign_in", sign_in);
+    app.use("/orders", verifyToken, order);
 
     app.use(sassMiddleware({
             src: __dirname,
