@@ -8,6 +8,8 @@ import {SignIn} from "../pages/sign_in";
 import {SignUp} from "../pages/sign_up";
 import {Logout} from "../pages/logout";
 import {Settings} from "../pages/settings";
+import {Users} from "../pages/users";
+import {NewUsers} from "../pages/users_new";
 
 /**
  * Класс отвечающий за создание роутингов и инициализацию роутера
@@ -85,6 +87,16 @@ export class RouterConfiguration {
                 name: "providers",
                 component: Providers
             },
+            {
+                path: "/users",
+                name: "users",
+                component: Users
+            },
+            {
+                path: "/new_users",
+                name: "new_users",
+                component: NewUsers
+            }
         ];
     }
 }

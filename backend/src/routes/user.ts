@@ -5,7 +5,9 @@ import {OrgGroup} from "../db/models/OrgGroup";
 import {Organization} from "../db/models/Organization";
 import {Action} from "../db/models/Action";
 import {hashSync} from "bcryptjs";
-import {sign, verify, VerifyErrors} from "jsonwebtoken";
+import {sign} from "jsonwebtoken";
+import {checkAdminRights} from "./middlewares";
+import {Status} from "../db/enums";
 
 export const user = Router();
 
@@ -55,7 +57,7 @@ user.put('/me', async (req, res, next) => {
     }
 });
 
-user.get('', async (req, res, next) => {
+user.get('', checkAdminRights, async (req, res, next) => {
     try {
         res.json(await User.scope(req.query['scope']).findAll({order: ['id']}));
     } catch (e) {
@@ -63,7 +65,15 @@ user.get('', async (req, res, next) => {
     }
 });
 
-user.get('/:id', async (req, res, next) => {
+user.get('/new', checkAdminRights, async (req, res, next) => {
+    try {
+        res.json(await User.scope(req.query['scope']).findAll({where: {status: Status.NEW}, order: ['id']}));
+    } catch (e) {
+        next(e);
+    }
+});
+
+user.get('/:id', checkAdminRights, async (req, res, next) => {
     try {
         const org = await User.scope(req.query['scope']).findByPk(req.params['id'], {include: [{model: Role, include: [Action]}, {model: Organization, include: [OrgGroup]}]});
         res.json(org);
@@ -72,7 +82,7 @@ user.get('/:id', async (req, res, next) => {
     }
 });
 
-user.put('/:id', async (req, res, next) => {
+user.put('/:id', checkAdminRights, async (req, res, next) => {
     try {
         await User.update<User>(req.body, {where: {id: req.params['id']}});
         res.sendStatus(200);

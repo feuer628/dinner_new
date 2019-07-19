@@ -5,8 +5,8 @@ import Component from "vue-class-component";
 // language=Vue
 template: `
 <div v-if="user">
-    <b-card title="Личные данные" style="max-width: 650px;" class="mAuto">
-    <b-form>
+    <div class="w800" style="display: inline-block; vertical-align: top;">
+        <h4>Личные данные</h4>
         <b-form-group label-cols="4" label-cols-lg="3" label="Логин" label-for="login">
             <b-form-input id="login" v-model="user.login" disabled class="inline w400"></b-form-input>
         </b-form-group>
@@ -58,8 +58,19 @@ template: `
         <b-form-group label-cols="4" label-cols-lg="3" label="Идентификатор компьютера" label-for="comp_key">
             <b-form-input id="comp_key" v-model="user.comp_key" disabled class="inline w400"></b-form-input>
         </b-form-group>
-    </b-form>
-    </b-card>
+    </div>
+    <div class="w800" style="display: inline-block; vertical-align: top;">
+        <h4>Роль</h4>
+        <b-form-group label-cols="4" label-cols-lg="3" label="Ваша роль" label-for="role">
+            <b-form-input id="role" v-model="user.role.name" disabled class="inline w300"></b-form-input>
+        </b-form-group>
+        <template v-if="user.role.actions.length">
+            <h5>Права доступа</h5>
+            <b-list-group flush>
+                <b-list-group-item v-for="action in user.role.actions" :key="action.id"><font-awesome-icon icon="check"></font-awesome-icon> {{action.desc}}</b-list-group-item>
+            </b-list-group>
+        </template>
+    </div>
 </div>
 `
 })

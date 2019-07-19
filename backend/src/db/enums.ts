@@ -7,3 +7,9 @@ export enum RoleActions {
     CONFIRM_ORG_USERS = 6,
     MANAGE_RIGHTS_ORG = 7
 }
+
+export enum Status {
+    NEW = 0,
+    CONFIRMED = 1,
+    DELETED = 2
+}

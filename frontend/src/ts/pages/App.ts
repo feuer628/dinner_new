@@ -20,8 +20,8 @@ import Common from "../utils/common";
                     <b-nav-item v-show="authenticated" to="menu"><font-awesome-icon icon="th-list"></font-awesome-icon> Меню</b-nav-item>
                     
                     <b-nav-item-dropdown v-show="authenticated" text="Обеды">
-                        <b-nav-item to="orderGroup">Группы заказов</b-nav-item>
-                        <b-nav-item to="report">Отчет</b-nav-item>
+                        <b-dropdown-item to="orderGroup">Группы заказов</b-dropdown-item>
+                        <b-dropdown-item to="report">Отчет</b-dropdown-item>
                     </b-nav-item-dropdown>
 
                     <b-nav-item-dropdown v-show="authenticated" text="Администрирование">
@@ -30,7 +30,7 @@ import Common from "../utils/common";
                         <b-dropdown-item to="organizations">Список организаций</b-dropdown-item>
                         <b-dropdown-item to="providers">Поставщики</b-dropdown-item>
                         <b-dropdown-item to="users">Пользователи</b-dropdown-item>
-                        <b-dropdown-item to="newUsers">Новые пользователи</b-dropdown-item>
+                        <b-dropdown-item to="new_users">Новые пользователи</b-dropdown-item>
                         <b-dropdown-item to="system_properties">Системные свойства</b-dropdown-item>
                     </b-nav-item-dropdown>
 

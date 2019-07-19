@@ -228,8 +228,8 @@ INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, descr
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'фитнесс', 'перловара4', 200, 238, 'описание гарнира: ну такое');
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'фитнесс', 'перловара5', 200, 138, 'описание гарнира: ну такое');
 
-INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
-    VALUES ('silakov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 100, '', MAKE_DATE(1980, 06, 12), '9108786556', 2, 1, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
+INSERT INTO users (login, password, status, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
+    VALUES ('silakov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 1, 100, '', MAKE_DATE(1980, 06, 12), '9108786556', 2, 1, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
 INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
 VALUES ('ivanov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 0, '', MAKE_DATE(1998, 04, 29), '9105144545', 2, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
 INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)

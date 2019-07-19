@@ -51,9 +51,13 @@ employeeService.loadEmployeeInfo();
     (<any> Vue).http.interceptors.push((request: any, next: any) => {
         request.headers.set('x-access-token', Vue.cookies.get("token"));
         next((response: any) => {
-            if(response.status == 401 || response.status === 403) {
+            if(response.status == 401) {
                 Common.messageDialog.showWarning("Вы не авторизованы!");
                 router.push("/sign_in");
+            }
+            if(response.status == 403) {
+                Common.messageDialog.showWarning("У вас нет доступа к этому разделу");
+                router.push("/");
             }
         });
     });
