@@ -1,8 +1,6 @@
-import Vue from "vue";
 import Component from "vue-class-component";
-import MessageDialog from '../components/dialogs/messageDialog';
-import Common from "../utils/common";
 import {DbAction, DbRole, Role} from "../models/models";
+import {UI} from "./ui";
 
 @Component({
     // language=Vue
@@ -44,9 +42,7 @@ import {DbAction, DbRole, Role} from "../models/models";
 </div>
 `
 })
-export class Roles extends Vue {
-
-    messageDialog: MessageDialog = Common.getMessageDialog();
+export class Roles extends UI {
 
     private roles: Role[] = [];
 
@@ -59,7 +55,7 @@ export class Roles extends Vue {
      */
     private async mounted(): Promise<void> {
         this.roles = await this.loadRoles();
-        this.actions = await this.loadItems<DbAction>("actions");
+        this.actions = await this.rest.loadItems<DbAction>("actions");
     }
 
     private hideModal(name: string): void {
@@ -71,7 +67,7 @@ export class Roles extends Vue {
             if (this.newRoleName) {
                 await this.$http.post("/roles", {name: this.newRoleName});
                 (<any> this.$refs[name]).hide();
-                this.roles = await this.loadItems<Role>("roles");
+                this.roles = await this.rest.loadItems<Role>("roles");
             } else {
                 await this.messageDialog.showWarning("Не задано имя новой роли");
             }
@@ -93,7 +89,7 @@ export class Roles extends Vue {
         try {
             if (await this.$bvModal.msgBoxConfirm(`Вы уверены что хотите удалить роль '${role.name}'`)) {
                 await this.$http.delete("/roles/" + role.id);
-                this.roles = await this.loadItems<Role>("roles");
+                this.roles = await this.rest.loadItems<Role>("roles");
             }
         } catch (e) {
             await this.messageDialog.showInternalError();
@@ -101,7 +97,7 @@ export class Roles extends Vue {
     }
 
     private async loadRoles(): Promise<Role[]> {
-        const roles = await this.loadItems<DbRole>("roles");
+        const roles = await this.rest.loadItems<DbRole>("roles");
         return roles.map(role => {
             const actions: {[id: number]: string} = {};
             for (const act of role.actions) {
@@ -109,15 +105,5 @@ export class Roles extends Vue {
             }
             return {id: role.id, name: role.name, actions}
         });
-    }
-
-    private async loadItems<T>(refName: string): Promise<T[]> {
-        try {
-            const response = await this.$http.get(`/${refName}`);
-            return <T[]>response.data;
-        } catch (e) {
-            await this.messageDialog.showInternalError();
-        }
-        return [];
     }
 }

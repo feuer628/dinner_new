@@ -1,5 +1,5 @@
-import Vue from "vue";
 import Component from "vue-class-component";
+import {UI} from "./ui";
 
 @Component({
 // language=Vue
@@ -74,7 +74,7 @@ template: `
 </div>
 `
 })
-export class Settings extends Vue {
+export class Settings extends UI {
 
     private editing = {
         password: false,

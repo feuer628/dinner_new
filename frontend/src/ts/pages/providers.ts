@@ -1,8 +1,6 @@
-import Vue from "vue";
 import Component from "vue-class-component";
-import MessageDialog from '../components/dialogs/messageDialog';
-import Common from "../utils/common";
 import {Provider} from "../models/models";
+import {UI} from "./ui";
 
 @Component({
     // language=Vue
@@ -40,9 +38,7 @@ import {Provider} from "../models/models";
 </div>
 `
 })
-export class Providers extends Vue {
-
-    messageDialog: MessageDialog = Common.getMessageDialog();
+export class Providers extends UI {
 
     private providers: Provider[] = [];
 
@@ -52,7 +48,7 @@ export class Providers extends Vue {
      * хук. загрузка необходимой информации
      */
     private async mounted(): Promise<void> {
-        this.providers = await this.loadItems<Provider>("providers");
+        this.providers = await this.rest.loadItems<Provider>("providers");
     }
 
     private initCurrent(): Provider {
@@ -74,23 +70,13 @@ export class Providers extends Vue {
         (<any> this.$refs["editProviderModal"]).hide();
     }
 
-    private async loadItems<T>(refName: string): Promise<T[]> {
-        try {
-            const response = await this.$http.get(`/${refName}`);
-            return <T[]>response.data;
-        } catch (e) {
-            await this.messageDialog.showInternalError();
-        }
-        return [];
-    }
-
     private async editProvider(): Promise<void> {
         if (!!this.current.id) {
             await this.$http.put(`/providers/${this.current.id}`, this.current);
         } else {
             await this.$http.post(`/providers`, this.current);
         }
-        this.providers = await this.loadItems<Provider>("providers");
+        this.providers = await this.rest.loadItems<Provider>("providers");
         this.hideModal();
     }
 }

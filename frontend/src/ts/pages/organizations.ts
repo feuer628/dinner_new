@@ -1,8 +1,6 @@
-import Vue from "vue";
 import Component from "vue-class-component";
-import MessageDialog from '../components/dialogs/messageDialog';
-import Common from "../utils/common";
-import {Organization, OrgGroup} from "../models/models";
+import {Organization} from "../models/models";
+import {UI} from "./ui";
 
 @Component({
     // language=Vue
@@ -39,9 +37,7 @@ import {Organization, OrgGroup} from "../models/models";
 </div>
 `
 })
-export class Organizations extends Vue {
-
-    messageDialog: MessageDialog = Common.getMessageDialog();
+export class Organizations extends UI {
 
     private orgs: Organization[] = [];
 
@@ -51,7 +47,7 @@ export class Organizations extends Vue {
      * хук. загрузка необходимой информации
      */
     private async mounted(): Promise<void> {
-        this.orgs = await this.loadItems<Organization>("organizations/full");
+        this.orgs = await this.rest.loadItems<Organization>("organizations/full");
     }
 
     private initCurrentOrganization(): Organization {
@@ -83,23 +79,13 @@ export class Organizations extends Vue {
         (<any> this.$refs["editOrgModal"]).hide();
     }
 
-    private async loadItems<T>(refName: string): Promise<T[]> {
-        try {
-            const response = await this.$http.get(`/${refName}`);
-            return <T[]>response.data;
-        } catch (e) {
-            await this.messageDialog.showInternalError();
-        }
-        return [];
-    }
-
     private async editOrganization(): Promise<void> {
         if (!!this.currentOrg.id) {
             await this.$http.put(`/organizations/${this.currentOrg.id}`, this.currentOrg);
         } else {
             await this.$http.post(`/organizations`, this.currentOrg);
         }
-        this.orgs = await this.loadItems<Organization>("organizations/full");
+        this.orgs = await this.rest.loadItems<Organization>("organizations/full");
         this.hideModal();
     }
 
@@ -107,7 +93,7 @@ export class Organizations extends Vue {
         try {
             if (await this.$bvModal.msgBoxConfirm(`Вы уверены что хотите удалить группу '${org.name}'?`)) {
                 await this.$http.delete(`/organizations/${org.id}`);
-                this.orgs = await this.loadItems<Organization>("organizations/full");
+                this.orgs = await this.rest.loadItems<Organization>("organizations/full");
             }
         } catch (e) {
             await this.messageDialog.showInternalError();

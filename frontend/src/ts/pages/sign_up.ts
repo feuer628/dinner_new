@@ -1,8 +1,7 @@
-import Vue from "vue";
 import Component from "vue-class-component";
 import {Organization, User} from "../models/models";
-import {RestService} from "../service/restService";
 import Common from "../utils/common";
+import {UI} from "./ui";
 
 @Component({
 // language=Vue
@@ -30,11 +29,9 @@ template: `
 </div>
 `
 })
-export class SignUp extends Vue {
+export class SignUp extends UI {
 
     private current: User = this.initUser();
-
-    private rest: RestService = new RestService(this);
 
     private organizations: Organization[] = [];
 

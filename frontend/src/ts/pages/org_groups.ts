@@ -1,9 +1,7 @@
-import Vue from "vue";
 import Component from "vue-class-component";
-import MessageDialog from '../components/dialogs/messageDialog';
-import Common from "../utils/common";
 import {LimitType} from "../models/limitType";
 import {Organization, OrgGroup, Provider} from "../models/models";
+import {UI} from "./ui";
 
 @Component({
     // language=Vue
@@ -65,9 +63,7 @@ import {Organization, OrgGroup, Provider} from "../models/models";
 </div>
 `
 })
-export class OrgGroups extends Vue {
-
-    messageDialog: MessageDialog = Common.getMessageDialog();
+export class OrgGroups extends UI {
 
     private currentGroup: OrgGroup = this.initCurrentGroup();
 
@@ -82,9 +78,9 @@ export class OrgGroups extends Vue {
     }
 
     private async refreshData(): Promise<void> {
-        this.orgGroups = await this.loadItems<OrgGroup>("org_groups/full");
-        this.orgs = await this.loadItems<Organization>("organizations");
-        this.providers = await this.loadItems<Provider>("providers");
+        this.orgGroups = await this.rest.loadItems<OrgGroup>("org_groups/full");
+        this.orgs = await this.rest.loadItems<Organization>("organizations");
+        this.providers = await this.rest.loadItems<Provider>("providers");
     }
 
     private initCurrentGroup(): OrgGroup {
@@ -135,16 +131,6 @@ export class OrgGroups extends Vue {
 
     private hideModal(): void {
         (<any> this.$refs["addOrgGroupModal"]).hide();
-    }
-
-    private async loadItems<T>(refName: string): Promise<T[]> {
-        try {
-            const response = await this.$http.get(`/${refName}`);
-            return <T[]>response.data;
-        } catch (e) {
-            await this.messageDialog.showInternalError();
-        }
-        return [];
     }
 
     private async editGroup(): Promise<void> {

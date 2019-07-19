@@ -1,8 +1,7 @@
-import Vue from "vue"
 import Component from "vue-class-component"
 import {MenuItem} from "../models/models";
-import {RestService} from "../service/restService";
 import Common from "../utils/common";
+import {UI} from "./ui";
 
 /** Название REST-пути работы с пунктами меню */
 const MENU_ITEMS = "menu_items";
@@ -97,13 +96,11 @@ const MENU_ITEMS = "menu_items";
 </div>
 `
 })
-export default class Menu extends Vue {
+export default class Menu extends UI {
 
     private tabs: MenuTab[] = [];
 
     private tabIndex = 0;
-
-    private rest: RestService = new RestService(this);
 
     private get currentOrder() {
         return this.tabs[this.tabIndex] && this.tabs[this.tabIndex].current || [];

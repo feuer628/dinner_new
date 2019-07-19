@@ -1,6 +1,6 @@
-import Vue from "vue";
 import Component from "vue-class-component";
 import Common from "../utils/common";
+import {UI} from "./ui";
 
 @Component({
 // language=Vue
@@ -23,7 +23,7 @@ template: `
 </div>
 `
 })
-export class SignIn extends Vue {
+export class SignIn extends UI {
 
     private credentials: Credentials = {login: "", password: ""};
 

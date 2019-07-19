@@ -1,10 +1,11 @@
 import {Router} from 'express';
 import {Order} from "../db/models/Order";
 import {OrderItem} from "../db/models/OrderItem";
+import {checkConfirmUser} from "./middlewares";
 
 export const order = Router();
 
-order.post('/', async (req, res, next) => {
+order.post('/', checkConfirmUser, async (req, res, next) => {
     try {
         const order = await Order.create({
             user_id: (<any> req).userId,

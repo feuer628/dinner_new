@@ -1,9 +1,6 @@
-import Vue from "vue";
 import Component from "vue-class-component";
-import MessageDialog from '../components/dialogs/messageDialog';
-import Common from "../utils/common";
-import {Provider, User} from "../models/models";
-import {RestService} from "../service/restService";
+import {User} from "../models/models";
+import {UI} from "./ui";
 
 @Component({
     // language=Vue
@@ -15,11 +12,9 @@ import {RestService} from "../service/restService";
 </div>
 `
 })
-export class Users extends Vue {
+export class Users extends UI {
 
     private users: User[] = [];
-
-    private rest: RestService = new RestService(this);
 
     private orderFields = {
         id: {

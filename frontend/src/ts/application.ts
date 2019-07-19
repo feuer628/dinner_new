@@ -52,12 +52,15 @@ employeeService.loadEmployeeInfo();
         request.headers.set('x-access-token', Vue.cookies.get("token"));
         next((response: any) => {
             if(response.status == 401) {
-                Common.messageDialog.showWarning("Вы не авторизованы!");
+                // Common.messageDialog.showWarning(response.body);
                 router.push("/sign_in");
             }
             if(response.status == 403) {
-                Common.messageDialog.showWarning("У вас нет доступа к этому разделу");
+                Common.messageDialog.showWarning(response.body);
                 router.push("/");
+            }
+            if (response.status == 500) {
+                Common.messageDialog.showWarning(response.body);
             }
         });
     });
