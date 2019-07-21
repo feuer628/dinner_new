@@ -1,8 +1,5 @@
-
-/**
- * Диалог для отображения простых сообщений
- */
-export default class MessageDialog {
+/** Диалог для отображения простых сообщений */
+export class MessageDialog {
 
     isShowDialog: boolean = false;
     title: string = "";

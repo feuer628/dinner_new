@@ -10,19 +10,12 @@ import VueResource from 'vue-resource';
 import VueRouter from "vue-router";
 import {App} from './pages/App';
 import BootstrapVue from "bootstrap-vue";
-import settingsService from './service/settingsService';
-import employeeService from './service/employeeServices';
 import {RouterConfiguration} from "./router/routerConfiguration";
 import {install} from "vue-cookies";
 import Common from "./utils/common";
 import {store} from "./store";
 import {Days} from "./models/days";
 import moment = require("moment");
-
-// загружаем настройки заказов
-settingsService.loadSettings();
-// загружаем информацию о пользователе
-employeeService.loadEmployeeInfo();
 
 /**
  * Точка входа в приложение

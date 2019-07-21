@@ -1,7 +1,7 @@
 import Component from "vue-class-component"
 import {MenuItem} from "../models/models";
 import Common from "../utils/common";
-import {UI} from "./ui";
+import {UI} from "../components/ui";
 
 /** Название REST-пути работы с пунктами меню */
 const MENU_ITEMS = "menu_items";
@@ -178,17 +178,13 @@ export default class Menu extends UI {
         (<any>this.$refs["orderConfirmDialog"]).show();
     }
 
-    private hideModal() {
-        (<any>this.$refs["orderConfirmDialog"]).hide();
-    }
-
     private async confirmOrder() {
         const params = {
             order_date: this.activeTab.name,
             items: this.currentOrder
         };
         await this.$http.post("/orders", params);
-        this.hideModal();
+        this.hideModal("orderConfirmDialog");
         await this.loadOrderInfo(this.activeTab.name);
     }
 

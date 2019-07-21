@@ -1,6 +1,6 @@
 import Component from "vue-class-component";
 import {DbAction, DbRole, Role} from "../models/models";
-import {UI} from "./ui";
+import {UI} from "../components/ui";
 
 @Component({
     // language=Vue
@@ -58,20 +58,17 @@ export class Roles extends UI {
         this.actions = await this.rest.loadItems<DbAction>("actions");
     }
 
-    private hideModal(name: string): void {
-        (<any> this.$refs[name]).hide();
-    }
-
     private async addNewRole(name: string): Promise<void> {
         try {
             if (this.newRoleName) {
                 await this.$http.post("/roles", {name: this.newRoleName});
-                (<any> this.$refs[name]).hide();
+                this.hideModal(name);
                 this.roles = await this.rest.loadItems<Role>("roles");
             } else {
                 await this.messageDialog.showWarning("Не задано имя новой роли");
             }
         } catch (e) {
+            this.hideModal(name);
             await this.messageDialog.showInternalError();
         }
     }

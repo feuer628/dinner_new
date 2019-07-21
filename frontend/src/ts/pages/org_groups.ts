@@ -1,14 +1,14 @@
 import Component from "vue-class-component";
 import {LimitType} from "../models/limitType";
 import {Organization, OrgGroup, Provider} from "../models/models";
-import {UI} from "./ui";
+import {UI} from "../components/ui";
 
 @Component({
     // language=Vue
     template:
 `
 <div>
-    <h4>Группы организаций <b-button @click="showModal()" pill variant="outline-success" size="sm"><font-awesome-icon icon="plus"></font-awesome-icon></b-button></h4>
+    <h4>Группы организаций <b-button @click="showModalGroup()" pill variant="outline-success" size="sm"><font-awesome-icon icon="plus"></font-awesome-icon></b-button></h4>
     <hr/>
     <b-card-group columns>
         <b-card v-for="orgGroup in orgGroups" :key="orgGroup.id" :title="orgGroup.name" :sub-title="orgGroup.description">
@@ -29,7 +29,7 @@ import {UI} from "./ui";
             </b-card-text>
             <div slot="footer">
                 <b-button :disabled="!!orgGroup.orgs.length" @click="deleteGroup(orgGroup)" pill variant="outline-danger" size="sm"><font-awesome-icon icon="trash"></font-awesome-icon></b-button>
-                <b-button @click="showModal(orgGroup)" pill variant="outline-warning" size="sm"><font-awesome-icon icon="edit"></font-awesome-icon> Редактировать</b-button>
+                <b-button @click="showModalGroup(orgGroup)" pill variant="outline-warning" size="sm"><font-awesome-icon icon="edit"></font-awesome-icon> Редактировать</b-button>
             </div>
         </b-card>
     </b-card-group>
@@ -109,7 +109,7 @@ export class OrgGroups extends UI {
         return LimitType.valueOf(type);
     }
 
-    private showModal(group: OrgGroup) {
+    private showModalGroup(group: OrgGroup) {
         // Если редактируется организация
         if (group) {
             this.currentGroup = {
@@ -129,10 +129,6 @@ export class OrgGroups extends UI {
         (<any> this.$refs["addOrgGroupModal"]).show();
     }
 
-    private hideModal(): void {
-        (<any> this.$refs["addOrgGroupModal"]).hide();
-    }
-
     private async editGroup(): Promise<void> {
         if (!!this.currentGroup.id) {
             await this.$http.put(`/org_groups/${this.currentGroup.id}`, this.currentGroup);
@@ -140,7 +136,7 @@ export class OrgGroups extends UI {
             await this.$http.post(`/org_groups`, this.currentGroup);
         }
         await this.refreshData();
-        this.hideModal();
+        this.hideModal("addOrgGroupModal");
     }
 
     private async deleteGroup(group: OrgGroup): Promise<void> {

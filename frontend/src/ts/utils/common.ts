@@ -1,4 +1,4 @@
-import MessageDialog from "../components/dialogs/messageDialog";
+import {MessageDialog} from "../components/dialogs/messageDialog";
 
 export default class Common {
 

@@ -1,5 +1,5 @@
 import Component from "vue-class-component";
-import {UI} from "./ui";
+import {UI} from "../components/ui";
 
 @Component({
 // language=Vue

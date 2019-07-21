@@ -1,7 +1,7 @@
 import Component from "vue-class-component";
 import {Organization, User} from "../models/models";
 import Common from "../utils/common";
-import {UI} from "./ui";
+import {UI} from "../components/ui";
 
 @Component({
 // language=Vue

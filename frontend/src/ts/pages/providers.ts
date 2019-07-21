@@ -1,6 +1,6 @@
 import Component from "vue-class-component";
 import {Provider} from "../models/models";
-import {UI} from "./ui";
+import {UI} from "../components/ui";
 
 @Component({
     // language=Vue
@@ -19,7 +19,7 @@ import {UI} from "./ui";
                 <p v-if="provider.description" class="xs"><b>Описание:</b> {{provider.description}}</p>
             </div>
             <div class="xs">
-                <b-button @click="showModal(provider)" pill variant="outline-warning" size="sm"><font-awesome-icon icon="edit"></font-awesome-icon> Редактировать</b-button>
+                <b-button @click="showModalProvider(provider)" pill variant="outline-warning" size="sm"><font-awesome-icon icon="edit"></font-awesome-icon> Редактировать</b-button>
             </div>
         </b-list-group-item>
     </b-list-group>
@@ -61,13 +61,9 @@ export class Providers extends UI {
         };
     }
 
-    private showModal(provider: Provider) {
+    private showModalProvider(provider: Provider) {
         this.current = provider ? {...provider} : this.initCurrent();
         (<any> this.$refs["editProviderModal"]).show();
-    }
-
-    private hideModal(): void {
-        (<any> this.$refs["editProviderModal"]).hide();
     }
 
     private async editProvider(): Promise<void> {
@@ -77,6 +73,6 @@ export class Providers extends UI {
             await this.$http.post(`/providers`, this.current);
         }
         this.providers = await this.rest.loadItems<Provider>("providers");
-        this.hideModal();
+        this.hideModal("editProviderModal");
     }
 }

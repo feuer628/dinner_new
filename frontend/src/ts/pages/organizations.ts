@@ -1,6 +1,6 @@
 import Component from "vue-class-component";
 import {Organization} from "../models/models";
-import {UI} from "./ui";
+import {UI} from "../components/ui";
 
 @Component({
     // language=Vue
@@ -21,7 +21,7 @@ import {UI} from "./ui";
         <div class="xs">
             <p>"Кому" в шапке заявлений: <b>{{org.to_name}}</b></p>
             <b-button @click="deleteOrg(org)" pill variant="outline-danger" size="sm"><font-awesome-icon icon="trash"></font-awesome-icon></b-button>
-            <b-button @click="showModal(org)" pill variant="outline-warning" size="sm"><font-awesome-icon icon="edit"></font-awesome-icon> Редактировать</b-button>
+            <b-button @click="showModalOrg(org)" pill variant="outline-warning" size="sm"><font-awesome-icon icon="edit"></font-awesome-icon> Редактировать</b-button>
         </div>
         </b-list-group-item>
     </b-list-group>
@@ -59,7 +59,7 @@ export class Organizations extends UI {
         };
     }
 
-    private showModal(org: Organization) {
+    private showModalOrg(org: Organization) {
         // Если редактируется организация
         if (org) {
             this.currentOrg = {
@@ -75,10 +75,6 @@ export class Organizations extends UI {
         (<any> this.$refs["editOrgModal"]).show();
     }
 
-    private hideModal(): void {
-        (<any> this.$refs["editOrgModal"]).hide();
-    }
-
     private async editOrganization(): Promise<void> {
         if (!!this.currentOrg.id) {
             await this.$http.put(`/organizations/${this.currentOrg.id}`, this.currentOrg);
@@ -86,7 +82,7 @@ export class Organizations extends UI {
             await this.$http.post(`/organizations`, this.currentOrg);
         }
         this.orgs = await this.rest.loadItems<Organization>("organizations/full");
-        this.hideModal();
+        this.hideModal("editOrgModal");
     }
 
     private async deleteOrg(org: Organization): Promise<void> {

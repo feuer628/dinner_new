@@ -1,7 +1,5 @@
-import Vue from "vue";
-import MessageDialog from '../components/dialogs/messageDialog';
 import Component from "vue-class-component";
-import Common from "../utils/common";
+import {UI} from "../components/ui";
 
 @Component({
     // language=Vue
@@ -68,9 +66,7 @@ import Common from "../utils/common";
     </div>`
 })
 
-export class App extends Vue {
-
-    messageDialog: MessageDialog = Common.getMessageDialog();
+export class App extends UI {
 
     private get authenticated() {
         return this.$store.state.auth;
