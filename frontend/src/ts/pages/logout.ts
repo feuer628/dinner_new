@@ -3,7 +3,7 @@ import {UI} from "../components/ui";
 
 @Component({
 // language=Vue
-template: `<div><h3>Выход вышли из учетной записи</h3></div>`
+template: `<div><h3>Вы вышли из учетной записи</h3></div>`
 })
 export class Logout extends UI {
 

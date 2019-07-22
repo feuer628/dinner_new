@@ -9,7 +9,7 @@ import {UI} from "../components/ui";
 <div>
     <h4>
         Поставщики
-        <b-button @click="showModal()" pill variant="outline-success" size="sm"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
+        <b-button @click="showModal(modalId)" pill variant="outline-success" size="sm"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
     </h4>
     <b-list-group>
         <b-list-group-item v-for="(provider, index) in providers" :key="provider.id" :variant="index % 2 ? 'default' : 'light'">
@@ -23,7 +23,7 @@ import {UI} from "../components/ui";
             </div>
         </b-list-group-item>
     </b-list-group>
-    <b-modal ref="editProviderModal" id="org-modal" class="w-300" centered :title="(!!current.id ? 'Изменение' : 'Добавление нового') + ' поставщика'">
+    <b-modal :id="modalId" class="w-300" centered :title="(!!current.id ? 'Изменение' : 'Добавление нового') + ' поставщика'">
         <b-form-input v-model="current.name" placeholder="Название поставщика" class="mb10"></b-form-input>
         <b-form-input v-model="current.emails" placeholder="E-mail'ы поставщика" class="mb10"></b-form-input>
         <b-form-input v-model="current.description" placeholder="Описание" class="mb10"></b-form-input>
@@ -31,7 +31,7 @@ import {UI} from "../components/ui";
         <b-form-input v-model="current.logo" placeholder="Ссылка на логотип"></b-form-input>
         
         <div slot="modal-footer" class="alignR">
-            <b-button variant="outline-secondary" size="sm" @click="hideModal">Отмена</b-button>
+            <b-button variant="outline-secondary" size="sm" @click="hideModal(modalId)">Отмена</b-button>
             <b-button variant="success" size="sm" @click="editProvider">{{!!current.id ? 'Изменить' : 'Добавить'}}</b-button>
         </div>
     </b-modal>
@@ -40,13 +40,12 @@ import {UI} from "../components/ui";
 })
 export class Providers extends UI {
 
+    private modalId = "modalProviderId";
+
     private providers: Provider[] = [];
 
     private current: Provider = this.initCurrent();
 
-    /**
-     * хук. загрузка необходимой информации
-     */
     private async mounted(): Promise<void> {
         this.providers = await this.rest.loadItems<Provider>("providers");
     }
@@ -63,7 +62,7 @@ export class Providers extends UI {
 
     private showModalProvider(provider: Provider) {
         this.current = provider ? {...provider} : this.initCurrent();
-        (<any> this.$refs["editProviderModal"]).show();
+        this.showModal(this.modalId);
     }
 
     private async editProvider(): Promise<void> {
@@ -73,6 +72,6 @@ export class Providers extends UI {
             await this.$http.post(`/providers`, this.current);
         }
         this.providers = await this.rest.loadItems<Provider>("providers");
-        this.hideModal("editProviderModal");
+        this.hideModal(this.modalId);
     }
 }

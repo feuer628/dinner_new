@@ -33,7 +33,7 @@ import {UI} from "../components/ui";
             </div>
         </b-card>
     </b-card-group>
-    <b-modal ref="addOrgGroupModal" id="org-group-modal" class="w-300" centered :title="(!!currentGroup.id ? 'Изменение' : 'Добавление') + ' группы организаций'">
+    <b-modal :id="modalId" class="w-300" centered :title="(!!currentGroup.id ? 'Изменение' : 'Добавление') + ' группы организаций'">
         <b-form-input v-model="currentGroup.name" placeholder="Название группы" class="mb10"></b-form-input>
         <b-form-input v-model="currentGroup.description" placeholder="Описание" class="mb10"></b-form-input>
         <b-form-select v-model="currentGroup.limit_type" :options="limitTypes()" value-field="id" class="mb10"></b-form-select>
@@ -56,7 +56,7 @@ import {UI} from "../components/ui";
             <b-form-checkbox v-if="org.group_id === null || org.group_id === currentGroup.id" v-model="currentGroup.orgs" :key="org.id" :value="org" inline>{{org.name}}</b-form-checkbox>
         </template>
         <div slot="modal-footer" class="alignR">
-            <b-button variant="outline-secondary" size="sm" @click="hideModal">Отмена</b-button>
+            <b-button variant="outline-secondary" size="sm" @click="hideModal(modalId)">Отмена</b-button>
             <b-button :variant="!!currentGroup.id ? 'primary' : 'success'" size="sm" @click="editGroup">{{!!currentGroup.id ? 'Изменить' : 'Добавить'}}</b-button>
         </div>
     </b-modal>
@@ -64,6 +64,8 @@ import {UI} from "../components/ui";
 `
 })
 export class OrgGroups extends UI {
+
+    private modalId = "modalOrgGroupId";
 
     private currentGroup: OrgGroup = this.initCurrentGroup();
 
@@ -126,7 +128,7 @@ export class OrgGroups extends UI {
         } else {
             this.currentGroup = this.initCurrentGroup();
         }
-        (<any> this.$refs["addOrgGroupModal"]).show();
+        this.showModal(this.modalId);
     }
 
     private async editGroup(): Promise<void> {
@@ -136,7 +138,7 @@ export class OrgGroups extends UI {
             await this.$http.post(`/org_groups`, this.currentGroup);
         }
         await this.refreshData();
-        this.hideModal("addOrgGroupModal");
+        this.hideModal(this.modalId);
     }
 
     private async deleteGroup(group: OrgGroup): Promise<void> {

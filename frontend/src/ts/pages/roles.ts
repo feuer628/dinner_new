@@ -11,10 +11,10 @@ import {UI} from "../components/ui";
     <hr/>
     <h4>
         Роли (нажать, чтобы открыть список действий) 
-        <b-button v-b-modal.add-role-modal pill variant="outline-success" size="sm"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
+        <b-button v-b-modal="modalId" pill variant="outline-success" size="sm"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
     </h4>
     <b-list-group>
-        <b-list-group-item v-for="role in roles" v-b-toggle="'rolecollapse-'+role.id">
+        <b-list-group-item v-for="role in roles" :key="role.id" v-b-toggle="'rolecollapse-'+role.id">
             <b-button variant="outline-danger" size="sm" @click.stop="dropRole(role)"><font-awesome-icon icon="trash"></font-awesome-icon></b-button>
             {{role.name}} <font-awesome-icon icon="angle-down"></font-awesome-icon>
             <b-collapse :id="'rolecollapse-'+role.id" class="mt-2">
@@ -26,16 +26,16 @@ import {UI} from "../components/ui";
             </b-collapse>
         </b-list-group-item>
     </b-list-group>
-    <b-modal ref="addRoleModal" id="add-role-modal" class="w-300" centered title="Добавление новой роли">
+    <b-modal :id="modalId" class="w-300" centered title="Добавление новой роли">
         <b-form-input v-model="newRoleName" placeholder="Введите имя новой роли"></b-form-input>
         <div slot="modal-footer" class="alignR">
-            <b-button variant="outline-secondary" size="sm" @click="hideModal('addRoleModal')">Отмена</b-button>
-            <b-button variant="success" size="sm" @click="addNewRole('addRoleModal')">Добавить</b-button>
+            <b-button variant="outline-secondary" size="sm" @click="hideModal(modalId)">Отмена</b-button>
+            <b-button variant="success" size="sm" @click="addNewRole">Добавить</b-button>
         </div>
     </b-modal>
     <h4>Действия</h4>
     <b-list-group>
-        <b-list-group-item v-for="action in actions">
+        <b-list-group-item v-for="action in actions" :key="action.id">
             {{action.desc}}
         </b-list-group-item>
     </b-list-group>
@@ -44,9 +44,12 @@ import {UI} from "../components/ui";
 })
 export class Roles extends UI {
 
-    private roles: Role[] = [];
+    /** Идентификатор модального окна страницы */
+    private modalId = "modalRoleId";
 
     private newRoleName: string = "";
+
+    private roles: Role[] = [];
 
     private actions: DbAction[] = [];
 
@@ -58,17 +61,17 @@ export class Roles extends UI {
         this.actions = await this.rest.loadItems<DbAction>("actions");
     }
 
-    private async addNewRole(name: string): Promise<void> {
+    private async addNewRole(): Promise<void> {
         try {
             if (this.newRoleName) {
                 await this.$http.post("/roles", {name: this.newRoleName});
-                this.hideModal(name);
+                this.hideModal(this.modalId);
                 this.roles = await this.rest.loadItems<Role>("roles");
             } else {
                 await this.messageDialog.showWarning("Не задано имя новой роли");
             }
         } catch (e) {
-            this.hideModal(name);
+            this.hideModal(this.modalId);
             await this.messageDialog.showInternalError();
         }
     }

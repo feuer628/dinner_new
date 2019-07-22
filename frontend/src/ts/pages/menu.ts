@@ -70,7 +70,7 @@ const MENU_ITEMS = "menu_items";
             </b-collapse>
         </b-tab>
         
-        <b-modal ref="orderConfirmDialog" title="Подтверждение заказа">
+        <b-modal :id="modalId" title="Подтверждение заказа">
             <b-table :items="currentOrder" :fields="orderFields" stripped small>
                 <template slot="comment" slot-scope="row">
                     <b-button size="sm" @click.stop="row.toggleDetails" variant="outline-info" :pressed.sync="row.detailsShowing">
@@ -88,7 +88,7 @@ const MENU_ITEMS = "menu_items";
             <div v-if="user.organization.group.limit">Компенсация: -{{user.organization.group.limit}}₽</div>
             <div v-if="totalPay > 0"><b>К доплате: {{totalPay}}₽</b></div>
             <div slot="modal-footer" class="alignR">
-                <b-button variant="outline-secondary" size="sm" @click="hideModal">Отмена</b-button>
+                <b-button variant="outline-secondary" size="sm" @click="hideModal(modalId)">Отмена</b-button>
                 <b-button variant="success" size="sm" @click="confirmOrder">Подтвердить заказ</b-button>
             </div>
         </b-modal>
@@ -97,6 +97,8 @@ const MENU_ITEMS = "menu_items";
 `
 })
 export default class Menu extends UI {
+
+    private modalId = "modalOrderId";
 
     private tabs: MenuTab[] = [];
 
@@ -175,7 +177,7 @@ export default class Menu extends UI {
             await this.$bvModal.msgBoxOk("Вы ничего не выбрали.");
             return;
         }
-        (<any>this.$refs["orderConfirmDialog"]).show();
+        this.showModal(this.modalId);
     }
 
     private async confirmOrder() {
@@ -184,7 +186,7 @@ export default class Menu extends UI {
             items: this.currentOrder
         };
         await this.$http.post("/orders", params);
-        this.hideModal("orderConfirmDialog");
+        this.hideModal(this.modalId);
         await this.loadOrderInfo(this.activeTab.name);
     }
 
