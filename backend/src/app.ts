@@ -51,6 +51,7 @@ export const LOG = require('simple-node-logger').createSimpleLogger('project.log
     );
 
     app.use("/public", express.static(__dirname + '/public'));
+    app.use('/favicon.ico', express.static(__dirname + '/public/favicon.ico'));
     app.get('/', function(req, res) {
         res.sendFile(__dirname + "/public/index.html");
     });

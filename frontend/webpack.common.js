@@ -36,7 +36,8 @@ module.exports = {
     },
     plugins: [
         new CopyPlugin([
-            { from: path.resolve(__dirname, "src", "index.html"), to: path.resolve(publicPath, "index.html") }
+            { from: path.resolve(__dirname, "src", "index.html"), to: path.resolve(publicPath, "index.html") },
+            { from: path.resolve(__dirname, "src", "favicon.ico"), to: path.resolve(publicPath, "favicon.ico") }
         ])
     ]
 };
