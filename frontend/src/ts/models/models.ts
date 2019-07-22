@@ -63,6 +63,7 @@ export type MenuItem = {
     menu_date: string;
     type: string;
     name: string;
+    weight_type: string;
     weight: number;
     price: number;
     description: string;

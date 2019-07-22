@@ -7,7 +7,6 @@ export const sign_in = Router();
 
 sign_in.post('/', async (req, res, next) => {
     try {
-        console.log(req.body);
         const login = req.body.login;
         const user = await User.findOne({where: {login}});
         if (!user) {

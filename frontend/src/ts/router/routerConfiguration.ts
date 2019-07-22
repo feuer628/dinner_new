@@ -10,6 +10,9 @@ import {Logout} from "../pages/logout";
 import {Settings} from "../pages/settings";
 import {Users} from "../pages/users";
 import {NewUsers} from "../pages/users_new";
+import {MenuReviews} from "../pages/menu_reviews";
+import {ProviderReviews} from "../pages/provider_reviews";
+import {UploadMenu} from "../pages/upload_menu";
 
 /**
  * Класс отвечающий за создание роутингов и инициализацию роутера
@@ -39,6 +42,11 @@ export class RouterConfiguration {
             {
                 path: "/",
                 redirect: "/menu"
+            },
+            {
+                path: "/uploadMenu",
+                name: "uploadMenu",
+                component: UploadMenu
             },
             // {
             //     path: "*",
@@ -96,6 +104,16 @@ export class RouterConfiguration {
                 path: "/new_users",
                 name: "new_users",
                 component: NewUsers
+            },
+            {
+                path: "/menu_reviews",
+                name: "menu_reviews",
+                component: MenuReviews
+            },
+            {
+                path: "/provider_reviews",
+                name: "provider_reviews",
+                component: ProviderReviews
             }
         ];
     }

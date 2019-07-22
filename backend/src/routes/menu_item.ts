@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import {MenuItem} from "../db/models/MenuItem";
+import {Op} from "sequelize";
 
 export const menu_item = Router();
 
@@ -14,7 +15,7 @@ menu_item.post('/', async (req, res, next) => {
 
 menu_item.get('', async (req, res, next) => {
     try {
-        res.json(await MenuItem.scope(req.query['scope']).findAll({order: ["id"]}));
+        res.json(await MenuItem.scope(req.query['scope']).findAll({where: {menu_date: {[Op.ne]: null}}, order: ["id"]}));
     } catch (e) {
         next(e);
     }

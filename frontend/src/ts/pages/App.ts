@@ -18,6 +18,7 @@ import {UI} from "../components/ui";
                     <b-nav-item v-show="authenticated" to="menu"><font-awesome-icon icon="th-list"></font-awesome-icon> Меню</b-nav-item>
                     
                     <b-nav-item-dropdown v-show="authenticated" text="Обеды">
+                        <b-dropdown-item to="uploadMenu">Загрузка меню</b-dropdown-item>
                         <b-dropdown-item to="orderGroup">Группы заказов</b-dropdown-item>
                         <b-dropdown-item to="report">Отчет</b-dropdown-item>
                     </b-nav-item-dropdown>

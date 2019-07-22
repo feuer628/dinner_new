@@ -14,6 +14,9 @@ import {verifyToken} from "./routes/middlewares";
 import {registration} from "./routes/registration";
 import {sign_in} from "./routes/sign_in";
 import {order} from "./routes/order";
+import {menu} from "./routes/menu";
+
+const fileUpload = require('express-fileupload');
 
 export const LOG = require('simple-node-logger').createSimpleLogger('project.log');
 
@@ -32,6 +35,11 @@ export const LOG = require('simple-node-logger').createSimpleLogger('project.log
     app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
     // parse application/json
     app.use(bodyParser.json({ limit: '10mb' }));
+
+    app.use(fileUpload({
+        limits: { fileSize: 50 * 1024 * 1024 },
+    }));
+
     app.use("/roles", verifyToken, role);
     app.use("/actions", verifyToken, action);
     app.use("/organizations", organization);
@@ -42,6 +50,7 @@ export const LOG = require('simple-node-logger').createSimpleLogger('project.log
     app.use("/sign_up", registration);
     app.use("/sign_in", sign_in);
     app.use("/orders", verifyToken, order);
+    app.use("/menu", verifyToken, menu);
 
     app.use(sassMiddleware({
             src: __dirname,

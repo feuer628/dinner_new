@@ -9,7 +9,6 @@ registration.post('/', async (req, res, next) => {
     try {
         const requestData = req.body;
         const hashedPassword = hashSync(requestData.password, 8);
-        console.log(hashedPassword);
 
         const userAttributes = {
             login: requestData.login,

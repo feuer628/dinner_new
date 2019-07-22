@@ -4,31 +4,23 @@ CREATE SCHEMA IF NOT EXISTS public;
 CREATE TABLE "roles" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
 	"name" VARCHAR(300) NOT NULL
-) WITH (
-    OIDS=FALSE
-);
+) WITH (OIDS=FALSE);
 
 CREATE TABLE "actions" (
     "id" SERIAL NOT NULL PRIMARY KEY,
     "desc" VARCHAR(500) NOT NULL
-) WITH (
-    OIDS=FALSE
-);
+) WITH (OIDS=FALSE);
 
 CREATE TABLE "role_actions" (
     "id" SERIAL NOT NULL PRIMARY KEY,
     "role_id" SERIAL NOT NULL,
     "action_id" SERIAL NOT NULL
-) WITH (
-    OIDS=FALSE
-);
+) WITH (OIDS=FALSE);
 
 CREATE TABLE "system_properties" (
 	"name" VARCHAR(100) NOT NULL PRIMARY KEY,
 	"value" VARCHAR(1024) NULL
-) WITH (
-    OIDS=FALSE
-);
+) WITH (OIDS=FALSE);
 
 CREATE TABLE "providers" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
@@ -37,9 +29,7 @@ CREATE TABLE "providers" (
 	"description" VARCHAR(1024) NULL,
 	"url" VARCHAR(255) NULL,
 	"logo" VARCHAR(255) NULL
-) WITH (
-    OIDS=FALSE
-);
+) WITH (OIDS=FALSE);
 
 CREATE TABLE "org_groups" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
@@ -50,18 +40,14 @@ CREATE TABLE "org_groups" (
 	"name" VARCHAR(300) NOT NULL,
 	"description" VARCHAR(255),
 	"provider_id" INTEGER NULL
-) WITH (
-    OIDS=FALSE
-);
+) WITH (OIDS=FALSE);
 
 CREATE TABLE "organizations" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
 	"name" VARCHAR(300) NOT NULL,
 	"to_name" VARCHAR(300),
 	"group_id" INTEGER NULL
-) WITH (
-    OIDS=FALSE
-);
+) WITH (OIDS=FALSE);
 
 CREATE TABLE "provider_reviews" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
@@ -69,9 +55,7 @@ CREATE TABLE "provider_reviews" (
 	"user_id" INTEGER NOT NULL,
 	"review" VARCHAR(255) NOT NULL,
 	"rating" INTEGER NOT NULL
-) WITH (
-    OIDS=FALSE
-);
+) WITH (OIDS=FALSE);
 
 CREATE TABLE "users" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
@@ -92,22 +76,19 @@ CREATE TABLE "users" (
 	"telegram_id" INTEGER,
 	"created_at" TIMESTAMP DEFAULT CURRENT_DATE,
 	"updated_at" TIMESTAMP DEFAULT CURRENT_DATE
-) WITH (
-    OIDS=FALSE
-);
+) WITH (OIDS=FALSE);
 
 CREATE TABLE "menu_items" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
 	"provider_id" INTEGER NOT NULL,
-	"menu_date" DATE NOT NULL,
+	"menu_date" DATE,
 	"type" VARCHAR(255) NOT NULL,
 	"name" VARCHAR(255) NOT NULL,
+    "weight_type" VARCHAR(100),
 	"weight" INTEGER,
 	"price" FLOAT(10),
 	"description" VARCHAR(1024)
-) WITH (
-  OIDS=FALSE
-);
+) WITH (OIDS=FALSE);
 
 CREATE TABLE "orders" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
@@ -116,9 +97,7 @@ CREATE TABLE "orders" (
 	"order_date" DATE NOT NULL,
 	"created_at" TIMESTAMP DEFAULT CURRENT_DATE,
 	"updated_at" TIMESTAMP DEFAULT CURRENT_DATE
-) WITH (
-  OIDS=FALSE
-);
+) WITH (OIDS=FALSE);
 
 CREATE TABLE "order_items" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
@@ -129,9 +108,7 @@ CREATE TABLE "order_items" (
 	"price" FLOAT(10) NOT NULL,
 	"rating" INTEGER,
 	"review" VARCHAR(500)
-) WITH (
-  OIDS=FALSE
-);
+) WITH (OIDS=FALSE);
 
 CREATE TABLE "balance_history" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
@@ -139,9 +116,7 @@ CREATE TABLE "balance_history" (
 	"amount" FLOAT(10) NOT NULL,
 	"created_at" TIMESTAMP NOT NULL,
 	"order_id" INTEGER
-) WITH (
-  OIDS=FALSE
-);
+) WITH (OIDS=FALSE);
 
 ALTER TABLE "role_actions" ADD CONSTRAINT "role_actions_fk0" FOREIGN KEY ("role_id") REFERENCES "roles"("id");
 ALTER TABLE "role_actions" ADD CONSTRAINT "role_actions_fk1" FOREIGN KEY ("action_id") REFERENCES "actions"("id");
@@ -227,6 +202,92 @@ INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, descr
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'гарниры', 'перловара3', 200, 15, 'описание гарнира: ну такое');
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'фитнесс', 'перловара4', 200, 238, 'описание гарнира: ну такое');
 INSERT INTO menu_items (provider_id, menu_date, type, name, weight, price, description) VALUES (1, CURRENT_DATE + INTERVAL '2 days', 'фитнесс', 'перловара5', 200, 138, 'описание гарнира: ну такое');
+
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'беляши 1/75', 'шт', 42);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Булочка Дуэт', 'кг', 22);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Булочка Забава1/50', 'шт', 19);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Булочка крем/ваниль 1/65', 'шт', 19);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Булочка Невская', 'шт', 28);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Булочка Прима вера', 'шт', 27);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Булочка с корицей', 'шт', 22);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Булочка с черносливом', 'шт', 19);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Ватрушка сдобная творожная', 'шт', 25);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Гамбургер', 'шт', 62);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Гамбургер с ветчиной1/80 ', 'шт', 47);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Кекс Малышок', 'шт', 17);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Кекс морковный 1/75', 'порц', 20);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Кекс Пионер', 'шт', 23);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Кольцо песочное', 'шт', 22);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Корзиночка Вкус детства 1/70', 'шт', 30);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Котлета в тесте1/90', 'шт', 33);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Круассан с вишней', 'шт', 20);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Круассан с кремом', 'шт', 20);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Лепёшка вост/гриб. 1/200гр.', 'шт', 52);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Любава с изюмом', 'шт', 26);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Любава с маком', 'шт', 26);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Мафины с ягодами', 'шт', 21);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Меренги1/100', 'шт', 34);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Мини сэндвич с бужениной', 'порц', 42);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Печенье "Домашнее" 1/150', 'шт', 37);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Печенье мраморное 1/150', 'шт', 56);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Печенье тающий снег 1/150', 'шт', 52);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Печенье Фитнес', 'шт', 37);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Печенье цукатное 1/150', 'шт', 47);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожное "Трюфель" 1/140', 'шт', 62);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожное "Ягодный десерт" 1/140', 'шт', 62);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожное Воздушное1/50', 'шт', 25);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожное Медовое 1/100', 'шт', 37);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожное Наполеон1/100', 'шт', 37);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожное Новинка', 'шт', 21);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожное Школьное', 'шт', 29);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожок грибы/карт1/70', 'шт', 19);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожок курага/хурма70г', 'шт', 19);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожок рис/яйцо 1/70', 'шт', 19);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожок с капустой 1/70 ', 'шт', 19);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожок с курагой1/70', 'шт', 19);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожок с мясом1/70', 'шт', 32);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожок с печенью1/70', 'шт', 22);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожок с повидлом1/70', 'шт', 19);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожок с яблоком1/70', 'шт', 19);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пирожок слоеный с повидлом 1/50', 'порц', 32);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Пицца докторская ', 'порц', 73);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Плюшка Московская', 'шт', 21);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Рогалик с творогом1/70', 'шт', 22);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Ромовая баба', 'шт', 30);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Рулет грушевый 1/80', 'шт', 23);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Рулет с джемом', 'шт', 47);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Рулет с марципаном', 'шт', 23);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Рулетик Мираж', 'кг', 22);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Рулетик сахарный 1/50', 'шт', 17);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Сдоба с вишней', 'шт', 23);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Сладушка с клубникой 1/85', 'шт', 26);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Слойка Бантик1/40', 'шт', 15);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Слойка вет/сыр', 'шт', 32);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Слойка с курицей', 'шт', 27);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Слойка с сыром', 'шт', 25);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Слойка со сгущенкой 1/70', 'шт', 20);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Сосиска аппетитная', 'порц', 44);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Сосиска в тесте', 'шт', 38);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Сочник', 'шт', 30);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Сухари ржаные1/100', 'шт', 25);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Сухари сдобные1/100', 'шт', 14);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Сэндвич с ветчиной 1/120', 'порц', 52);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Сэндвич с курицей 1/120', 'порц', 52);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Сэндвич с семгой 1/120', 'порц', 72);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Тесто дрожжевое 1кг', 'кг', 72);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'торт "Два шоколада" 1/130', 'шт', 87);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Трюфель со сливками ', 'шт', 42);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Улитка курица /грибы', 'кг', 29);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Флан творож/вишня 1/140', 'шт', 47);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Эклер с заварным кремом', 'шт', 22);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Яблочное Чудо1/150', 'шт', 37);
+INSERT INTO menu_items (provider_id, type, name, weight_type, price) VALUES(1, 'выпечка', 'Язычок слоёный', 'шт', 16);
+INSERT INTO menu_items (provider_id, type, name, weight, price) VALUES(1, 'напитки', 'сок Фруктовый сад 0,2 (мультифрукт, апельсиновый, томатный)', 200, 28);
+INSERT INTO menu_items (provider_id, type, name, weight, price) VALUES(1, 'напитки', 'сок "Плодовое" 0,2 (яблоко-виноград, грушевый, яблочный, Апельсиновый, персиковый, мультифрукт) ', 200, 20);
+INSERT INTO menu_items (provider_id, type, name, weight, price) VALUES(1, 'напитки', 'вода аква минерале 0,6 газ, б/газ', 600, 50);
+INSERT INTO menu_items (provider_id, type, name, weight, price) VALUES(1, 'напитки', 'пепси, миринда, сэвен ап 0,5', 500, 58);
+INSERT INTO menu_items (provider_id, type, name, weight, price) VALUES(1, 'напитки', 'пепси, миринда, сэвен ап 0,33', 330, 40);
+
 
 INSERT INTO users (login, password, status, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
     VALUES ('silakov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 1, 100, '', MAKE_DATE(1980, 06, 12), '9108786556', 2, 1, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
