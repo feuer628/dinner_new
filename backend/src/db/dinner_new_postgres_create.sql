@@ -1,5 +1,5 @@
-DROP SCHEMA public CASCADE;
-CREATE SCHEMA public;
+DROP SCHEMA IF EXISTS public CASCADE;
+CREATE SCHEMA IF NOT EXISTS public;
 
 CREATE TABLE "roles" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
@@ -158,32 +158,32 @@ ALTER TABLE "order_items" ADD CONSTRAINT "order_items_fk0" FOREIGN KEY ("order_i
 ALTER TABLE "balance_history" ADD CONSTRAINT "balance_history_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
 ALTER TABLE "balance_history" ADD CONSTRAINT "balance_history_fk1" FOREIGN KEY ("order_id") REFERENCES "orders"("id");
 
-INSERT INTO "public"."roles" ("id", "name") VALUES (1, 'администраторы');
-INSERT INTO "public"."roles" ("id", "name") VALUES (2, 'модераторы');
-INSERT INTO "public"."roles" ("id", "name") VALUES (3, 'операторы');
-INSERT INTO "public"."roles" ("id", "name") VALUES (4, 'пользователи');
-INSERT INTO "public"."roles" ("id", "name") VALUES (5, 'поставщики');
+INSERT INTO "public"."roles" ("name")VALUES ('администраторы');
+INSERT INTO "public"."roles" ("name")VALUES ('модераторы');
+INSERT INTO "public"."roles" ("name")VALUES ('операторы');
+INSERT INTO "public"."roles" ("name")VALUES ('пользователи');
+INSERT INTO "public"."roles" ("name")VALUES ('поставщики');
 
-INSERT INTO "public"."actions" ("id", "desc") VALUES (1, 'Возможность администрирования системы');
-INSERT INTO "public"."actions" ("id", "desc") VALUES (2, 'Возможность добавлять обед за другого сотрудника');
-INSERT INTO "public"."actions" ("id", "desc") VALUES (3, 'Возможность добавлять организацию');
-INSERT INTO "public"."actions" ("id", "desc") VALUES (4, 'Возможность управления группой организаций');
-INSERT INTO "public"."actions" ("id", "desc") VALUES (5, 'Возможность подтверждать регистрацию любых пользователей');
-INSERT INTO "public"."actions" ("id", "desc") VALUES (6, 'Возможность подтверждать регистрацию пользователей своей организации');
-INSERT INTO "public"."actions" ("id", "desc") VALUES (7, 'Возможность настраивать права доступа для сотрудников своей организации');
+INSERT INTO "public"."actions" ("desc")VALUES ('Возможность администрирования системы');
+INSERT INTO "public"."actions" ("desc")VALUES ('Возможность добавлять обед за другого сотрудника');
+INSERT INTO "public"."actions" ("desc")VALUES ('Возможность добавлять организацию');
+INSERT INTO "public"."actions" ("desc")VALUES ('Возможность управления группой организаций');
+INSERT INTO "public"."actions" ("desc")VALUES ('Возможность подтверждать регистрацию любых пользователей');
+INSERT INTO "public"."actions" ("desc")VALUES ('Возможность подтверждать регистрацию пользователей своей организации');
+INSERT INTO "public"."actions" ("desc")VALUES ('Возможность настраивать права доступа для сотрудников своей организации');
 
-INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 1);
-INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 2);
-INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 3);
-INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 4);
-INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 5);
-INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 6);
-INSERT INTO "public".role_actions (role_id, action_id) VALUES (1, 7);
-INSERT INTO "public".role_actions (role_id, action_id) VALUES (2, 5);
-INSERT INTO "public".role_actions (role_id, action_id) VALUES (2, 6);
-INSERT INTO "public".role_actions (role_id, action_id) VALUES (2, 7);
-INSERT INTO "public".role_actions (role_id, action_id) VALUES (3, 2);
-INSERT INTO "public".role_actions (role_id, action_id) VALUES (3, 6);
+INSERT INTO "public".role_actions ("role_id", "action_id")VALUES (1, 1);
+INSERT INTO "public".role_actions ("role_id", "action_id")VALUES (1, 2);
+INSERT INTO "public".role_actions ("role_id", "action_id")VALUES (1, 3);
+INSERT INTO "public".role_actions ("role_id", "action_id") VALUES (1, 4);
+INSERT INTO "public".role_actions ("role_id", "action_id") VALUES (1, 5);
+INSERT INTO "public".role_actions ("role_id", "action_id") VALUES (1, 6);
+INSERT INTO "public".role_actions ("role_id", "action_id") VALUES (1, 7);
+INSERT INTO "public".role_actions ("role_id", "action_id") VALUES (2, 5);
+INSERT INTO "public".role_actions ("role_id", "action_id") VALUES (2, 6);
+INSERT INTO "public".role_actions ("role_id", "action_id") VALUES (2, 7);
+INSERT INTO "public".role_actions ("role_id", "action_id") VALUES (3, 2);
+INSERT INTO "public".role_actions ("role_id", "action_id")VALUES (3, 6);
 
 INSERT INTO providers (name, emails, url) VALUES ('Вкусная почта', 'asdasdw@mail.ru', 'http://obedi.ru');
 INSERT INTO providers (name, emails, url) VALUES ('Просто еда', 'eda@mail.ru', 'http://obedi22.ru');
