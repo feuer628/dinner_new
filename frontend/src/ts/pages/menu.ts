@@ -69,7 +69,7 @@ const MENU_ITEMS = "menu_items";
                 </b-table>
             </b-collapse>
         </b-tab>
-        
+
         <b-modal :id="modalId" title="Подтверждение заказа">
             <b-table :items="currentOrder" :fields="orderFields" stripped small>
                 <template slot="comment" slot-scope="row">
@@ -153,7 +153,7 @@ export default class Menu extends UI {
     private async created(): Promise<void> {
         this.$store.state.user = (await this.$http.get("/users/me")).data;
         if (this.$store.state.user.organization.group === null) {
-            await Common.messageDialog.showWarning("Ваша оргиназация не входит ни в одну группу.");
+            await Common.messageDialog.showWarning("Ваша организация не входит ни в одну группу.");
             return;
         }
         const menu = await this.rest.loadItems<MenuItem>(MENU_ITEMS);
