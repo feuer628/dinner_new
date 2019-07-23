@@ -1,5 +1,3 @@
-import {BelongsTo, Column, ForeignKey} from "sequelize-typescript";
-
 export type DbRole = {
     id?: number;
     name: string;
@@ -63,8 +61,7 @@ export type MenuItem = {
     menu_date: string;
     type: string;
     name: string;
-    weight_type: string;
-    weight: number;
+    weight: string;
     price: number;
     description: string;
 }

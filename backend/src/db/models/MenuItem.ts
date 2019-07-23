@@ -23,10 +23,7 @@ export class MenuItem extends Model<MenuItem> {
     name: string;
 
     @Column
-    weight_type: string;
-
-    @Column
-    weight: number;
+    weight: string;
 
     @Column
     price: number;
