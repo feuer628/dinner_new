@@ -44,13 +44,13 @@ import {UI} from "../components/ui";
                     <b-nav-item v-show="authenticated" to="settings"><font-awesome-icon icon="user-cog"></font-awesome-icon> Настройки</b-nav-item>
                     <b-nav-item v-show="authenticated" to="logout"><font-awesome-icon icon="sign-out-alt"></font-awesome-icon> Выход</b-nav-item>
                 </b-navbar-nav>
-
-
-
             </b-collapse>
         </b-navbar>
         <main>
             <div class="content" style="">
+                <div class="alignC mt10 mb10">
+                    <b-spinner v-if="dataLoading" variant="primary" label="Загрузка данных"></b-spinner>
+                </div>
                 <b-alert dismissible > sadfafsdf </b-alert>
                 <router-view class="m10"></router-view>
             </div>

@@ -9,6 +9,14 @@ export class UI extends Vue {
 
     protected rest: RestService = new RestService(this);
 
+    protected get dataLoading() {
+        return this.$store.state.dataLoading;
+    }
+
+    protected set dataLoading(newValue: boolean) {
+        this.$store.state.dataLoading = newValue;
+    }
+
     protected showModal(name: string): void {
         this.$bvModal.show(name);
     }

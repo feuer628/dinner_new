@@ -156,22 +156,27 @@ export default class Menu extends UI {
     }
 
     private async created(): Promise<void> {
-        this.$store.state.user = (await this.$http.get("/users/me")).data;
-        if (this.$store.state.user.organization.group === null) {
-            await Common.messageDialog.showWarning("Ваша организация не входит ни в одну группу.");
-            return;
-        }
-        const menu = await this.rest.loadItems<MenuItem>(MENU_ITEMS);
-        new Set(menu.map(m => m.menu_date)).forEach(async (menuDate: string) => {
-            this.tabs.push({
-                name: menuDate,
-                items: menu.filter(m => m.menu_date === menuDate),
-                current: [],
-                orderConfirmed: false,
-                needShowMenu: false
+        try {
+            this.dataLoading = true;
+            this.$store.state.user = (await this.$http.get("/users/me")).data;
+            if (this.$store.state.user.organization.group === null) {
+                await Common.messageDialog.showWarning("Ваша организация не входит ни в одну группу.");
+                return;
+            }
+            const menu = await this.rest.loadItems<MenuItem>(MENU_ITEMS);
+            new Set(menu.map(m => m.menu_date)).forEach(async (menuDate: string) => {
+                this.tabs.push({
+                    name: menuDate,
+                    items: menu.filter(m => m.menu_date === menuDate),
+                    current: [],
+                    orderConfirmed: false,
+                    needShowMenu: false
+                });
+                await this.loadOrderInfo(menuDate);
             });
-            await this.loadOrderInfo(menuDate);
-        });
+        } finally {
+            this.dataLoading = false;
+        }
     }
 
     private async showOrderConfirmDialog() {
