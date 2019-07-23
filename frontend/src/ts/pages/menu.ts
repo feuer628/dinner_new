@@ -14,7 +14,7 @@ const MENU_ITEMS = "menu_items";
         <h4 class="alignC">Меню еще не загружено. Подождите.</h4>
     </div>
     <div v-if="tabs.length && user && user.organization.group">
-        <b-tabs v-model="tabIndex" card>
+        <b-tabs v-model="tabIndex" card lazy>
             <b-tab v-for="tab in tabs" :key="tab.name" :title="tab.name | formatTabDate">
                 <div v-if="tab.orderConfirmed" class="mb10">
                     <h4 class="alignC">На этот день вы заказали следующее:</h4>
