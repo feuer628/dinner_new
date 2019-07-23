@@ -63,7 +63,7 @@ const MENU_ITEMS = "menu_items";
                         <b-button-group>
                             <b-button size="sm" @click="add(row.item)" variant="info"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
                             <b-button disabled variant="light"><b>{{getOrderItemCount(row.item.name)}}</b></b-button>
-                            <b-button :disabled="!getOrderItemCount(row.item)" size="sm" @click="dec(row.item)" variant="info"><font-awesome-icon icon="minus"></font-awesome-icon></b-button>
+                            <b-button :disabled="!getOrderItemCount(row.item.name)" size="sm" @click="dec(row.item)" variant="info"><font-awesome-icon icon="minus"></font-awesome-icon></b-button>
                         </b-button-group>
                     </template>
                 </b-table>
