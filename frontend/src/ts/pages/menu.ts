@@ -65,21 +65,19 @@ const MENU_ITEMS = "menu_items";
                 <b-collapse id="menu_table_collapse" v-model="menuShowed">
                     <b-table striped :items="menu" :fields="currentOrder.id ? basicMenuFields : fullMenuFields" class="mt10">
                         <template slot="buttons" slot-scope="row">
-                            <b-button-group>
-                                <b-button size="sm" @click="add(row.item)" variant="info"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
-                                <b-button disabled variant="light"><b>{{getOrderItemCount(row.item.name)}}</b></b-button>
-                                <b-button :disabled="!getOrderItemCount(row.item.name)" size="sm" @click="dec(row.item)" variant="info"><font-awesome-icon icon="minus"></font-awesome-icon></b-button>
-                            </b-button-group>
+                            <b-button pill :disabled="!getOrderItemCount(row.item.name)" size="sm" @click="dec(row.item)" variant="outline-default"><font-awesome-icon icon="minus"></font-awesome-icon></b-button>
+                            <span style="padding: 0 5px 0 5px;"><b>{{getOrderItemCount(row.item.name)}}</b></span>
+                            <b-button pill size="sm" @click="add(row.item)" variant="outline-default"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
                         </template>
                     </b-table>
                 </b-collapse>
             </b-tab>
 
             <b-modal :id="modalId" title="Подтверждение заказа" size="lg">
-                <b-table :items="currentOrder.orderItems" :fields="orderFields" stripped small>
+                <b-table :items="currentOrder.orderItems" :fields="orderFields" striped small>
                     <template slot="comment" slot-scope="row">
-                        <b-button size="sm" @click.stop="row.toggleDetails" variant="outline-info" :pressed.sync="row.detailsShowing">
-                            <font-awesome-icon :icon="row.detailsShowing ? 'angle-up' : 'angle-down'"></font-awesome-icon>
+                        <b-button size="sm" pill @click.stop="row.toggleDetails" variant="light" :pressed.sync="row.detailsShowing">
+                            <font-awesome-icon :icon="row.detailsShowing ? 'chevron-up' : 'chevron-down'"></font-awesome-icon>
                         </b-button>
                     </template>
                     <template slot="row-details" slot-scope="row">
@@ -260,7 +258,7 @@ export default class Menu extends UI {
     private fullMenuFields = {
         buttons: {
             label: "Количество",
-            class: "w80"
+            class: "w150"
         },
         ...this.basicMenuFields
     };
@@ -268,7 +266,7 @@ export default class Menu extends UI {
     private orderFields = {
         comment: {
             label: "",
-            class: "w25"
+            class: "w80 vAlignC"
         },
         amount: {
             label: "Стоимость",
