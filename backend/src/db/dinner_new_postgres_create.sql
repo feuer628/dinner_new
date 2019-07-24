@@ -115,9 +115,7 @@ CREATE TABLE "order_items" (
 	"name" VARCHAR(255) NOT NULL,
 	"comment" VARCHAR(255),
 	"count" INTEGER NOT NULL,
-	"price" FLOAT(10) NOT NULL,
-	"rating" INTEGER,
-	"review" VARCHAR(500)
+	"price" FLOAT(10) NOT NULL
 ) WITH (OIDS=FALSE);
 
 CREATE TABLE "balance_history" (

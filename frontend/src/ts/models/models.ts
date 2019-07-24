@@ -76,15 +76,20 @@ export type OrderInfo = {
     orderItems: OrderItem[];
 }
 
+/** Позиция заказа */
 export type OrderItem = {
+    /** Идентификатор позиции заказа */
     id?: number;
+    /** Идентификатор заказа */
     order_id?: number;
+    /** Название блюда */
     name: string;
+    /** Комментарий к позиции */
     comment: string;
+    /** Количество */
     count: number;
+    /** Цена */
     price: number;
-    rating?: number;
-    review?: string;
 }
 
 /** Отзыв о блюде */
