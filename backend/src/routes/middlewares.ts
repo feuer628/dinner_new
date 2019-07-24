@@ -20,7 +20,7 @@ export function verifyToken(req: Request, res: Response, next: NextFunction) {
     // Проверяем токен на актуальность
     verify(token, process.env.AUTH_SECRET, (err: VerifyErrors, decoded: DecodedType) => {
         if (err) {
-            return res.status(500).send("Ошибка при аутентификации токена");
+            return res.status(401).send("Bad token. Войдите в свою учетную запись");
         }
         // Кладем в запрос userId, используем дальше по своему усмотрению
         (<any> req).userId = decoded.id;

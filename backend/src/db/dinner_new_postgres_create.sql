@@ -179,7 +179,7 @@ INSERT INTO providers (name, emails, description, url) VALUES ('Супы дом�
 
 INSERT INTO org_groups (limit_type, name, description) VALUES (0, 'Первая группа', 'Описание первой группы');
 INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name) VALUES (1, true, 200, 1000, 'СС');
-INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name, provider_id) VALUES (1, false, 200, 300, 'Финализированная группос', 2);
+INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name, provider_id) VALUES (1, false, 200, 300, 'Финализированная группос', 1);
 INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name, description) VALUES (1, true, 220, 0, 'ЖЖшечка', 'Акробат');
 INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name, description, provider_id) VALUES (1, true, 1000, 0, 'Адобе', 'Фтошоп', 1);
 
@@ -299,6 +299,17 @@ INSERT INTO menu_items (provider_id, type, name, weight, price) VALUES(1, 'на�
 INSERT INTO menu_items (provider_id, type, name, weight, price) VALUES(1, 'напитки', 'пепси, миринда, сэвен ап 0,5', '500 мл', 58);
 INSERT INTO menu_items (provider_id, type, name, weight, price) VALUES(1, 'напитки', 'пепси, миринда, сэвен ап 0,33', '330 мл', 40);
 
+INSERT INTO users (login, password, status, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
+    VALUES ('silakov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 1, 100, '', MAKE_DATE(1980, 06, 12), '9108786556', 8, 1, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
+INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
+VALUES ('ivanov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 0, '', MAKE_DATE(1998, 04, 29), '9105144545', 2, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
+INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
+VALUES ('petrov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 200, '', MAKE_DATE(1997, 02, 20), '9085623223', 3, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
+INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
+VALUES ('sidorov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 500, '', MAKE_DATE(1996, 09, 29), '9105654854', 2, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
+INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
+VALUES ('egoshin', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', -80, '', MAKE_DATE(1995, 12, 29), '9875642312', 3, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
+
 -- Добавление отзывов о блюдах
 INSERT INTO menu_item_reviews (provider_id, user_id, menu_item_name, review, rating) VALUES (1, 1, 'картофельное пюре', 'норм', 5);
 INSERT INTO menu_item_reviews (provider_id, user_id, menu_item_name, review, rating) VALUES (1, 1, 'Булочка Дуэт', 'норм Булочка Дуэт', 7);
@@ -310,15 +321,3 @@ INSERT INTO menu_item_reviews (provider_id, user_id, menu_item_name, review, rat
 INSERT INTO menu_item_reviews (provider_id, user_id, menu_item_name, review, rating) VALUES (1, 1, 'Язычок слоёный', 'таксебе', 5);
 INSERT INTO menu_item_reviews (provider_id, user_id, menu_item_name, review, rating) VALUES (1, 1, 'вода аква минерале', 'водица, так не годиться', 1);
 INSERT INTO menu_item_reviews (provider_id, user_id, menu_item_name, review, rating) VALUES (1, 1, 'пепси, миринда, сэвен ап', 'норм', 5);
-
-
-INSERT INTO users (login, password, status, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
-    VALUES ('silakov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 1, 100, '', MAKE_DATE(1980, 06, 12), '9108786556', 8, 1, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
-INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
-VALUES ('ivanov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 0, '', MAKE_DATE(1998, 04, 29), '9105144545', 2, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
-INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
-VALUES ('petrov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 200, '', MAKE_DATE(1997, 02, 20), '9085623223', 3, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
-INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
-VALUES ('sidorov', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', 500, '', MAKE_DATE(1996, 09, 29), '9105654854', 2, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');
-INSERT INTO users (login, password, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)
-VALUES ('egoshin', '$2a$08$Rfr.D6DWJF4yo.Haf8zdxOtimkBojAMslHkyxsJKRnkCY.u5a2DI6', -80, '', MAKE_DATE(1995, 12, 29), '9875642312', 3, 2, '123', '192.168.17.11', 'ADASFS12', '229', 'Туду С. С.', '123456789');

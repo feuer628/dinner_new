@@ -5,7 +5,7 @@ import Common from "../utils/common";
 
 export class UI extends Vue {
 
-    protected messageDialog: MessageDialog = Common.getMessageDialog();
+    protected messageDialog = Common.getMessageDialog();
 
     protected rest: RestService = new RestService(this);
 

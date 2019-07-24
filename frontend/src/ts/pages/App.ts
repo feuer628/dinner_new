@@ -76,8 +76,13 @@ export class App extends UI {
     }
 
     private async created(): Promise<void> {
-        this.$store.state.user = (await this.$http.get("/users/me")).data;
-        this.$store.state.auth = true;
+        if (this.$cookies.get("token")) {
+            this.$store.state.auth = true;
+            this.$store.state.user = (await this.$http.get("/users/me")).data;
+        }
+        if (!this.$store.state.auth) {
+            this.$router.push("/sign_in");
+        }
     }
 
 }

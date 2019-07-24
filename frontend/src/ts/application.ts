@@ -9,7 +9,7 @@ import Vue from 'vue';
 import VueResource from 'vue-resource';
 import VueRouter from "vue-router";
 import {App} from './pages/App';
-import BootstrapVue from "bootstrap-vue";
+import BootstrapVue, {BToast} from "bootstrap-vue";
 import {RouterConfiguration} from "./router/routerConfiguration";
 import {install} from "vue-cookies";
 import Common from "./utils/common";
@@ -45,7 +45,10 @@ import moment = require("moment");
         request.headers.set('x-access-token', Vue.cookies.get("token"));
         next((response: any) => {
             if(response.status == 401) {
-                // Common.messageDialog.showWarning(response.body);
+                Vue.cookies.remove("token");
+                store.state.auth = false;
+                const toast = new BToast({propsData: {title: response.body, }});
+                toast.$mount().show();
                 router.push("/sign_in");
             }
             if(response.status == 403) {
