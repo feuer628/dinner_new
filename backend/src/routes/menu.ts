@@ -10,7 +10,7 @@ import {OrgGroup} from "../db/models/OrgGroup";
 export const menu = Router();
 
 const DAYS = ["понедельник", "вторник", "среда", "четверг", "пятница", "суббота", "воскресенье"];
-const EXCLUSIONS = ["бренд-шеф", "меню"];
+const EXCLUSIONS = ["бренд-шеф", "меню", "3"];
 
 menu.post('/upload', async (req, res, next) => {
     try {
@@ -39,15 +39,14 @@ menu.post('/upload', async (req, res, next) => {
             6: [],
             7: [],
         };
-
         firstSheet.data.forEach((item: any[]) => {
             if (item.length === 1) {
-                const trash = EXCLUSIONS.find(s => (<string> item[0]).toLowerCase().trim().includes(s));
+                const trash = EXCLUSIONS.find(s => String(item[0]).toLowerCase().trim().includes(s));
                 if (trash) {
                     // console.log("НАЙДЕН МУСОР!: " + trash);
                     return false;
                 }
-                const weekDay = DAYS.find(s => s === (<string> item[0]).toLowerCase().trim());
+                const weekDay = DAYS.find(s => s === String(item[0]).toLowerCase().trim());
                 if (!!weekDay) {
                     // console.log("НАЙДЕН ДЕНЬ НЕДЕЛИ!: " + (<string> item[0]).toLowerCase().trim());
                     if (weekDay === "понедельник") {
@@ -57,15 +56,15 @@ menu.post('/upload', async (req, res, next) => {
                     return false;
                 }
                 if (startBlockOfMenu) {
-                    currentType = (<string> item[0]).toLowerCase().trim().replace(/(,\s*|\s+)/g, ' ');
+                    currentType = String(item[0]).toLowerCase().trim().replace(/(,\s*|\s+)/g, ' ');
                     // console.log("НАЙДЕН НОВЫЙ ТИП БЛЮД!: " + currentType);
                     return false;
                 }
             }
             if (item.length === 3) {
-                if ((<string> item[1]).toLowerCase().trim() === "вес" && (<string> item[2]).toLowerCase().trim() === "цена") {
+                if (String(item[1]).toLowerCase().trim() === "вес" && String(item[2]).toLowerCase().trim() === "цена") {
                     // console.log("НАЙДЕН ТИП БЛЮДА!: " + (<string> item[0]).toLowerCase().trim());
-                    currentType = (<string> item[0]).toLowerCase().trim().replace(/(,\s*|\s+)/g, ' ');
+                    currentType = String(item[0]).toLowerCase().trim().replace(/(,\s*|\s+)/g, ' ');
                     return false;
                 }
                 if ((<string> item[0]).toLowerCase().trim() === "хлеб") {
@@ -75,10 +74,10 @@ menu.post('/upload', async (req, res, next) => {
                 if (item.filter(i => i === null).length === 0) {
                     // console.log("НАШЛИ БЛЮДО! ТИП: " + currentType + ", ДЕНЬ НЕДЕЛИ: " + currentWeekday + ", НАЗВАНИЕ: " + (<string> item[0]).toLowerCase().trim());
                     menuByDates[currentWeekday].push(new MenuItem({
-                        name: (<string> item[0]).toLowerCase().trim().split(" ").filter(i => i.length > 0).join(" "),
+                        name: String(item[0]).toLowerCase().trim().split(" ").filter(i => i.length > 0).join(" "),
                         type: currentType,
-                        weight: (<string> item[1]).toLowerCase().trim(),
-                        price: Number((<string> item[2]).replace("-",".").toLowerCase().trim())
+                        weight: String(item[1]).toLowerCase().trim(),
+                        price: Number(item[2].replace("-",".").toLowerCase().trim())
                     }));
                     return true;
                 }
