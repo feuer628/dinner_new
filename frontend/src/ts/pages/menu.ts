@@ -29,12 +29,10 @@ const MENU_ITEMS = "menu_items";
                     </b-list-group>
                 </div>
                 <div v-else class="mb10">
-                    <b-card :title="'Выбрано блюд на ' + totalPrice + '₽'" sub-title="" class="mAuto w500">
+                    <b-card :title="'Выбрано блюд на ' + totalPrice + '₽'" sub-title="" class="mAuto w800">
                         <b-card-text>
                             <b-badge v-show="user.organization.group.limit" variant="success">компенсируется {{user.organization.group.limit}}₽</b-badge>
                             <b-badge v-show="limitExceeded" variant="warning">Превышение на {{totalPrice - user.organization.group.limit}}₽!</b-badge>
-                        </b-card-text>
-                        <b-card-text>
                             <b-badge v-show="hardLimitExceeded" variant="danger">
                                 Ограничение суммы заказа {{user.organization.group.hard_limit}}₽. Такой заказ невозможно утвердить.
                             </b-badge>
@@ -207,7 +205,7 @@ export default class Menu extends UI {
     private async confirmOrder() {
         const params = {
             order_date: this.currentTabName,
-            items: this.currentOrder
+            items: this.currentOrder.orderItems
         };
         await this.$http.post("/orders", params);
         this.hideModal(this.modalId);
