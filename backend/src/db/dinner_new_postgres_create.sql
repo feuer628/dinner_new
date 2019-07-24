@@ -92,10 +92,11 @@ CREATE TABLE "menu_items" (
 CREATE TABLE "orders" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
 	"user_id" INTEGER NOT NULL,
-	"status" INTEGER NOT NULL DEFAULT '1',
+	"status" INTEGER NOT NULL DEFAULT 1,
 	"order_date" DATE NOT NULL,
 	"created_at" TIMESTAMP DEFAULT CURRENT_DATE,
-	"updated_at" TIMESTAMP DEFAULT CURRENT_DATE
+	"updated_at" TIMESTAMP DEFAULT CURRENT_DATE,
+    UNIQUE (user_id, order_date)
 ) WITH (OIDS=FALSE);
 
 CREATE TABLE "order_items" (
@@ -126,7 +127,6 @@ ALTER TABLE "provider_reviews" ADD CONSTRAINT "provider_reviews_fk1" FOREIGN KEY
 ALTER TABLE "users" ADD CONSTRAINT "users_fk0" FOREIGN KEY ("org_id") REFERENCES "organizations"("id");
 ALTER TABLE "users" ADD CONSTRAINT "users_fk1" FOREIGN KEY ("role_id") REFERENCES "roles"("id");
 ALTER TABLE "menu_items" ADD CONSTRAINT "menu_items_fk0" FOREIGN KEY ("provider_id") REFERENCES "providers"("id");
-ALTER TABLE "orders" ADD CONSTRAINT "unique_fields" UNIQUE ("user_id", "order_date");
 ALTER TABLE "orders" ADD CONSTRAINT "orders_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
 ALTER TABLE "order_items" ADD CONSTRAINT "order_items_fk0" FOREIGN KEY ("order_id") REFERENCES "orders"("id");
 ALTER TABLE "balance_history" ADD CONSTRAINT "balance_history_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
@@ -167,7 +167,7 @@ INSERT INTO providers (name, emails, description, url) VALUES ('Супы дом�
 
 INSERT INTO org_groups (limit_type, name, description) VALUES (0, 'Первая группа', 'Описание первой группы');
 INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name) VALUES (1, true, 200, 1000, 'СС');
-INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name, provider_id) VALUES (1, false, 0, 0, 'Финализированная группос', 2);
+INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name, provider_id) VALUES (1, false, 200, 300, 'Финализированная группос', 2);
 INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name, description) VALUES (1, true, 220, 0, 'ЖЖшечка', 'Акробат');
 INSERT INTO org_groups (limit_type, compensation_flag, "limit", hard_limit, name, description, provider_id) VALUES (1, true, 1000, 0, 'Адобе', 'Фтошоп', 1);
 

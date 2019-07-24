@@ -14,7 +14,7 @@ const MENU_ITEMS = "menu_items";
         <h4 class="alignC">Меню еще не загружено. Ожидайте.</h4>
     </div>
     <div v-if="tabNames.length && user && user.organization.group">
-        <b-tabs @input="tabChanged" card lazy>
+        <b-tabs v-model="activeTab" @input="tabChanged" card lazy>
             <b-tab v-for="tabName in tabNames" :key="tabName" :title="tabName | formatTabDate">
                 <div v-if="currentOrder && currentOrder.id" class="mb10">
                     <h4 class="alignC">На этот день вы заказали следующее:</h4>
@@ -163,6 +163,10 @@ export default class Menu extends UI {
             return;
         }
         this.tabNames = await this.rest.loadItems<string>("menu_items/dates");
+        if (this.tabNames.length) {
+            await this.loadItemsForTab(this.tabNames[0]);
+            await this.loadOrderInfo(this.tabNames[0]);
+        }
     }
 
     private async tabChanged(index: number) {
@@ -186,7 +190,7 @@ export default class Menu extends UI {
         if (!cachedOrder) {
             this.$store.state.tabsOrders[orderDate] = (await this.rest.loadItem<OrderInfo>(`orders/date/${orderDate}`)) || {orderItems: []};
         }
-         this.currentOrder = this.$store.state.tabsOrders[orderDate];
+        this.currentOrder = this.$store.state.tabsOrders[orderDate];
     }
 
     private async showOrderConfirmDialog() {
@@ -201,6 +205,7 @@ export default class Menu extends UI {
     }
 
     private async confirmOrder() {
+        this.$store.state.tabsOrders[this.currentTabName] = null;
         const params = {
             order_date: this.currentTabName,
             items: this.currentOrder.orderItems
