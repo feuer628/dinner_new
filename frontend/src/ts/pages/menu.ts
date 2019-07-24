@@ -28,27 +28,30 @@ const MENU_ITEMS = "menu_items";
                         </b-list-group-item>
                     </b-list-group>
                 </div>
-                <div v-else>
-                    <div>
-                        Выбрано блюд на {{totalPrice}}₽
-                        <span v-if="user.organization.group.limit" class="xs">(компенсируется {{user.organization.group.limit}}₽)</span>
-                        <b-badge v-if="limitExceeded" variant="warning">Превышение на {{totalPrice - user.organization.group.limit}}₽!</b-badge>
-                    </div>
-                    <b-badge v-if="hardLimitExceeded" variant="danger">
-                        Ограничение суммы заказа {{user.organization.group.hard_limit}}₽. Такой заказ невозможно утвердить.
-                    </b-badge>
-                    <div v-if="user.organization.group.limit_type === 0">
-                        Баланс {{user.balance}}₽
-                        <b-badge v-if="user.balance < totalPrice" variant="danger">
-                            Сумма заказа превышает ваш баланс. Такой заказ невозможно утвердить.
-                        </b-badge>
-                    </div>
+                <div v-else class="mb10">
+                    <b-card :title="'Выбрано блюд на ' + totalPrice + '₽'" sub-title="" class="mAuto w500">
+                        <b-card-text>
+                            <b-badge v-show="user.organization.group.limit" variant="success">компенсируется {{user.organization.group.limit}}₽</b-badge>
+                            <b-badge v-show="limitExceeded" variant="warning">Превышение на {{totalPrice - user.organization.group.limit}}₽!</b-badge>
+                        </b-card-text>
+                        <b-card-text>
+                            <b-badge v-show="hardLimitExceeded" variant="danger">
+                                Ограничение суммы заказа {{user.organization.group.hard_limit}}₽. Такой заказ невозможно утвердить.
+                            </b-badge>
+                        </b-card-text>
+                        <b-card-text v-if="user.organization.group.limit_type === 0">
+                            Баланс {{user.balance}}₽
+                            <b-badge v-if="user.balance < totalPrice" variant="danger">
+                                Сумма заказа превышает ваш баланс. Такой заказ невозможно утвердить.
+                            </b-badge>
+                        </b-card-text>
+                    </b-card>
                 </div>
                 <div style="text-align: center;">
                     <b-button v-if="!currentOrder.id" :disabled="confirmButtonDisabled" @click="showOrderConfirmDialog" size="sm" variant="primary">Утвердить заказ</b-button>
                     <b-button size="sm" variant="outline-info">В Весточку</b-button>
                     <b-button size="sm" variant="outline-info">В Telegram</b-button>
-                    <b-button size="sm" variant="outline-warning">Попросить сбросить заказ</b-button>
+                    <b-button v-if="currentOrder.id" size="sm" variant="outline-warning">Попросить сбросить заказ</b-button>
                 </div>
                 <!--                    <span>-->
                 <!--                        <b-form-checkbox v-model="menu.anotherEmployee" @input="orderForAnotherEmployee(!!menu.anotherEmployee, menu)">Заказать за другого сотрудника</b-form-checkbox>-->

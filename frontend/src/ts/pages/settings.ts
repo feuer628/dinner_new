@@ -60,6 +60,17 @@ template: `
         </b-form-group>
     </div>
     <div class="w800" style="display: inline-block; vertical-align: top;">
+        <template v-if="user.organization">
+            <h4>Организация</h4>
+            <b-form-group label-cols="4" label-cols-lg="3" label="Ваша организация" label-for="org">
+                <b-form-input id="org" v-model="user.organization.name" disabled class="inline w300"></b-form-input>
+            </b-form-group>
+            <template v-if="user.organization.group">
+                <b-form-group label-cols="4" label-cols-lg="3" label="Группа организации" label-for="group">
+                    <b-form-input id="group" v-model="user.organization.group.name" disabled class="inline w300"></b-form-input>
+                </b-form-group>
+            </template>
+        </template>
         <h4>Роль</h4>
         <b-form-group label-cols="4" label-cols-lg="3" label="Ваша роль" label-for="role">
             <b-form-input id="role" v-model="user.role.name" disabled class="inline w300"></b-form-input>
