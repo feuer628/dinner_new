@@ -46,20 +46,23 @@
 
 // Стили отображения отзывов о блюдах
 #reviews {
-    $dishes: ("best": #81fa00, "good": #ffa500, "normal": #ff7c00, "bad": #ff0000);
-    @each $name, $color in $dishes {
-        .bg-#{$name}-dish {
-            background-color: #{$color}50;
-        }
-        .custom-range.#{$name}-dish {
-            &::-moz-range-thumb,
-            &::-webkit-slider-thumb {
-                background-color: #{$color};
-                box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem #{$color}40;
+    $dishes: ("best": #00ab00, "good": #81fa00, "normal": #ffa500, "bad": #ff7c00, "awful": #ff0000);
+    .reviewCard {
+        @each $name, $color in $dishes {
+            .bg-#{$name}-dish {
+                background-color: #{$color}50;
+            }
+            .custom-range.#{$name}-dish {
+                &::-moz-range-thumb {
+                    background-color: #{$color};
+                    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem #{$color}40;
+                }
+                &::-webkit-slider-thumb {
+                    background-color: #{$color};
+                    box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem #{$color}40;
+                }
             }
         }
-    }
-    .reviewCard {
         $dish-duration: 0.5s !default;
         > div {
             transition-duration: $dish-duration;
@@ -74,17 +77,25 @@
             font-size: 0.9rem;
             font-style: italic;
         }
+        /** Кастомизация ползунка */
         .custom-range {
-            &::-moz-range-thumb,
+            &::-moz-range-thumb {
+                transition-duration: $dish-duration;
+            }
             &::-webkit-slider-thumb {
                 transition-duration: $dish-duration;
             }
-            &::-moz-range-track,
-            &::-webkit-range-track {
-                background: linear-gradient(to right, #{map-get($dishes, "bad")}40 0%,
-                                                      #{map-get($dishes, "normal")}40 50%,
-                                                      #{map-get($dishes, "good")}40 70%,
-                                                      #{map-get($dishes, "best")}40 90%);
+            /** Градиент ползунка */
+            $gradient: #{map-get($dishes, "awful")}40 0%,
+                       #{map-get($dishes, "bad")}40 30%,
+                       #{map-get($dishes, "normal")}40 50%,
+                       #{map-get($dishes, "good")}40 70%,
+                       #{map-get($dishes, "best")}40 90%;
+            &::-moz-range-track {
+                background: -moz-linear-gradient(to right, $gradient);
+            }
+            &::-webkit-slider-runnable-track {
+                background: linear-gradient(to right, $gradient);
             }
         }
     }

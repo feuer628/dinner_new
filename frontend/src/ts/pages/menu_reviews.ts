@@ -14,7 +14,7 @@ import {UI} from "../components/ui";
     <b-card-group columns>
         <b-card v-for="item in reviews" :key="item.id" :header-bg-variant="headerVariant(item)" :header="item.menu_item_name" class="reviewCard">
             <b-card-text>{{item.review}}</b-card-text>
-            <div slot="footer"><b-form-input v-model="item.rating" :class="headerVariant(item)" type="range" min="0" max="10"></b-form-input></div>
+            <div slot="footer"><b-form-input v-model="item.rating" :class="headerVariant(item)" type="range" min="1" max="10" step="0.25"></b-form-input></div>
         </b-card>
     </b-card-group>
 </div>
@@ -42,6 +42,9 @@ export class MenuReviews extends UI {
         if (item.rating >= 5) {
             return "normal-dish";
         }
-        return "bad-dish";
+        if (item.rating >= 3) {
+            return "bad-dish";
+        }
+        return "awful-dish";
     }
 }
