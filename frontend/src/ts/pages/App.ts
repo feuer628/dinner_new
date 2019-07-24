@@ -1,5 +1,7 @@
 import Component from "vue-class-component";
 import {UI} from "../components/ui";
+import {State} from "vuex-class";
+import {User} from "../models/models";
 
 @Component({
     // language=Vue
@@ -71,16 +73,16 @@ import {UI} from "../components/ui";
 
 export class App extends UI {
 
-    private get authenticated() {
-        return this.$store.state.auth;
-    }
+    @State('auth') authenticated: boolean;
+
+    @State user: User;
 
     private async created(): Promise<void> {
         if (this.$cookies.get("token")) {
             this.$store.state.auth = true;
-            this.$store.state.user = (await this.$http.get("/users/me")).data;
+            this.$store.state.user = await this.rest.loadItem<User>("users/me");
         }
-        if (!this.$store.state.auth) {
+        if (!this.authenticated) {
             this.$router.push("/sign_in");
         }
     }
