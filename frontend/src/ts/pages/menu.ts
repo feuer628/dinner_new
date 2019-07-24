@@ -16,10 +16,10 @@ const MENU_ITEMS = "menu_items";
     <div v-if="tabNames.length && user && user.organization.group">
         <b-tabs @input="tabChanged" card lazy>
             <b-tab v-for="tabName in tabNames" :key="tabName" :title="tabName | formatTabDate">
-                <div v-if="orderConfirmed" class="mb10">
+                <div v-if="currentOrder && currentOrder.id" class="mb10">
                     <h4 class="alignC">На этот день вы заказали следующее:</h4>
                     <b-list-group class="w800 mAuto">
-                        <b-list-group-item v-for="ordItem in currentOrder" :key="ordItem.name" class="flex-column align-items-start">
+                        <b-list-group-item v-for="ordItem in currentOrder.orderItems" :key="ordItem.name" class="flex-column align-items-start">
                             <div class="d-flex w-100 justify-content-between">
                                 <h6>{{ordItem.name}}</h6>
                                 <span><b>{{ordItem.count}}</b> шт. по {{ordItem.price}}₽/шт</span>
@@ -45,7 +45,7 @@ const MENU_ITEMS = "menu_items";
                     </div>
                 </div>
                 <div style="text-align: center;">
-                    <b-button v-if="!orderConfirmed" :disabled="confirmButtonDisabled" @click="showOrderConfirmDialog" size="sm" variant="primary">Утвердить заказ</b-button>
+                    <b-button v-if="!currentOrder.id" :disabled="confirmButtonDisabled" @click="showOrderConfirmDialog" size="sm" variant="primary">Утвердить заказ</b-button>
                     <b-button size="sm" variant="outline-info">В Весточку</b-button>
                     <b-button size="sm" variant="outline-info">В Telegram</b-button>
                     <b-button size="sm" variant="outline-warning">Попросить сбросить заказ</b-button>
@@ -62,7 +62,7 @@ const MENU_ITEMS = "menu_items";
                     Свернуть / развернуть меню
                 </b-button>
                 <b-collapse id="menu_table_collapse" v-model="menuShowed">
-                    <b-table striped :items="menu" :fields="orderConfirmed ? basicMenuFields : fullMenuFields" class="mt10">
+                    <b-table striped :items="menu" :fields="currentOrder.id ? basicMenuFields : fullMenuFields" class="mt10">
                         <template slot="buttons" slot-scope="row">
                             <b-button-group>
                                 <b-button size="sm" @click="add(row.item)" variant="info"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
@@ -75,7 +75,7 @@ const MENU_ITEMS = "menu_items";
             </b-tab>
 
             <b-modal :id="modalId" title="Подтверждение заказа" size="lg">
-                <b-table :items="currentOrder" :fields="orderFields" stripped small>
+                <b-table :items="currentOrder.orderItems" :fields="orderFields" stripped small>
                     <template slot="comment" slot-scope="row">
                         <b-button size="sm" @click.stop="row.toggleDetails" variant="outline-info" :pressed.sync="row.detailsShowing">
                             <font-awesome-icon :icon="row.detailsShowing ? 'angle-up' : 'angle-down'"></font-awesome-icon>
@@ -111,9 +111,7 @@ export default class Menu extends UI {
 
     private menu: MenuItem[] = [];
 
-    private currentOrder: OrderItem[] = [];
-
-    private orderConfirmed = false;
+    private currentOrder: OrderInfo = {orderItems: []};
 
     private menuShowed = true;
 
@@ -153,7 +151,7 @@ export default class Menu extends UI {
 
     private get totalPrice() {
         let total = 0;
-        this.currentOrder.forEach(item => {
+        this.currentOrder.orderItems.forEach(item => {
             total += item.count * item.price;
         });
         return total;
@@ -169,8 +167,8 @@ export default class Menu extends UI {
     }
 
     private async tabChanged(index: number) {
+        await this.loadOrderInfo(this.tabNames[index]);
         await this.loadItemsForTab(this.tabNames[index]);
-        await this.loadOrderInfo(this.tabNames[index])
     }
 
     private async loadItemsForTab(date: string) {
@@ -185,17 +183,18 @@ export default class Menu extends UI {
     }
 
     private async loadOrderInfo(orderDate: string): Promise<void> {
-        this.currentOrder = [];
-        const orderInfo = await this.rest.loadItem<OrderInfo>(`orders/date/${orderDate}`);
-        this.currentOrder = orderInfo ? orderInfo.orderItems : [];
-        this.orderConfirmed = !!this.currentOrder.length;
+        let cachedOrder = this.$store.state.tabsOrders[orderDate];
+        if (!cachedOrder) {
+            this.$store.state.tabsOrders[orderDate] = (await this.rest.loadItem<OrderInfo>(`orders/date/${orderDate}`)) || {orderItems: []};
+        }
+         this.currentOrder = this.$store.state.tabsOrders[orderDate];
     }
 
     private async showOrderConfirmDialog() {
-        this.currentOrder = this.currentOrder.filter(orderItem => {
+        this.currentOrder.orderItems = this.currentOrder.orderItems.filter(orderItem => {
             return orderItem.count !== 0;
         });
-        if (!this.currentOrder.length) {
+        if (!this.currentOrder.orderItems.length) {
             await this.$bvModal.msgBoxOk("Вы ничего не выбрали.");
             return;
         }
@@ -213,21 +212,21 @@ export default class Menu extends UI {
     }
 
     private getOrderItemCount(name: string): number {
-        const item = this.currentOrder.find(i => i.name === name);
+        const item = this.currentOrder.orderItems.find(i => i.name === name);
         return item && item.count || 0;
     }
 
     private async add(item: MenuItem): Promise<void> {
-        const currentOrderItem = this.currentOrder.find(s => s.name === item.name);
+        const currentOrderItem = this.currentOrder.orderItems.find(s => s.name === item.name);
         if (currentOrderItem) {
             currentOrderItem.count++;
         } else {
-            this.currentOrder.push({name: item.name, count: 1, comment: "", price: item.price});
+            this.currentOrder.orderItems.push({name: item.name, count: 1, comment: "", price: item.price});
         }
     }
 
     private dec(item: MenuItem): void {
-        const currentOrderItem = this.currentOrder.find(s => s.name === item.name);
+        const currentOrderItem = this.currentOrder.orderItems.find(s => s.name === item.name);
         if (currentOrderItem && currentOrderItem.count) {
             currentOrderItem.count--;
         }

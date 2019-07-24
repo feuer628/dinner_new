@@ -1,11 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import {MenuItem, User} from "../models/models";
+import {MenuItem, OrderInfo, User} from "../models/models";
 
 Vue.use(Vuex);
 
 export const store = new Vuex.Store<StoreState>({
     state: {
+        tabsOrders: {},
         tabsMenu: {},
         dataLoading: false,
         auth: false,
@@ -14,6 +15,7 @@ export const store = new Vuex.Store<StoreState>({
 });
 
 export interface StoreState {
+    tabsOrders: TabsOrder;
     tabsMenu: TabsMenu;
     dataLoading: boolean;
     auth: boolean;
@@ -23,3 +25,7 @@ export interface StoreState {
 export type TabsMenu = {
     [key: string]: MenuItem[];
 };
+
+export type TabsOrder = {
+    [key: string]: OrderInfo;
+}

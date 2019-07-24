@@ -67,12 +67,12 @@ export type MenuItem = {
 }
 
 export type OrderInfo = {
-    id: number;
-    user_id: number;
-    status: number;
-    order_date: Date;
-    created_at: number;
-    updated_at: number;
+    id?: number;
+    user_id?: number;
+    status?: number;
+    order_date?: Date;
+    created_at?: number;
+    updated_at?: number;
     orderItems: OrderItem[];
 }
 
