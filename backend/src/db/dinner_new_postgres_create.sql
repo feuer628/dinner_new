@@ -89,6 +89,16 @@ CREATE TABLE "menu_items" (
 	"description" VARCHAR(1024)
 ) WITH (OIDS=FALSE);
 
+-- Таблица с отзывами о блюдах
+CREATE TABLE "menu_item_reviews" (
+	"id" SERIAL NOT NULL PRIMARY KEY,
+	"provider_id" INTEGER NOT NULL,
+	"user_id" INTEGER NOT NULL,
+	"menu_item_name" VARCHAR(255) NOT NULL,
+	"review" VARCHAR(255) NOT NULL,
+	"rating" INTEGER NOT NULL
+) WITH (OIDS=FALSE);
+
 CREATE TABLE "orders" (
 	"id" SERIAL NOT NULL PRIMARY KEY,
 	"user_id" INTEGER NOT NULL,
@@ -127,6 +137,8 @@ ALTER TABLE "provider_reviews" ADD CONSTRAINT "provider_reviews_fk1" FOREIGN KEY
 ALTER TABLE "users" ADD CONSTRAINT "users_fk0" FOREIGN KEY ("org_id") REFERENCES "organizations"("id");
 ALTER TABLE "users" ADD CONSTRAINT "users_fk1" FOREIGN KEY ("role_id") REFERENCES "roles"("id");
 ALTER TABLE "menu_items" ADD CONSTRAINT "menu_items_fk0" FOREIGN KEY ("provider_id") REFERENCES "providers"("id");
+ALTER TABLE "menu_item_reviews" ADD CONSTRAINT "menu_item_reviews_fk0" FOREIGN KEY ("provider_id") REFERENCES "providers"("id");
+ALTER TABLE "menu_item_reviews" ADD CONSTRAINT "menu_item_reviews_fk1" FOREIGN KEY ("user_id") REFERENCES "users"("id");
 ALTER TABLE "orders" ADD CONSTRAINT "orders_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
 ALTER TABLE "order_items" ADD CONSTRAINT "order_items_fk0" FOREIGN KEY ("order_id") REFERENCES "orders"("id");
 ALTER TABLE "balance_history" ADD CONSTRAINT "balance_history_fk0" FOREIGN KEY ("user_id") REFERENCES "users"("id");
@@ -286,6 +298,18 @@ INSERT INTO menu_items (provider_id, type, name, weight, price) VALUES(1, 'на�
 INSERT INTO menu_items (provider_id, type, name, weight, price) VALUES(1, 'напитки', 'вода аква минерале 0,6 газ, б/газ', '600 мл', 50);
 INSERT INTO menu_items (provider_id, type, name, weight, price) VALUES(1, 'напитки', 'пепси, миринда, сэвен ап 0,5', '500 мл', 58);
 INSERT INTO menu_items (provider_id, type, name, weight, price) VALUES(1, 'напитки', 'пепси, миринда, сэвен ап 0,33', '330 мл', 40);
+
+-- Добавление отзывов о блюдах
+INSERT INTO menu_item_reviews (provider_id, user_id, menu_item_name, review, rating) VALUES (1, 1, 'картофельное пюре', 'норм', 5);
+INSERT INTO menu_item_reviews (provider_id, user_id, menu_item_name, review, rating) VALUES (1, 1, 'Булочка Дуэт', 'норм Булочка Дуэт', 7);
+INSERT INTO menu_item_reviews (provider_id, user_id, menu_item_name, review, rating) VALUES (1, 1, 'Сдоба с вишней', 'норм Сдоба с вишней', 8);
+INSERT INTO menu_item_reviews (provider_id, user_id, menu_item_name, review, rating) VALUES (1, 1, 'Сухари ржаные', 'Ну ваще сухарики', 9);
+INSERT INTO menu_item_reviews (provider_id, user_id, menu_item_name, review, rating) VALUES (1, 1, 'Флан творож/вишня', 'Какаято хрень', 3);
+INSERT INTO menu_item_reviews (provider_id, user_id, menu_item_name, review, rating) VALUES (1, 1, 'Улитка курица /грибы', 'Это блюдо показалось мне очень даже вкусным. Посмотрев на него я понял что это верх совершенства кулинарного исскуства... Нужно брать. Советую всем', 10);
+INSERT INTO menu_item_reviews (provider_id, user_id, menu_item_name, review, rating) VALUES (1, 1, 'Яблочное Чудо', 'ну хз', 5);
+INSERT INTO menu_item_reviews (provider_id, user_id, menu_item_name, review, rating) VALUES (1, 1, 'Язычок слоёный', 'таксебе', 5);
+INSERT INTO menu_item_reviews (provider_id, user_id, menu_item_name, review, rating) VALUES (1, 1, 'вода аква минерале', 'водица, так не годиться', 1);
+INSERT INTO menu_item_reviews (provider_id, user_id, menu_item_name, review, rating) VALUES (1, 1, 'пепси, миринда, сэвен ап', 'норм', 5);
 
 
 INSERT INTO users (login, password, status, balance, description, birthday, phone, org_id, role_id, key, ip, comp_key, ip_phone, from_text, telegram_id)

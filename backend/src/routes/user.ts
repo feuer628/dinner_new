@@ -1,9 +1,10 @@
-import {Router} from 'express';
+import {Router} from "express";
 import {User} from "../db/models/User";
 import {Role} from "../db/models/Role";
 import {OrgGroup} from "../db/models/OrgGroup";
 import {Organization} from "../db/models/Organization";
 import {Action} from "../db/models/Action";
+import {MenuItemReview} from "../db/models/MenuItemReview";
 import {hashSync} from "bcryptjs";
 import {sign} from "jsonwebtoken";
 import {checkAdminRights} from "./middlewares";
@@ -68,6 +69,18 @@ user.get('', checkAdminRights, async (req, res, next) => {
 user.get('/new', checkAdminRights, async (req, res, next) => {
     try {
         res.json(await User.scope(req.query['scope']).findAll({where: {status: Status.NEW}, order: ['id']}));
+    } catch (e) {
+        next(e);
+    }
+});
+
+/**
+ * Получение отзывов текущего пользователя
+ */
+user.get('/reviews', async (req, res, next) => {
+    try {
+        const user = await User.findOne({where: {id: (<any> req).userId}, include: [{model: Organization, include: [OrgGroup]}]});
+        res.json(await MenuItemReview.scope(req.query['scope']).findAll({where: {provider_id: user.organization.group.provider_id}, order: ["id"]}));
     } catch (e) {
         next(e);
     }

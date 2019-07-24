@@ -87,6 +87,24 @@ export type OrderItem = {
     review?: string;
 }
 
+/** Отзыв о блюде */
+export type MenuItemReview = {
+    /** Идентификатор */
+    id: number;
+    /** Идентификатор пользователя */
+    user_id: number;
+    /** Идентификатор поставшика */
+    provider_id: number;
+    /** Название блюда */
+    menu_item_name: string;
+    /** Отзыв */
+    review: string;
+    /** Рейтинг */
+    rating: number;
+    /** Пользователь */
+    user: User;
+}
+
 export type User = {
     id?: number;
     login: string;

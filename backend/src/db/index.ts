@@ -13,6 +13,7 @@ import {MenuItem} from "./models/MenuItem";
 import {OrderItem} from "./models/OrderItem";
 import {Order} from "./models/Order";
 import {BalanceHistory} from "./models/BalanceHistory";
+import {MenuItemReview} from "./models/MenuItemReview";
 
 export function init() {
     LOG.info("Инициализация моделей. Начало.");
@@ -29,7 +30,7 @@ export function init() {
     LOG.info("Инициализация моделей");
     sequelize.addModels([
         Role, Action, RoleAction, Organization, OrgGroup, Provider, ProviderReview,
-        SystemProperty, User, MenuItem, Order, OrderItem, BalanceHistory
+        SystemProperty, User, MenuItem, Order, OrderItem, BalanceHistory, MenuItemReview
     ]);
     LOG.info("Инициализация моделей. Конец.")
 }

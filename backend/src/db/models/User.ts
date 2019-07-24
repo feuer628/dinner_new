@@ -1,5 +1,6 @@
-import {AutoIncrement, BelongsTo, Column, ForeignKey, Model, PrimaryKey, Table} from "sequelize-typescript";
+import {AutoIncrement, BelongsTo, Column, ForeignKey, Model, PrimaryKey, Table, HasMany} from "sequelize-typescript";
 import {Organization} from "./Organization";
+import {MenuItemReview} from "./MenuItemReview";
 import {Role} from "./Role";
 
 @Table({modelName: "users"})
