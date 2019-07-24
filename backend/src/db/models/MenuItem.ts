@@ -14,7 +14,7 @@ export class MenuItem extends Model<MenuItem> {
     provider_id: number;
 
     @Column
-    menu_date: Date;
+    menu_date: string;
 
     @Column
     type: string;

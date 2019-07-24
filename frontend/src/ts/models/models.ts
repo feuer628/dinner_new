@@ -66,6 +66,27 @@ export type MenuItem = {
     description: string;
 }
 
+export type OrderInfo = {
+    id: number;
+    user_id: number;
+    status: number;
+    order_date: Date;
+    created_at: number;
+    updated_at: number;
+    orderItems: OrderItem[];
+}
+
+export type OrderItem = {
+    id?: number;
+    order_id?: number;
+    name: string;
+    comment: string;
+    count: number;
+    price: number;
+    rating?: number;
+    review?: string;
+}
+
 export type User = {
     id?: number;
     login: string;

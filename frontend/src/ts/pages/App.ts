@@ -10,7 +10,12 @@ import {UI} from "../components/ui";
 
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
-            <b-navbar-brand to="menu">BIFIT_dinner</b-navbar-brand>
+            <b-navbar-brand to="menu">
+                BIFIT_dinner 
+                <div class="w60 inline-block">
+                    <b-spinner v-show="dataLoading" variant="light" style="width: 1rem; height: 1rem;" label="Загрузка данных"></b-spinner>
+                </div>
+            </b-navbar-brand>
 
             <b-collapse is-nav id="nav_collapse">
 
@@ -48,9 +53,6 @@ import {UI} from "../components/ui";
         </b-navbar>
         <main>
             <div class="content" style="">
-                <div class="alignC mt10 mb10">
-                    <b-spinner v-if="dataLoading" variant="primary" label="Загрузка данных"></b-spinner>
-                </div>
                 <b-alert dismissible > sadfafsdf </b-alert>
                 <router-view class="m10"></router-view>
             </div>

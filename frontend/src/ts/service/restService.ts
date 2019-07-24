@@ -19,8 +19,12 @@ export class RestService {
      * @param itemName название группы объекта, который требуется загрузить, часть REST-пути
      * @param id       идентификатор объекта
      */
-    async loadItem<T>(itemName: string, id: number): Promise<T> {
-        return <T> (await this.get(`/${itemName}/${id}`));
+    async loadItem<T>(itemName: string, id?: string): Promise<T> {
+        let url = `/${itemName}`;
+        if (id) {
+            url += `/${id}`
+        }
+        return <T> (await this.get(url));
     }
 
     private async get(url: string) {

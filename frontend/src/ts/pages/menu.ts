@@ -1,7 +1,8 @@
 import Component from "vue-class-component"
-import {MenuItem} from "../models/models";
+import {MenuItem, OrderInfo, OrderItem} from "../models/models";
 import Common from "../utils/common";
 import {UI} from "../components/ui";
+import {order} from "../../../../backend/src/routes/order";
 
 /** Название REST-пути работы с пунктами меню */
 const MENU_ITEMS = "menu_items";
@@ -10,16 +11,16 @@ const MENU_ITEMS = "menu_items";
     // language=Vue
     template: `
 <div>
-    <div v-if="!tabs.length">
-        <h4 class="alignC">Меню еще не загружено. Подождите.</h4>
+    <div v-if="!tabNames.length">
+        <h4 class="alignC">Меню еще не загружено. Ожидайте.</h4>
     </div>
-    <div v-if="tabs.length && user && user.organization.group">
-        <b-tabs v-model="tabIndex" card lazy>
-            <b-tab v-for="tab in tabs" :key="tab.name" :title="tab.name | formatTabDate">
-                <div v-if="tab.orderConfirmed" class="mb10">
+    <div v-if="tabNames.length && user && user.organization.group">
+        <b-tabs @input="tabChanged" card lazy>
+            <b-tab v-for="tabName in tabNames" :key="tabName" :title="tabName | formatTabDate">
+                <div v-if="orderConfirmed" class="mb10">
                     <h4 class="alignC">На этот день вы заказали следующее:</h4>
                     <b-list-group class="w800 mAuto">
-                        <b-list-group-item v-for="ordItem in tab.current" :key="ordItem.itemId" class="flex-column align-items-start">
+                        <b-list-group-item v-for="ordItem in currentOrder" :key="ordItem.name" class="flex-column align-items-start">
                             <div class="d-flex w-100 justify-content-between">
                                 <h6>{{ordItem.name}}</h6>
                                 <span><b>{{ordItem.count}}</b> шт. по {{ordItem.price}}₽/шт</span>
@@ -45,7 +46,7 @@ const MENU_ITEMS = "menu_items";
                     </div>
                 </div>
                 <div style="text-align: center;">
-                    <b-button v-if="!tab.orderConfirmed" :disabled="confirmButtonDisabled" @click="showOrderConfirmDialog" size="sm" variant="primary">Утвердить заказ</b-button>
+                    <b-button v-if="!orderConfirmed" :disabled="confirmButtonDisabled" @click="showOrderConfirmDialog" size="sm" variant="primary">Утвердить заказ</b-button>
                     <b-button size="sm" variant="outline-info">В Весточку</b-button>
                     <b-button size="sm" variant="outline-info">В Telegram</b-button>
                     <b-button size="sm" variant="outline-warning">Попросить сбросить заказ</b-button>
@@ -58,11 +59,11 @@ const MENU_ITEMS = "menu_items";
                 <!--                            Утвердить-->
                 <!--                        </b-button>-->
                 <!--                    </span>-->
-                <b-button :aria-expanded="tab.needShowMenu ? 'true' : 'false'" aria-controls="menu_table_collapse" @click="tab.needShowMenu = !tab.needShowMenu" size="sm">
+                <b-button :aria-expanded="menuShowed ? 'true' : 'false'" aria-controls="menu_table_collapse" @click="menuShowed = !menuShowed" size="sm" variant="light">
                     Свернуть / развернуть меню
                 </b-button>
-                <b-collapse id="menu_table_collapse" v-model="tab.needShowMenu">
-                    <b-table striped :items="tab.items" :fields="tab.orderConfirmed ? basicMenuFields : fullMenuFields" class="mt10">
+                <b-collapse id="menu_table_collapse" v-model="menuShowed">
+                    <b-table striped :items="menu" :fields="orderConfirmed ? basicMenuFields : fullMenuFields" class="mt10">
                         <template slot="buttons" slot-scope="row">
                             <b-button-group>
                                 <b-button size="sm" @click="add(row.item)" variant="info"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
@@ -105,16 +106,20 @@ export default class Menu extends UI {
 
     private modalId = "modalOrderId";
 
-    private tabs: MenuTab[] = [];
+    private tabNames: string[] = [];
 
-    private tabIndex = 0;
+    private activeTab: number = 0;
 
-    private get currentOrder() {
-        return this.tabs[this.tabIndex] && this.tabs[this.tabIndex].current || [];
-    }
+    private menu: MenuItem[] = [];
 
-    private get activeTab() {
-        return this.tabs[this.tabIndex];
+    private currentOrder: OrderItem[] = [];
+
+    private orderConfirmed = false;
+
+    private menuShowed = true;
+
+    private get currentTabName() {
+        return this.tabNames[this.activeTab];
     }
 
     private get user() {
@@ -156,31 +161,48 @@ export default class Menu extends UI {
     }
 
     private async created(): Promise<void> {
+        this.$store.state.user = (await this.$http.get("/users/me")).data;
+        if (this.$store.state.user.organization.group === null) {
+            await Common.messageDialog.showWarning("Ваша организация не входит ни в одну группу организаций.");
+            return;
+        }
+        this.tabNames = await this.rest.loadItems<string>("menu_items/dates");
+        if (this.tabNames.length) {
+            this.activeTab = 0;
+            await this.loadItemsForTab(this.tabNames[this.activeTab]);
+            await this.loadOrderInfo(this.tabNames[this.activeTab])
+        }
+    }
+
+    private async tabChanged(index: number) {
+        await this.loadItemsForTab(this.tabNames[index]);
+        await this.loadOrderInfo(this.tabNames[index])
+    }
+
+    private async loadItemsForTab(date: string) {
         try {
-            this.dataLoading = true;
-            this.$store.state.user = (await this.$http.get("/users/me")).data;
-            if (this.$store.state.user.organization.group === null) {
-                await Common.messageDialog.showWarning("Ваша организация не входит ни в одну группу.");
-                return;
-            }
-            const menu = await this.rest.loadItems<MenuItem>(MENU_ITEMS);
-            new Set(menu.map(m => m.menu_date)).forEach(async (menuDate: string) => {
-                this.tabs.push({
-                    name: menuDate,
-                    items: menu.filter(m => m.menu_date === menuDate),
-                    current: [],
-                    orderConfirmed: false,
-                    needShowMenu: false
-                });
-                await this.loadOrderInfo(menuDate);
-            });
+            this.$store.state.dataLoading = true;
+            this.menu = [];
+            this.menu = await this.rest.loadItems<MenuItem>(`menu_items/date/${date}`);
         } finally {
-            this.dataLoading = false;
+            this.$store.state.dataLoading = false;
+        }
+    }
+
+    private async loadOrderInfo(orderDate: string): Promise<void> {
+        try {
+            this.$store.state.dataLoading = true;
+            this.currentOrder = [];
+            const orderInfo = await this.rest.loadItem<OrderInfo>(`orders/date/${orderDate}`);
+            this.currentOrder = orderInfo ? orderInfo.orderItems : [];
+            this.orderConfirmed = !!this.currentOrder.length;
+        } finally {
+            this.$store.state.dataLoading = false;
         }
     }
 
     private async showOrderConfirmDialog() {
-        this.activeTab.current = this.currentOrder.filter(orderItem => {
+        this.currentOrder = this.currentOrder.filter(orderItem => {
             return orderItem.count !== 0;
         });
         if (!this.currentOrder.length) {
@@ -192,36 +214,12 @@ export default class Menu extends UI {
 
     private async confirmOrder() {
         const params = {
-            order_date: this.activeTab.name,
+            order_date: this.currentTabName,
             items: this.currentOrder
         };
         await this.$http.post("/orders", params);
         this.hideModal(this.modalId);
-        await this.loadOrderInfo(this.activeTab.name);
-    }
-
-    private async loadOrderInfo(orderDate: string) {
-        const response = (await this.$http.get(`/orders/date/${orderDate}`)).data;
-        const tab = this.tabs.find(t => {return t.name === orderDate});
-        if (tab) {
-            tab.current = [];
-            tab.orderConfirmed = response !== null;
-            tab.needShowMenu = response === null;
-            if (response !== null) {
-                for (const orderItem of (<any[]>response.orderItems)) {
-                    tab.current.push({
-                        count: orderItem.count,
-                        comment: orderItem.comment,
-                        rating: orderItem.rating,
-                        review: orderItem.review,
-                        price: orderItem.price,
-                        name: orderItem.name
-                    })
-                }
-            } else {
-                tab.needShowMenu = true;
-            }
-        }
+        await this.loadOrderInfo(this.currentTabName);
     }
 
     private getOrderItemCount(name: string): number {
@@ -290,21 +288,4 @@ export default class Menu extends UI {
             label: "Наименование"
         },
     }
-}
-
-type MenuTab = {
-    name: string;
-    items: MenuItem[];
-    orderConfirmed: boolean;
-    needShowMenu: boolean;
-    current: OrderItem[];
-}
-
-type OrderItem = {
-    count: number;
-    name: string;
-    comment: string;
-    price: number;
-    rating?: number;
-    review?: string;
 }
