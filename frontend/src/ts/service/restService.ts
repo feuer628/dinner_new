@@ -29,9 +29,12 @@ export class RestService {
 
     private async get(url: string) {
         try {
+            this.ctx.$store.state.dataLoading = true;
             return (await this.ctx.$http.get(url)).data;
         } catch (e) {
             console.log("Ошибка запроса: " + e.status);
+        } finally {
+            this.ctx.$store.state.dataLoading = false;
         }
         return null;
     }

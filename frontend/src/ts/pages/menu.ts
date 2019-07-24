@@ -2,7 +2,6 @@ import Component from "vue-class-component"
 import {MenuItem, OrderInfo, OrderItem} from "../models/models";
 import Common from "../utils/common";
 import {UI} from "../components/ui";
-import {order} from "../../../../backend/src/routes/order";
 
 /** Название REST-пути работы с пунктами меню */
 const MENU_ITEMS = "menu_items";
@@ -108,7 +107,7 @@ export default class Menu extends UI {
 
     private tabNames: string[] = [];
 
-    private activeTab: number = 0;
+    private activeTab = 0;
 
     private menu: MenuItem[] = [];
 
@@ -167,11 +166,6 @@ export default class Menu extends UI {
             return;
         }
         this.tabNames = await this.rest.loadItems<string>("menu_items/dates");
-        if (this.tabNames.length) {
-            this.activeTab = 0;
-            await this.loadItemsForTab(this.tabNames[this.activeTab]);
-            await this.loadOrderInfo(this.tabNames[this.activeTab])
-        }
     }
 
     private async tabChanged(index: number) {
@@ -180,25 +174,21 @@ export default class Menu extends UI {
     }
 
     private async loadItemsForTab(date: string) {
-        try {
-            this.$store.state.dataLoading = true;
-            this.menu = [];
-            this.menu = await this.rest.loadItems<MenuItem>(`menu_items/date/${date}`);
-        } finally {
-            this.$store.state.dataLoading = false;
+        const cachedMenu = this.$store.state.tabsMenu[date];
+        if (cachedMenu) {
+            this.menu = cachedMenu;
+            return;
         }
+        this.menu = [];
+        this.menu = await this.rest.loadItems<MenuItem>(`menu_items/date/${date}`);
+        this.$store.state.tabsMenu[date] = this.menu;
     }
 
     private async loadOrderInfo(orderDate: string): Promise<void> {
-        try {
-            this.$store.state.dataLoading = true;
-            this.currentOrder = [];
-            const orderInfo = await this.rest.loadItem<OrderInfo>(`orders/date/${orderDate}`);
-            this.currentOrder = orderInfo ? orderInfo.orderItems : [];
-            this.orderConfirmed = !!this.currentOrder.length;
-        } finally {
-            this.$store.state.dataLoading = false;
-        }
+        this.currentOrder = [];
+        const orderInfo = await this.rest.loadItem<OrderInfo>(`orders/date/${orderDate}`);
+        this.currentOrder = orderInfo ? orderInfo.orderItems : [];
+        this.orderConfirmed = !!this.currentOrder.length;
     }
 
     private async showOrderConfirmDialog() {
