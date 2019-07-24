@@ -10,7 +10,7 @@ import {OrgGroup} from "../db/models/OrgGroup";
 export const menu = Router();
 
 const DAYS = ["понедельник", "вторник", "среда", "четверг", "пятница", "суббота", "воскресенье"];
-const EXCLUSIONS = ["бренд-шеф", "меню", "3"];
+const EXCLUSIONS = ["бренд-шеф", "меню"];
 
 menu.post('/upload', async (req, res, next) => {
     try {
