@@ -35,7 +35,23 @@ export class RestService {
     async sendItem(url: string, data: any): Promise<any> {
         try {
             this.ctx.$store.state.dataLoading = true;
-            return (await this.ctx.$http.post(url, data)).data;
+            return (await this.ctx.$http.post(`/${url}`, data)).data;
+        } catch (e) {
+            console.log("Ошибка запроса: " + e.status);
+        } finally {
+            this.ctx.$store.state.dataLoading = false;
+        }
+    }
+
+    /**
+     * Удаляет элемент с сервера
+     * @param url путь удаления элемента
+     * @param id  идентификатор элемента
+     */
+    async removeItem(url: string, id: string | number): Promise<any> {
+        try {
+            this.ctx.$store.state.dataLoading = true;
+            return (await this.ctx.$http.delete(`/${url}/${id}`)).data;
         } catch (e) {
             console.log("Ошибка запроса: " + e.status);
         } finally {

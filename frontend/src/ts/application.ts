@@ -56,7 +56,12 @@ import moment = require("moment");
                 router.push("/");
             }
             if (response.status == 500) {
+                console.log(response.body);
+                Common.messageDialog.showWarning("Внутренняя ошибка сервера");
+            }
+            if (response.status == 422) {
                 Common.messageDialog.showWarning(response.body);
+                router.go(-1);
             }
         });
     });

@@ -56,9 +56,9 @@ export type ProviderReview = {
 }
 
 export type MenuItem = {
-    id: number;
-    provider_id: number;
-    menu_date: string;
+    id?: number;
+    provider_id?: number;
+    menu_date?: string;
     type: string;
     name: string;
     weight: string;

@@ -6,6 +6,7 @@ import {Organization} from "../db/models/Organization";
 import {Role} from "../db/models/Role";
 import {Action} from "../db/models/Action";
 import {OrgGroup} from "../db/models/OrgGroup";
+import {UserController} from "../controllers/UserController";
 
 export const menu = Router();
 
@@ -139,10 +140,62 @@ menu.post('/confirm', async (req, res, next) => {
     }
 });
 
+menu.post('/templates', async (req, res, next) => {
+    try {
+        const controller = new UserController(req, res);
+        const orgGroup = await controller.getAuthUserGroup();
+        if (!orgGroup.provider_id) {
+            return res.status(422).send("Группа организаций не привязана к поставщику");
+        }
+        const attrs = {provider_id: orgGroup.provider_id, ...req.body};
+        for (const field of ["name", "type", "price", "weight"]) {
+            if (attrs[field] === null || attrs[field] === undefined) {
+                return res.status(500).send(`Не заполнены обязательное поле (${field})`);
+            }
+        }
+        const item = await MenuItem.create(attrs);
+        res.status(201).json(item);
+    } catch (e) {
+        next(e);
+    }
+});
 
 menu.get('/templates', async (req, res, next) => {
     try {
-        res.json(await MenuItem.scope(req.query['scope']).findAll({where: {menu_date: null}, order: ["id"]}));
+        const controller = new UserController(req, res);
+        const orgGroup = await controller.getAuthUserGroup();
+        if (!orgGroup.provider_id) {
+            return res.status(422).send("Группа организаций не привязана к поставщику");
+        }
+        res.json(await MenuItem.scope(req.query['scope']).findAll({where: {provider_id: orgGroup.provider_id, menu_date: null}, order: ["id"]}));
+    } catch (e) {
+        next(e);
+    }
+});
+
+menu.put('/templates/:id', async (req, res, next) => {
+    try {
+        const templateId = req.params['id'];
+        const item = await MenuItem.findByPk(templateId);
+        if (!item) {
+            return res.status(404).send("Не найдена позиция стаким ID");
+        }
+        item.name = req.body.name;
+        item.price = req.body.price;
+        item.type = req.body.type;
+        item.description = req.body.description;
+        item.weight = req.body.weight;
+        await item.save();
+        res.sendStatus(201);
+    } catch (e) {
+        next(e);
+    }
+});
+
+menu.delete('/templates/:id', async (req, res, next) => {
+    try {
+        await MenuItem.destroy({where: {id: req.params['id']}});
+        res.sendStatus(200);
     } catch (e) {
         next(e);
     }

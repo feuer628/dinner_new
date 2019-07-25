@@ -188,7 +188,7 @@ export class UploadMenu extends UI {
         }
         const formData = new FormData();
         formData.append("menu", this.file);
-        this.parsedMenuByDates = await this.rest.sendItem("/menu/upload", formData);
+        this.parsedMenuByDates = await this.rest.sendItem("menu/upload", formData);
         for(const key in this.parsedMenuByDates) {
             this.menuDates[key] = <any> null;
         }
@@ -207,7 +207,7 @@ export class UploadMenu extends UI {
                     everydayItems: this.templateItems,
                     menuByDates: this.parsedMenuByDates
                 };
-                await this.rest.sendItem("/menu/confirm", params);
+                await this.rest.sendItem("menu/confirm", params);
                 this.$router.push("/menu");
             }
         } catch (e) {

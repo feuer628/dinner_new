@@ -13,6 +13,7 @@ import {NewUsers} from "../pages/users_new";
 import {MenuReviews} from "../pages/menu_reviews";
 import {ProviderReviews} from "../pages/provider_reviews";
 import {UploadMenu} from "../pages/upload_menu";
+import {TemplateOrders} from "../pages/template_orders";
 
 /**
  * Класс отвечающий за создание роутингов и инициализацию роутера
@@ -47,6 +48,11 @@ export class RouterConfiguration {
                 path: "/uploadMenu",
                 name: "uploadMenu",
                 component: UploadMenu
+            },
+            {
+                path: "/templateOrders",
+                name: "templateOrders",
+                component: TemplateOrders
             },
             // {
             //     path: "*",
