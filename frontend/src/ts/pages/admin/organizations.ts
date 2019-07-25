@@ -9,7 +9,7 @@ import {UI} from "../../components/ui";
 <div>
     <h4>
         Организации
-        <b-button @click="showModal(modalId)" pill variant="outline-success" size="sm"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
+        <b-button @click="showModal()" pill variant="outline-success" size="sm"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
     </h4>
     <b-list-group>
         <b-list-group-item v-for="(org, index) in orgs" :key="org.id" :variant="index % 2 ? 'default' : 'light'">
@@ -30,7 +30,7 @@ import {UI} from "../../components/ui";
         <b-form-input v-model="currentOrg.to_name" placeholder="'Кому' в шапке заявлений" class="mb10"></b-form-input>
         
         <div slot="modal-footer" class="alignR">
-            <b-button variant="outline-secondary" size="sm" @click="hideModal(modalId)">Отмена</b-button>
+            <b-button variant="outline-secondary" size="sm" @click="hideModal">Отмена</b-button>
             <b-button variant="success" size="sm" @click="editOrganization">{{!!currentOrg.id ? 'Изменить' : 'Добавить'}}</b-button>
         </div>
     </b-modal>
@@ -38,8 +38,6 @@ import {UI} from "../../components/ui";
 `
 })
 export class Organizations extends UI {
-
-    private modalId = "modalOrgId";
 
     private orgs: Organization[] = [];
 
@@ -74,7 +72,7 @@ export class Organizations extends UI {
         } else {
             this.currentOrg = this.initCurrentOrganization();
         }
-        this.showModal(this.modalId);
+        this.showModal();
     }
 
     private async editOrganization(): Promise<void> {
@@ -84,7 +82,7 @@ export class Organizations extends UI {
             await this.$http.post(`/organizations`, this.currentOrg);
         }
         this.orgs = await this.rest.loadItems<Organization>("organizations/full");
-        this.hideModal(this.modalId);
+        this.hideModal();
     }
 
     private async deleteOrg(org: Organization): Promise<void> {

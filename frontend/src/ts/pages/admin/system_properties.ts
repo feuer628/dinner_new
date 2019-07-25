@@ -30,7 +30,7 @@ import {SystemProperty} from "../../models/models";
         </b-form-group>
         
         <div slot="modal-footer" class="alignR">
-            <b-button variant="outline-secondary" size="sm" @click="hideModal(modalId)">Отмена</b-button>
+            <b-button variant="outline-secondary" size="sm" @click="hideModal()">Отмена</b-button>
             <b-button variant="success" size="sm" @click="editProp">Добавить</b-button>
         </div>
     </b-modal>
@@ -38,9 +38,6 @@ import {SystemProperty} from "../../models/models";
 `
 })
 export class SystemProperties extends UI {
-
-    /** Идентификатор модального окна */
-    private modalId = "SystemPropertiesModal";
 
     /** Шаблонные позиции меню, которые добавляются на каждый день */
     private props: SystemProperty[] = [];
@@ -71,13 +68,13 @@ export class SystemProperties extends UI {
     /** Показать модальное окно изменения/добавления позиции */
     private async showModalDialog(item?: SystemProperty): Promise<void> {
         this.currentItem = item ? {...item} : this.initProp();
-        this.showModal(this.modalId);
+        this.showModal();
     }
 
     private async editProp() {
         await this.rest.sendItem("system_properties", this.currentItem);
         await this.refreshData();
-        this.hideModal(this.modalId);
+        this.hideModal();
     }
 
     private async removeProp(item: SystemProperty) {

@@ -91,7 +91,7 @@ const MENU_ITEMS = "menu_items";
                 <div v-if="user.organization.group.limit">Компенсация: -{{user.organization.group.limit}}₽</div>
                 <div v-if="totalPay > 0"><b>К доплате: {{totalPay}}₽</b></div>
                 <div slot="modal-footer" class="alignR">
-                    <b-button variant="outline-secondary" size="sm" @click="hideModal(modalId)">Отмена</b-button>
+                    <b-button variant="outline-secondary" size="sm" @click="hideModal()">Отмена</b-button>
                     <b-button variant="success" size="sm" @click="confirmOrder">Подтвердить заказ</b-button>
                 </div>
             </b-modal>
@@ -101,8 +101,6 @@ const MENU_ITEMS = "menu_items";
 `
 })
 export default class Menu extends UI {
-
-    private modalId = "modalOrderId";
 
     private tabNames: string[] = [];
 
@@ -201,7 +199,7 @@ export default class Menu extends UI {
             await this.$bvModal.msgBoxOk("Вы ничего не выбрали.");
             return;
         }
-        this.showModal(this.modalId);
+        this.showModal();
     }
 
     private async confirmOrder() {
@@ -211,7 +209,7 @@ export default class Menu extends UI {
             items: this.currentOrder.orderItems
         };
         await this.$http.post("/orders", params);
-        this.hideModal(this.modalId);
+        this.hideModal();
         await this.loadOrderInfo(this.currentTabName);
     }
 

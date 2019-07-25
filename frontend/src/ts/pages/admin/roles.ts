@@ -29,7 +29,7 @@ import {UI} from "../../components/ui";
     <b-modal :id="modalId" class="w-300" centered title="Добавление новой роли">
         <b-form-input v-model="newRoleName" placeholder="Введите имя новой роли"></b-form-input>
         <div slot="modal-footer" class="alignR">
-            <b-button variant="outline-secondary" size="sm" @click="hideModal(modalId)">Отмена</b-button>
+            <b-button variant="outline-secondary" size="sm" @click="hideModal()">Отмена</b-button>
             <b-button variant="success" size="sm" @click="addNewRole">Добавить</b-button>
         </div>
     </b-modal>
@@ -43,9 +43,6 @@ import {UI} from "../../components/ui";
 `
 })
 export class Roles extends UI {
-
-    /** Идентификатор модального окна страницы */
-    private modalId = "modalRoleId";
 
     private newRoleName: string = "";
 
@@ -65,13 +62,13 @@ export class Roles extends UI {
         try {
             if (this.newRoleName) {
                 await this.$http.post("/roles", {name: this.newRoleName});
-                this.hideModal(this.modalId);
+                this.hideModal();
                 this.roles = await this.rest.loadItems<Role>("roles");
             } else {
                 await this.messageDialog.showWarning("Не задано имя новой роли");
             }
         } catch (e) {
-            this.hideModal(this.modalId);
+            this.hideModal();
             await this.messageDialog.showInternalError();
         }
     }

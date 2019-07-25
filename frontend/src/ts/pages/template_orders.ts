@@ -35,7 +35,7 @@ import {UI} from "../components/ui";
             <b-form-input id="description" v-model="currentItem.description"></b-form-input>
         </b-form-group>
         <div slot="modal-footer" class="alignR">
-            <b-button variant="outline-secondary" size="sm" @click="hideModal(modalId)">Отмена</b-button>
+            <b-button variant="outline-secondary" size="sm" @click="hideModal()">Отмена</b-button>
             <b-button :variant="!!currentItem.id ? 'primary' : 'success'" size="sm" @click="editTemplateOrder">{{!!currentItem.id ? 'Изменить' : 'Добавить'}}</b-button>
         </div>
     </b-modal>
@@ -43,9 +43,6 @@ import {UI} from "../components/ui";
 `
 })
 export class TemplateOrders extends UI {
-
-    /** Идентификатор модального окна */
-    private modalId = "templateOrderModal";
 
     /** Шаблонные позиции меню, которые добавляются на каждый день */
     private templateItems: MenuItem[] = [];
@@ -86,7 +83,7 @@ export class TemplateOrders extends UI {
     /** Показать модальное окно изменения/добавления позиции */
     private async showModalDialog(item?: MenuItem): Promise<void> {
         this.currentItem = item ? {...item} : this.initTemplateItem();
-        this.showModal(this.modalId);
+        this.showModal();
     }
 
     /** Изменить позицию */
@@ -97,7 +94,7 @@ export class TemplateOrders extends UI {
             await this.rest.sendItem("menu/templates", this.currentItem);
         }
         await this.refreshData();
-        this.hideModal(this.modalId);
+        this.hideModal();
     }
 
     /** Удаляет позицию из шаблонных позиций */

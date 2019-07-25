@@ -56,7 +56,7 @@ import {LimitType} from "../../models/limitType";
             <b-form-checkbox v-if="org.group_id === null || org.group_id === currentGroup.id" v-model="currentGroup.orgs" :key="org.id" :value="org" inline>{{org.name}}</b-form-checkbox>
         </template>
         <div slot="modal-footer" class="alignR">
-            <b-button variant="outline-secondary" size="sm" @click="hideModal(modalId)">Отмена</b-button>
+            <b-button variant="outline-secondary" size="sm" @click="hideModal()">Отмена</b-button>
             <b-button :variant="!!currentGroup.id ? 'primary' : 'success'" size="sm" @click="editGroup">{{!!currentGroup.id ? 'Изменить' : 'Добавить'}}</b-button>
         </div>
     </b-modal>
@@ -64,8 +64,6 @@ import {LimitType} from "../../models/limitType";
 `
 })
 export class OrgGroups extends UI {
-
-    private modalId = "modalOrgGroupId";
 
     private currentGroup: OrgGroup = this.initCurrentGroup();
 
@@ -128,7 +126,7 @@ export class OrgGroups extends UI {
         } else {
             this.currentGroup = this.initCurrentGroup();
         }
-        this.showModal(this.modalId);
+        this.showModal();
     }
 
     private async editGroup(): Promise<void> {
@@ -138,7 +136,7 @@ export class OrgGroups extends UI {
             await this.$http.post(`/org_groups`, this.currentGroup);
         }
         await this.refreshData();
-        this.hideModal(this.modalId);
+        this.hideModal();
     }
 
     private async deleteGroup(group: OrgGroup): Promise<void> {
