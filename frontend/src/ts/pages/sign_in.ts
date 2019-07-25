@@ -16,7 +16,7 @@ template: `
             </b-form-group>
         </b-form>
         <div slot="footer" class="alignR">
-            <b-link to="sign_up">Регистрация</b-link>
+            <b-link to="/sign_up">Регистрация</b-link>
             <b-button @click="login" type="submit" variant="primary">Войти</b-button>
         </div>
     </b-card>
