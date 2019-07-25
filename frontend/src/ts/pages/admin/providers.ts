@@ -1,6 +1,6 @@
 import Component from "vue-class-component";
-import {Provider} from "../models/models";
-import {UI} from "../components/ui";
+import {UI} from "../../components/ui";
+import {Provider} from "../../models/models";
 
 @Component({
     // language=Vue

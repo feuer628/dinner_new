@@ -1,7 +1,7 @@
 import Component from "vue-class-component";
-import {LimitType} from "../models/limitType";
-import {Organization, OrgGroup, Provider} from "../models/models";
-import {UI} from "../components/ui";
+import {UI} from "../../components/ui";
+import {Organization, OrgGroup, Provider} from "../../models/models";
+import {LimitType} from "../../models/limitType";
 
 @Component({
     // language=Vue

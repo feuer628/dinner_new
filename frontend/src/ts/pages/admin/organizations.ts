@@ -1,6 +1,6 @@
 import Component from "vue-class-component";
-import {Organization} from "../models/models";
-import {UI} from "../components/ui";
+import {Organization} from "../../models/models";
+import {UI} from "../../components/ui";
 
 @Component({
     // language=Vue

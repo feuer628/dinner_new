@@ -10,11 +10,12 @@ import {org_group} from "./routes/org_group";
 import {provider} from "./routes/provider";
 import {menu_item} from "./routes/menu_item";
 import {user} from "./routes/user";
-import {verifyToken} from "./routes/middlewares";
+import {checkAdminRights, verifyToken} from "./routes/middlewares";
 import {registration} from "./routes/registration";
 import {sign_in} from "./routes/sign_in";
 import {order} from "./routes/order";
 import {menu} from "./routes/menu";
+import {system_property} from "./routes/system_property";
 
 const fileUpload = require('express-fileupload');
 
@@ -51,6 +52,7 @@ export const LOG = require('simple-node-logger').createSimpleLogger('project.log
     app.use("/sign_in", sign_in);
     app.use("/orders", verifyToken, order);
     app.use("/menu", verifyToken, menu);
+    app.use("/system_properties", verifyToken, checkAdminRights, system_property);
 
     app.use(sassMiddleware({
             src: __dirname,

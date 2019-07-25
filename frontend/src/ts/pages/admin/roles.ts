@@ -1,6 +1,6 @@
 import Component from "vue-class-component";
-import {DbAction, DbRole, Role} from "../models/models";
-import {UI} from "../components/ui";
+import {DbAction, DbRole, Role} from "../../models/models";
+import {UI} from "../../components/ui";
 
 @Component({
     // language=Vue

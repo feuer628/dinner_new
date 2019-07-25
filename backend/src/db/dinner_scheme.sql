@@ -255,3 +255,7 @@ INSERT INTO menu_items (provider_id, type, name, weight, price) VALUES(1, 'на�
 INSERT INTO menu_items (provider_id, type, name, weight, price) VALUES(1, 'напитки', 'вода аква минерале 0,6 газ, б/газ', '600 мл', 50);
 INSERT INTO menu_items (provider_id, type, name, weight, price) VALUES(1, 'напитки', 'пепси, миринда, сэвен ап 0,5', '500 мл', 58);
 INSERT INTO menu_items (provider_id, type, name, weight, price) VALUES(1, 'напитки', 'пепси, миринда, сэвен ап 0,33', '330 мл', 40);
+
+INSERT INTO system_properties (name, value) VALUES ('OPERATOR_EMAIL', 'silakov@bifit.com');
+INSERT INTO system_properties (name, value) VALUES ('OPERATOR_PHONE', '9101231234');
+INSERT INTO system_properties (name, value) VALUES ('OPERATOR_NAME', 'Игорь');

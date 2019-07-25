@@ -1,19 +1,21 @@
 import VueRouter, {RouteConfig} from "vue-router";
 import menu from '../pages/menu';
-import {Roles} from '../pages/roles';
-import {Organizations} from "../pages/organizations";
-import {OrgGroups} from "../pages/org_groups";
-import {Providers} from "../pages/providers";
 import {SignIn} from "../pages/sign_in";
 import {SignUp} from "../pages/sign_up";
 import {Logout} from "../pages/logout";
 import {Settings} from "../pages/settings";
-import {Users} from "../pages/users";
-import {NewUsers} from "../pages/users_new";
 import {MenuReviews} from "../pages/menu_reviews";
 import {ProviderReviews} from "../pages/provider_reviews";
 import {UploadMenu} from "../pages/upload_menu";
 import {TemplateOrders} from "../pages/template_orders";
+import {Admin} from "../pages/admin/admin";
+import {Roles} from "../pages/admin/roles";
+import {OrgGroups} from "../pages/admin/org_groups";
+import {Organizations} from "../pages/admin/organizations";
+import {Providers} from "../pages/admin/providers";
+import {Users} from "../pages/admin/users";
+import {NewUsers} from "../pages/admin/users_new";
+import {SystemProperties} from "../pages/admin/system_properties";
 
 /**
  * Класс отвечающий за создание роутингов и инициализацию роутера
@@ -50,6 +52,48 @@ export class RouterConfiguration {
                 component: UploadMenu
             },
             {
+                path: "/admin",
+                name: "admin",
+                component: Admin,
+                children: [
+                    {
+                        path: "roles",
+                        name: "roles",
+                        component: Roles
+                    },
+                    {
+                        path: "org_groups",
+                        name: "org_groups",
+                        component: OrgGroups
+                    },
+                    {
+                        path: "organizations",
+                        name: "orgs",
+                        component: Organizations
+                    },
+                    {
+                        path: "providers",
+                        name: "providers",
+                        component: Providers
+                    },
+                    {
+                        path: "users",
+                        name: "users",
+                        component: Users
+                    },
+                    {
+                        path: "new_users",
+                        name: "new_users",
+                        component: NewUsers
+                    },
+                    {
+                        path: "system_properties",
+                        name: "system_properties",
+                        component: SystemProperties
+                    },
+                ]
+            },
+            {
                 path: "/templateOrders",
                 name: "templateOrders",
                 component: TemplateOrders
@@ -80,36 +124,6 @@ export class RouterConfiguration {
             {
                 path: "/settings",
                 component: Settings
-            },
-            {
-                path: "/roles",
-                name: "roles",
-                component: Roles
-            },
-            {
-                path: "/org_groups",
-                name: "org_groups",
-                component: OrgGroups
-            },
-            {
-                path: "/organizations",
-                name: "orgs",
-                component: Organizations
-            },
-            {
-                path: "/providers",
-                name: "providers",
-                component: Providers
-            },
-            {
-                path: "/users",
-                name: "users",
-                component: Users
-            },
-            {
-                path: "/new_users",
-                name: "new_users",
-                component: NewUsers
             },
             {
                 path: "/menu_reviews",
