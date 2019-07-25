@@ -7,19 +7,14 @@ import {UI} from "../../components/ui";
     template:
 `
 <div>
-    <h3>Роли и действия</h3>
-    <hr/>
-    <h4>
-        Роли (нажать, чтобы открыть список действий) 
-        <b-button v-b-modal="modalId" pill variant="outline-success" size="sm"><font-awesome-icon icon="plus"></font-awesome-icon></b-button>
-    </h4>
+    <h4 class="alignC">Роли с правами действия <b-button v-b-modal="modalId" pill variant="outline-success" size="sm"><font-awesome-icon icon="plus"></font-awesome-icon></b-button></h4>
     <b-list-group>
         <b-list-group-item v-for="role in roles" :key="role.id" v-b-toggle="'rolecollapse-'+role.id">
             <b-button variant="outline-danger" size="sm" @click.stop="dropRole(role)"><font-awesome-icon icon="trash"></font-awesome-icon></b-button>
             {{role.name}} <font-awesome-icon icon="angle-down"></font-awesome-icon>
             <b-collapse :id="'rolecollapse-'+role.id" class="mt-2">
                 <b-list-group>
-                    <b-list-group-item v-for="action in actions" @click.stop>
+                    <b-list-group-item v-for="action in actions" :key="action.id" @click.stop>
                         <b-form-checkbox v-model="role.actions[action.id]" :value="action.desc" @change="roleActionAssoc(role.id, action.id, !!role.actions[action.id])">{{action.desc}}</b-form-checkbox>
                     </b-list-group-item>
                 </b-list-group>
@@ -33,12 +28,6 @@ import {UI} from "../../components/ui";
             <b-button variant="success" size="sm" @click="addNewRole">Добавить</b-button>
         </div>
     </b-modal>
-    <h4>Действия</h4>
-    <b-list-group>
-        <b-list-group-item v-for="action in actions" :key="action.id">
-            {{action.desc}}
-        </b-list-group-item>
-    </b-list-group>
 </div>
 `
 })
